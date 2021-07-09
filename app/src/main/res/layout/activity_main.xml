@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_home"
+    android:fitsSystemWindows="true"
+   >
+
+    <!--显示主界面头部栏-->
+    <RelativeLayout
+        android:id="@+id/home_rl_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/y84"
+        android:layout_marginRight="@dimen/y81"
+        android:layout_marginTop="@dimen/x12">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:id="@+id/ll_wen_du"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="温度:"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="31°"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    android:layout_marginLeft="@dimen/x10"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_shi_du"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/ll_wen_du"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="湿度:"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="40%"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    android:layout_marginLeft="@dimen/x10"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_er_yang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/ll_shi_du"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CO₂:"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8000ppm"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:textSize="@dimen/x36"
+                    android:layout_marginLeft="@dimen/x10"
+                    />
+
+            </LinearLayout>
+
+
+
+
+        </RelativeLayout>
+
+        <!--wifi以及timetable-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_home_icon_bg"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/home_timetable"
+                android:layout_width="@dimen/x60"
+                android:layout_height="@dimen/x60"
+                android:src="@mipmap/timetable" />
+
+            <View
+                android:layout_width="@dimen/x1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/x6"
+                android:layout_marginLeft="@dimen/y24"
+                android:layout_marginRight="@dimen/y24"
+                android:layout_marginTop="@dimen/x6"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/home_wifi"
+                android:layout_width="@dimen/x60"
+                android:layout_height="@dimen/x60"
+                android:src="@mipmap/wifi" />
+        </LinearLayout>
+
+        <!--时间日期线-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/x140"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/home_one_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="一键\n开机"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginRight="@dimen/x20"
+                android:textSize="@dimen/x42"
+                android:background="@drawable/shape_circle_normal"
+                />
+
+            <TextView
+                android:id="@+id/home_one_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="一键\n开机"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/x42"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginRight="@dimen/x30"
+                android:background="@drawable/shape_circle_normal"
+                android:layout_toRightOf="@+id/home_one_open"
+                />
+
+            <TextView
+                android:id="@+id/home_line_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="一键\n开灯"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/x42"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginRight="@dimen/x30"
+                android:background="@drawable/shape_circle_normal"
+                android:layout_toRightOf="@+id/home_one_close"
+                />
+
+            <TextView
+                android:id="@+id/home_line_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="一键\n关灯"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/x42"
+                android:layout_marginLeft="@dimen/x20"
+                android:layout_marginRight="@dimen/x30"
+                android:background="@drawable/shape_circle_normal"
+                android:layout_toRightOf="@+id/home_line_open"
+
+                />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--主体内容展示栏-->
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/home_rl_head"
+        android:clipChildren="false"
+        android:layout_marginTop="@dimen/x16"
+        >
+
+    </FrameLayout>
+
+
+
+
+
+</RelativeLayout>

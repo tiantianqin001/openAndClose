@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:zbv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_bg">
+
+    <ImageView
+        android:id="@+id/img_wifi"
+        android:layout_width="@dimen/y69"
+        android:layout_height="@dimen/x69"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/y99"
+        android:layout_marginTop="@dimen/x120"
+        android:src="@mipmap/wifi" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/login_logo"
+            android:layout_width="@dimen/y700"
+            android:layout_height="@dimen/x124"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/x210"
+           android:text="环境监测云平台"
+            android:textSize="@dimen/x56"
+            android:textColor="@color/shadow_gray"
+            android:gravity="center"
+
+            />
+
+
+        <com.telit.money.start.customview.CustomEditText
+            android:id="@+id/login_username_edit"
+            android:layout_width="@dimen/y600"
+            android:layout_height="@dimen/x90"
+            android:layout_below="@+id/login_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/x81"
+            android:background="@drawable/shape_login_bg"
+            android:hint="@string/hint_username"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textSize="@dimen/x36"
+            android:lines="1"
+            android:maxLength="50"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            zbv:existShow="true" />
+
+        <com.telit.money.start.customview.CustomEditText
+            android:id="@+id/login_pwd_edit"
+            android:layout_width="@dimen/y600"
+            android:layout_height="@dimen/x90"
+            android:layout_below="@+id/login_username_edit"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/x33"
+            android:background="@drawable/shape_login_bg"
+            android:hint="@string/hint_password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:maxLength="18"
+            android:textSize="@dimen/x36"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            zbv:pwdMode="true" />
+
+        <ImageView
+            android:id="@+id/login_btn"
+            android:layout_width="@dimen/y621"
+            android:layout_height="@dimen/x108"
+            android:layout_below="@+id/login_pwd_edit"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/x57"
+            android:src="@mipmap/login_button" />
+
+
+    </RelativeLayout>
+</RelativeLayout>
