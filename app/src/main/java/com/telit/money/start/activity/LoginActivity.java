@@ -161,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             jsonObject.put("loginName","jnrstest");
            // jsonObject.put("password",password);
             jsonObject.put("password","jnrstest321");
-            String url= Common.Constance.loginApp;
+            String url= Common.loginApp;
             RequestBody body = RequestBody.create(Common.JSON, jsonObject.toString());
             OkGo.<String>post(url)
                     .tag(this)
@@ -182,6 +182,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         if (!TextUtils.isEmpty(userId)){
                                             SharedPreferenceUtil.getInstance(MyApplication.getInstance())
                                                     .setString("userId",userId);
+                                            //把用户名和密码保存到本地
+                                            SharedPreferenceUtil.getInstance(MyApplication.getInstance())
+                                                    .setString("loginName","jnrstest");
+                                            SharedPreferenceUtil.getInstance(MyApplication.getInstance())
+                                                    .setString("password","jnrstest321");
                                             //进入主界面
                                             Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                                             startActivity(intent);
