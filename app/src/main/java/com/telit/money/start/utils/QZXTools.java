@@ -45,6 +45,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.telit.money.start.MyApplication;
 
 import java.io.BufferedReader;
@@ -177,6 +180,37 @@ public class QZXTools {
     }
 
 
+    public static void moveAdevice(String getIp, String getPort, String type) {
+        try {
+            String url = "http://" + getIp + ":" + Integer.valueOf(getPort);
+            if (type.equals("关机")) {
+                url = url + "/shutdown";
+            } else {
+                url = url + "/shutdown";
+            }
+
+            QZXTools.logD(url);
+            OkGo.<String>post(url)
+                    .params("delayTime", 30)
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     /**
      * 将一个InputStream流转换成字符串
      *
@@ -226,15 +260,15 @@ public class QZXTools {
         ConnectivityManager connectivityManager = (ConnectivityManager) MyApplication.getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) {
-            isLinked=false;
+            isLinked = false;
         }
         if (connectivityManager != null) {
             NetworkInfo networkinfo = connectivityManager.getActiveNetworkInfo();
 
             if (networkinfo == null || !networkinfo.isAvailable()) {
-                isLinked=false;
-            }else {
-                isLinked=true;
+                isLinked = false;
+            } else {
+                isLinked = true;
             }
         }
         return isLinked;
@@ -278,7 +312,6 @@ public class QZXTools {
         }
         return drawable;
     }
-
 
 
     /**
@@ -1095,878 +1128,873 @@ public class QZXTools {
     private static final int NETWORK_4G = 4;
 
 
+    //----------------------------NETWORK------------------------
+
+    //----------------------------Time/Date----------------------
+
+    //当前的时间到秒
+    public static String getFormatCurrentDateToSecond() {
+        //年-y 月-M 日-d 时-h(1-12) H(0-23) 分-m 秒-s 毫秒-S
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = simpleDateFormat.format(new Date());
+        return date;
+    }
+
+    /**
+     * 依据时间戳字符串获取格式化的yyyy-MM-dd hh:mm:ss格式的时间字符串
+     */
+    public static String getFormatDateFromTimeStamp(String timeStamp) {
+        try {
+            //将ms的时间转成Date
+            Date date = DateFormat.getDateInstance().parse(timeStamp);
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logE("e=" + e, null);
+        }
+        return "";
+    }
+
+    /**
+     * 12:30:12
+     */
+    public static String getFormatTime(long time) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        return simpleDateFormat.format(new Date(time));
+    }
+
+    /**
+     * 获取Date时间值Long
+     *
+     * @param content 要格式化的字符串
+     * @param format  格式化样式
+     */
+    public static long getDateValue(String content, String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        try {
+            Date date = simpleDateFormat.parse(content);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logE("e=" + e, null);
+        }
+        return -1;
+    }
+
+    /**
+     * 依据当前日期获取星期号，星期日到星期六---》1~7
+     */
+    public static int judgeWeekFromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        if (week == 1) {
+            week = 7;
+        } else {
+            week--;
+        }
+        return week;
+    }
 
 
-        //----------------------------NETWORK------------------------
+    /**
+     * 返回该年该月有多少天
+     *
+     * @param month 1~12
+     */
+    public static int calculate(int year, int month) {
+        boolean yearleap = judge(year);
+        int day;
+        if (yearleap && month == 2) {
+            day = 29;
+        } else if (!yearleap && month == 2) {
+            day = 28;
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+            day = 30;
+        } else {
+            day = 31;
+        }
+        return day;
+    }
 
-        //----------------------------Time/Date----------------------
+    /**
+     * 判断是否是闰年
+     */
+    private static boolean judge(int year) {
+        boolean yearleap = (year % 400 == 0) || (year % 4 == 0)
+                && (year % 100 != 0);// 采用布尔数据计算判断是否能整除
+        return yearleap;
+    }
 
-        //当前的时间到秒
-        public static String getFormatCurrentDateToSecond () {
-            //年-y 月-M 日-d 时-h(1-12) H(0-23) 分-m 秒-s 毫秒-S
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String date = simpleDateFormat.format(new Date());
-            return date;
+    /**
+     * 时间转换
+     * 00:00:07
+     * 用处在于传入数值转化时间
+     * {@link #getFormatTime}
+     */
+    public static String getTransmitTime(long count) {
+        if (count > Long.MAX_VALUE || count < 0) {
+            return "传入的Count有误";
         }
 
-        /**
-         * 依据时间戳字符串获取格式化的yyyy-MM-dd hh:mm:ss格式的时间字符串
-         */
-        public static String getFormatDateFromTimeStamp (String timeStamp){
-            try {
-                //将ms的时间转成Date
-                Date date = DateFormat.getDateInstance().parse(timeStamp);
-                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                logE("e=" + e, null);
-            }
-            return "";
-        }
-
-        /**
-         * 12:30:12
-         */
-        public static String getFormatTime ( long time){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-            return simpleDateFormat.format(new Date(time));
-        }
-
-        /**
-         * 获取Date时间值Long
-         *
-         * @param content 要格式化的字符串
-         * @param format  格式化样式
-         */
-        public static long getDateValue (String content, String format){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-            try {
-                Date date = simpleDateFormat.parse(content);
-                return date.getTime();
-            } catch (ParseException e) {
-                e.printStackTrace();
-                logE("e=" + e, null);
-            }
-            return -1;
-        }
-
-        /**
-         * 依据当前日期获取星期号，星期日到星期六---》1~7
-         */
-        public static int judgeWeekFromDate (Date date){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            int week = calendar.get(Calendar.DAY_OF_WEEK);
-            if (week == 1) {
-                week = 7;
+        if (count < 60) {
+            //秒
+            String result;
+            if (count < 10) {
+                result = "00:0" + count;
             } else {
-                week--;
+                result = "00:" + count;
             }
-            return week;
-        }
-
-
-        /**
-         * 返回该年该月有多少天
-         *
-         * @param month 1~12
-         */
-        public static int calculate ( int year, int month){
-            boolean yearleap = judge(year);
-            int day;
-            if (yearleap && month == 2) {
-                day = 29;
-            } else if (!yearleap && month == 2) {
-                day = 28;
-            } else if (month == 4 || month == 6 || month == 9 || month == 11) {
-                day = 30;
+            return result;
+        } else if (count < 60 * 60) {
+            //分秒
+            long minute = count / (60);
+            String minuteResult;
+            if (minute < 10) {
+                minuteResult = "0" + minute;
             } else {
-                day = 31;
+                minuteResult = minute + "";
             }
-            return day;
-        }
-
-        /**
-         * 判断是否是闰年
-         */
-        private static boolean judge ( int year){
-            boolean yearleap = (year % 400 == 0) || (year % 4 == 0)
-                    && (year % 100 != 0);// 采用布尔数据计算判断是否能整除
-            return yearleap;
-        }
-
-        /**
-         * 时间转换
-         * 00:00:07
-         * 用处在于传入数值转化时间
-         * {@link #getFormatTime}
-         */
-        public static String getTransmitTime ( long count){
-            if (count > Long.MAX_VALUE || count < 0) {
-                return "传入的Count有误";
-            }
-
-            if (count < 60) {
-                //秒
-                String result;
-                if (count < 10) {
-                    result = "00:0" + count;
-                } else {
-                    result = "00:" + count;
-                }
-                return result;
-            } else if (count < 60 * 60) {
-                //分秒
-                long minute = count / (60);
-                String minuteResult;
-                if (minute < 10) {
-                    minuteResult = "0" + minute;
-                } else {
-                    minuteResult = minute + "";
-                }
-                long second = count % (60);
-                String secondResult;
-                if (second < 10) {
-                    secondResult = "0" + second;
-                } else {
-                    secondResult = second + "";
-                }
-                return minuteResult + ":" + secondResult;
+            long second = count % (60);
+            String secondResult;
+            if (second < 10) {
+                secondResult = "0" + second;
             } else {
-                long hour = count / (60 * 60);
-                String hourResult;
-                if (hour < 10) {
-                    hourResult = "0" + hour;
-                } else {
-                    hourResult = hour + "";
-                }
-
-                long minute = count % (60 * 60) / (60);
-                String minuteResult;
-                if (minute < 10) {
-                    minuteResult = "0" + minute;
-                } else {
-                    minuteResult = minute + "";
-                }
-
-                long second = count % (60 * 60) % (60);
-                String secondResult;
-                if (second < 10) {
-                    secondResult = "0" + second;
-                } else {
-                    secondResult = second + "";
-                }
-
-                return hourResult + ":" + minuteResult + ":" + secondResult;
+                secondResult = second + "";
             }
+            return minuteResult + ":" + secondResult;
+        } else {
+            long hour = count / (60 * 60);
+            String hourResult;
+            if (hour < 10) {
+                hourResult = "0" + hour;
+            } else {
+                hourResult = hour + "";
+            }
+
+            long minute = count % (60 * 60) / (60);
+            String minuteResult;
+            if (minute < 10) {
+                minuteResult = "0" + minute;
+            } else {
+                minuteResult = minute + "";
+            }
+
+            long second = count % (60 * 60) % (60);
+            String secondResult;
+            if (second < 10) {
+                secondResult = "0" + second;
+            } else {
+                secondResult = second + "";
+            }
+
+            return hourResult + ":" + minuteResult + ":" + secondResult;
         }
+    }
 
 
-        //----------------------------Time/Date----------------------
+    //----------------------------Time/Date----------------------
 
-        //-------------------------配置文件Properties---------------------
-        public static Properties getConfigProperties (String path){
-            Properties properties = new Properties();
+    //-------------------------配置文件Properties---------------------
+    public static Properties getConfigProperties(String path) {
+        Properties properties = new Properties();
 //        InputStream inputStream = QZXTools.class.getResourceAsStream(path);//获取的是assets等资源路径
-            try {
-                FileInputStream fis = new FileInputStream(path);
-                //统一编码
-                properties.load(new InputStreamReader(fis, "UTF-8"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return properties;
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            //统一编码
+            properties.load(new InputStreamReader(fis, "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return properties;
+    }
 
-        public static void addDataToProperties (String packageName, String fileName, String
-        key, String value){
-            String path = "/data/data/" + packageName + "/" + fileName;
-            Properties properties = new Properties();
+    public static void addDataToProperties(String packageName, String fileName, String
+            key, String value) {
+        String path = "/data/data/" + packageName + "/" + fileName;
+        Properties properties = new Properties();
 
-            properties.setProperty(key, value);
+        properties.setProperty(key, value);
 
-            try {
-                FileOutputStream fos = new FileOutputStream(path);
-                properties.store(new OutputStreamWriter(fos, "UTF-8"),
-                        "添加key=" + key + ";value=" + value + "的属性");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            FileOutputStream fos = new FileOutputStream(path);
+            properties.store(new OutputStreamWriter(fos, "UTF-8"),
+                    "添加key=" + key + ";value=" + value + "的属性");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //-------------------------Properties---------------------
+    }
+    //-------------------------Properties---------------------
 
-        //-----------------------保存图片到系统图片相册中------------------------
+    //-----------------------保存图片到系统图片相册中------------------------
 
-        /**
-         * 将Uri转化为path
-         *
-         * @param context
-         * @param uri
-         * @return
-         */
-        public static String getRealFilePath ( final Context context, final Uri uri){
-            if (null == uri) return null;
-            final String scheme = uri.getScheme();
-            String data = null;
-            if (scheme == null)
-                data = uri.getPath();
-            else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-                data = uri.getPath();
-            } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-                Cursor cursor = context.getContentResolver().query(uri, new String[]{
-                        MediaStore.Images.ImageColumns.DATA}, null, null, null);
-                if (null != cursor) {
-                    if (cursor.moveToFirst()) {
-                        int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                        if (index > -1) {
-                            data = cursor.getString(index);
-                        }
+    /**
+     * 将Uri转化为path
+     *
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getRealFilePath(final Context context, final Uri uri) {
+        if (null == uri) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null)
+            data = uri.getPath();
+        else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri, new String[]{
+                    MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
                     }
-                    cursor.close();
                 }
+                cursor.close();
             }
-            return data;
         }
+        return data;
+    }
 
-        /**
-         * MediaStore.Images.Media.insertImage(InteractiveActivity.this.getContentResolver(), bitmap, "", "");
-         * InteractiveActivity.this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-         * Uri.parse("file://" + destFile.getAbsolutePath())));
-         * <p>
-         * 将图片保存到系统的Pictures目录
-         */
-        public static void savePictureToSystemDCIM (Context context, File fileImage, String
-        nameImage){
-            // 其次把文件插入到系统图库
-            try {
-                MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                        fileImage.getAbsolutePath(), nameImage, null);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            // 最后通知图库更新
-            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri uri = Uri.fromFile(fileImage);
-            intent.setData(uri);
-            context.sendBroadcast(intent);
+    /**
+     * MediaStore.Images.Media.insertImage(InteractiveActivity.this.getContentResolver(), bitmap, "", "");
+     * InteractiveActivity.this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+     * Uri.parse("file://" + destFile.getAbsolutePath())));
+     * <p>
+     * 将图片保存到系统的Pictures目录
+     */
+    public static void savePictureToSystemDCIM(Context context, File fileImage, String
+            nameImage) {
+        // 其次把文件插入到系统图库
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    fileImage.getAbsolutePath(), nameImage, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+        // 最后通知图库更新
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(fileImage);
+        intent.setData(uri);
+        context.sendBroadcast(intent);
+    }
 
-        //调用系统相机---Camera以及SD卡权限--->这里6.0/7.0注意
-        public static final int CODE_TAKE_PHOTO = 1;//相机RequestCode
+    //调用系统相机---Camera以及SD卡权限--->这里6.0/7.0注意
+    public static final int CODE_TAKE_PHOTO = 1;//相机RequestCode
 
-        public static void accessSystemCamera (Activity activity, Uri photoUri){
-            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            //设置拍照保存的路径，需要特别注意的是在onActivityResult中获取的Intent为空
-            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            activity.startActivityForResult(takeIntent, CODE_TAKE_PHOTO);
+    public static void accessSystemCamera(Activity activity, Uri photoUri) {
+        Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //设置拍照保存的路径，需要特别注意的是在onActivityResult中获取的Intent为空
+        takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        activity.startActivityForResult(takeIntent, CODE_TAKE_PHOTO);
+    }
+
+
+    //调用系统相册
+    public static final int CODE_SELECT_IMAGE = 2;//相册RequestCode
+
+    public static void accessSystemAlbum(Activity activity) {
+        Intent albumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        albumIntent.setType("image/*");
+        activity.startActivityForResult(albumIntent, CODE_SELECT_IMAGE);
+    }
+
+    public static final int CROP_REQUEST_CODE = 3;//裁剪RequestCode
+
+    public static void cropPhoto(Uri uri, Activity activity) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
+        intent.putExtra("return-data", true);
+        activity.startActivityForResult(intent, CROP_REQUEST_CODE);
+    }
+
+    //通知系统刷新相册
+    public static void galleryAddPic(Activity activity, Uri contentUri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(contentUri);
+        activity.sendBroadcast(mediaScanIntent);
+    }
+
+
+    /**
+     * 压缩图片显示
+     */
+    public static Bitmap compressBitmap(Bitmap image, float userWidth, float userHeight) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        if (baos.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
+            baos.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
         }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+        BitmapFactory.Options newOpts = new BitmapFactory.Options();
+        //开始读入图片，此时把options.inJustDecodeBounds 设回true了
+        newOpts.inJustDecodeBounds = true;
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
+        newOpts.inJustDecodeBounds = false;
+        int w = newOpts.outWidth;
+        int h = newOpts.outHeight;
 
-
-
-        //调用系统相册
-        public static final int CODE_SELECT_IMAGE = 2;//相册RequestCode
-
-        public static void accessSystemAlbum (Activity activity){
-            Intent albumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            albumIntent.setType("image/*");
-            activity.startActivityForResult(albumIntent, CODE_SELECT_IMAGE);
+        float hh = userWidth;//这里设置高度为100f
+        float ww = userHeight;//这里设置宽度为100f
+        int be = 1;//be=1表示不缩放
+        if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
+            be = (int) (newOpts.outWidth / ww);
+        } else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
+            be = (int) (newOpts.outHeight / hh);
         }
+        if (be <= 0)
+            be = 1;
 
-        public static final int CROP_REQUEST_CODE = 3;//裁剪RequestCode
+        logD("w=" + w + ";h=" + h + ";be=" + be);
 
-        public static void cropPhoto (Uri uri, Activity activity){
-            Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            intent.setDataAndType(uri, "image/*");
-            intent.putExtra("crop", "true");
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("outputX", 300);
-            intent.putExtra("outputY", 300);
-            intent.putExtra("return-data", true);
-            activity.startActivityForResult(intent, CROP_REQUEST_CODE);
+        newOpts.inSampleSize = be;//设置缩放比例
+        //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+        isBm = new ByteArrayInputStream(baos.toByteArray());
+        bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
+        return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+    }
+
+    public static Bitmap compressImage(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;//每次都减少10
         }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
+    }
 
-        //通知系统刷新相册
-        public static void galleryAddPic (Activity activity, Uri contentUri){
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            mediaScanIntent.setData(contentUri);
-            activity.sendBroadcast(mediaScanIntent);
-        }
+    /**
+     * 使用Matrix
+     *
+     * @param bitmap 原始的Bitmap
+     * @param width  目标宽度
+     * @param height 目标高度
+     * @return 缩放后的Bitmap
+     */
+    public static Bitmap scaleMatrix(Bitmap bitmap, int width, int height) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        float scaleW = width * 1.0f / w;
+        float scaleH = height * 1.0f / h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleW, scaleH); // 长和宽放大缩小的比例
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
+    }
 
+    /**
+     * 使用Canvas
+     *
+     * @param bitmap 原始的Bitmap
+     * @param rect   Bitmap被缩放放置的Rect
+     * @return 缩放后的Bitmap
+     */
+    public static Bitmap scaleCanvas(Bitmap bitmap, Rect rect) {
+        Bitmap newBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.ARGB_8888);//创建和目标相同大小的空Bitmap
+        Canvas canvas = new Canvas(newBitmap);
+        Paint paint = new Paint();
+        Bitmap temp = bitmap;
 
-        /**
-         * 压缩图片显示
-         */
-        public static Bitmap compressBitmap (Bitmap image,float userWidth, float userHeight){
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            if (baos.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
-                baos.reset();//重置baos即清空baos
-                image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
-            }
-            ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
-            BitmapFactory.Options newOpts = new BitmapFactory.Options();
-            //开始读入图片，此时把options.inJustDecodeBounds 设回true了
-            newOpts.inJustDecodeBounds = true;
-            Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
-            newOpts.inJustDecodeBounds = false;
-            int w = newOpts.outWidth;
-            int h = newOpts.outHeight;
+        //针对绘制bitmap添加抗锯齿
+        PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+        paint.setFilterBitmap(true); //对Bitmap进行滤波处理
+        paint.setAntiAlias(true);//设置抗锯齿
+        canvas.setDrawFilter(pfd);
+        canvas.drawBitmap(temp, null, rect, paint);
 
-            float hh = userWidth;//这里设置高度为100f
-            float ww = userHeight;//这里设置宽度为100f
-            int be = 1;//be=1表示不缩放
-            if (w > h && w > ww) {//如果宽度大的话根据宽度固定大小缩放
-                be = (int) (newOpts.outWidth / ww);
-            } else if (w < h && h > hh) {//如果高度高的话根据宽度固定大小缩放
-                be = (int) (newOpts.outHeight / hh);
-            }
-            if (be <= 0)
-                be = 1;
+        return newBitmap;
+    }
 
-            logD("w=" + w + ";h=" + h + ";be=" + be);
+    //-----------------------保存图片到系统图片相册中------------------------
 
-            newOpts.inSampleSize = be;//设置缩放比例
-            //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-            isBm = new ByteArrayInputStream(baos.toByteArray());
-            bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
-            return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
-        }
-
-        public static Bitmap compressImage (Bitmap image){
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-            int options = 100;
-            while (baos.toByteArray().length / 1024 > 100) {    //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-                baos.reset();//重置baos即清空baos
-                image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
-                options -= 10;//每次都减少10
-            }
-            ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-            Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-            return bitmap;
-        }
-
-        /**
-         * 使用Matrix
-         *
-         * @param bitmap 原始的Bitmap
-         * @param width  目标宽度
-         * @param height 目标高度
-         * @return 缩放后的Bitmap
-         */
-        public static Bitmap scaleMatrix (Bitmap bitmap,int width, int height){
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
-            float scaleW = width * 1.0f / w;
-            float scaleH = height * 1.0f / h;
-            Matrix matrix = new Matrix();
-            matrix.postScale(scaleW, scaleH); // 长和宽放大缩小的比例
-            return Bitmap.createBitmap(bitmap, 0, 0, w, h, matrix, true);
-        }
-
-        /**
-         * 使用Canvas
-         *
-         * @param bitmap 原始的Bitmap
-         * @param rect   Bitmap被缩放放置的Rect
-         * @return 缩放后的Bitmap
-         */
-        public static Bitmap scaleCanvas (Bitmap bitmap, Rect rect){
-            Bitmap newBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.ARGB_8888);//创建和目标相同大小的空Bitmap
-            Canvas canvas = new Canvas(newBitmap);
-            Paint paint = new Paint();
-            Bitmap temp = bitmap;
-
-            //针对绘制bitmap添加抗锯齿
-            PaintFlagsDrawFilter pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-            paint.setFilterBitmap(true); //对Bitmap进行滤波处理
-            paint.setAntiAlias(true);//设置抗锯齿
-            canvas.setDrawFilter(pfd);
-            canvas.drawBitmap(temp, null, rect, paint);
-
-            return newBitmap;
-        }
-
-        //-----------------------保存图片到系统图片相册中------------------------
-
-        //------------------------------第三方调用打开文件
+    //------------------------------第三方调用打开文件
 
 
-        /**
-         * 根据文件后缀名获得对应的MIME类型。
-         *
-         * @param file
-         */
-        public static String getMIMEType (File file){
-            String type = "*/*";
-            String fName = file.getName();
-            // 获取后缀名前的分隔符"."在fName中的位置。
-            int dotIndex = fName.lastIndexOf(".");
-            if (dotIndex < 0) {
-                return type;
-            }
-            /* 获取文件的后缀名 */
-            String end = fName.substring(dotIndex + 1, fName.length())
-                    .toLowerCase();
-            if (end == "")
-                return type;
-            // 在MIME和文件类型的匹配表中找到对应的MIME类型。
-            for (int i = 0; i < MIME_Table.length; i++) {
-                if (end.equals(MIME_Table[i][0]))
-                    type = MIME_Table[i][1];
-            }
+    /**
+     * 根据文件后缀名获得对应的MIME类型。
+     *
+     * @param file
+     */
+    public static String getMIMEType(File file) {
+        String type = "*/*";
+        String fName = file.getName();
+        // 获取后缀名前的分隔符"."在fName中的位置。
+        int dotIndex = fName.lastIndexOf(".");
+        if (dotIndex < 0) {
             return type;
         }
-
-        /**
-         * 文件MIME类型(主要用做打开操作时，指定打开的指定文件对应所属的MIME类型)
-         */
-        private static final String[][] MIME_Table = {
-                // {后缀名，MIME类型}
-                {"aab", "application/x-authoware-bin"},
-                {"aam", "application/x-authoware-map"},
-                {"aas", "application/x-authoware-seg"},
-                {"amc", "application/x-mpeg"},
-                {"ani", "application/octet-stream"},
-                {"apk", "application/vnd.android.package-archive"},
-                {"asd", "application/astound"}, {"asn", "application/astound"},
-                {"asp", "application/x-asap"},
-                {"ai", "application/postscript"},
-                {"avb", "application/octet-stream"},
-                {"bcpio", "application/x-bcpio"},
-                {"bin", "application/octet-stream"},
-                {"bld", "application/bld"}, {"bld2", "application/bld2"},
-                {"aif", "audio/x-aiff"}, {"aifc", "audio/x-aiff"},
-                {"aiff", "audio/x-aiff"}, {"als", "audio/X-Alpha5"},
-                {"au", "audio/basic"}, {"awb", "audio/amr-wb"},
-                {"3gp", "video/3gpp"}, {"asf", "video/x-ms-asf"},
-                {"asx", "video/x-ms-asf"}, {"avi", "video/x-msvideo"},
-                {"asc", "text/plain"}, {"bmp", "image/bmp"},
-                {"bpk", "application/octet-stream"},
-                {"bz2", "application/x-bzip2"}, {"c", "text/x-csrc"},
-                {"cpp", "text/x-c++src"}, {"cal", "image/x-cals"},
-                {"ccn", "application/x-cnc"}, {"cco", "application/x-cocoa"},
-                {"cdf", "application/x-netcdf"},
-                {"cgi", "magnus-internal/cgi"}, {"chat", "application/x-chat"},
-                {"class", "application/octet-stream"},
-                {"clp", "application/x-msclip"}, {"cmx", "application/x-cmx"},
-                {"co", "application/x-cult3d-object"},
-                {"cod", "image/cis-cod"}, {"csh", "application/x-csh"},
-                {"csm", "chemical/x-csml"}, {"csml", "chemical/x-csml"},
-                {"css", "text/css"}, {"dcm", "x-lml/x-evm"},
-                {"cpio", "application/x-cpio"},
-                {"cpt", "application/mac-compactpro"},
-                {"crd", "application/x-mscardfile"},
-                {"cur", "application/octet-stream"},
-                {"dcr", "application/x-director"},
-                {"dir", "application/x-director"},
-                {"dll", "application/octet-stream"},
-                {"dmg", "application/octet-stream"},
-                {"dms", "application/octet-stream"},
-                {"doc", "application/msword"}, {"dot", "application/x-dot"},
-                {"dvi", "application/x-dvi"}, {"dwg", "application/x-autocad"},
-                {"dxf", "application/x-autocad"},
-                {"dxr", "application/x-director"},
-                {"ebk", "application/x-expandedbook"},
-                {"etc", "application/x-earthtime"}, {"dcx", "image/x-dcx"},
-                {"dhtml", "text/html"}, {"dwf", "drawing/x-dwf"},
-                {"emb", "chemical/x-embl-dl-nucleotide"},
-                {"embl", "chemical/x-embl-dl-nucleotide"},
-                {"eps", "application/postscript"}, {"eri", "image/x-eri"},
-                {"es", "audio/echospeech"}, {"esl", "audio/echospeech"},
-                {"etx", "text/x-setext"}, {"evm", "x-lml/x-evm"},
-                {"evy", "application/x-envoy"},
-                {"exe", "application/octet-stream"},
-                {"fh4", "image/x-freehand"}, {"fh5", "image/x-freehand"},
-                {"fhc", "image/x-freehand"}, {"fif", "image/fif"},
-                {"fm", "application/x-maker"}, {"fpx", "image/x-fpx"},
-                {"fvi", "video/isivideo"},
-                {"gau", "chemical/x-gaussian-input"},
-                {"gca", "application/x-gca-compressed"},
-                {"gdb", "x-lml/x-gdb"}, {"gif", "image/gif"},
-                {"gps", "application/x-gps"}, {"gtar", "application/x-gtar"},
-                {"gz", "application/x-gzip"}, {"h", "text/x-chdr"},
-                {"hdf", "application/x-hdf"}, {"hdm", "text/x-hdml"},
-                {"hdml", "text/x-hdml"}, {"hlp", "application/winhlp"},
-                {"hqx", "application/mac-binhex40"}, {"htm", "text/html"},
-                {"html", "text/html"}, {"hts", "text/html"},
-                {"ice", "x-conference/x-cooltalk"},
-                {"ico", "application/octet-stream"}, {"ief", "image/ief"},
-                {"ifm", "image/gif"}, {"ifs", "image/ifs"},
-                {"imy", "audio/melody"}, {"ins", "application/x-NET-Install"},
-                {"ips", "application/x-ipscript"},
-                {"ipx", "application/x-ipix"}, {"it", "audio/x-mod"},
-                {"itz", "audio/x-mod"}, {"ivr", "i-world/i-vrml"},
-                {"j2k", "image/j2k"},
-                {"jad", "text/vnd.sun.j2me.app-descriptor"},
-                {"jam", "application/x-jam"}, {"java", "application/x-java"},
-                {"jar", "application/java-archive"},
-                {"jnlp", "application/x-java-jnlp-file"},
-                {"jpe", "image/jpeg"}, {"jpeg", "image/jpeg"},
-                {"jpg", "image/jpeg"}, {"jpz", "image/jpeg"},
-                {"js", "application/x-javascript"}, {"jwc", "application/jwc"},
-                {"kjx", "application/x-kjx"}, {"lak", "x-lml/x-lak"},
-                {"latex", "application/x-latex"},
-                {"lcc", "application/fastman"},
-                {"lcl", "application/x-digitalloca"},
-                {"lcr", "application/x-digitalloca"},
-                {"lgh", "application/lgh"},
-                {"lha", "application/octet-stream"}, {"lml", "x-lml/x-lml"},
-                {"lmlpack", "x-lml/x-lmlpack"}, {"lsf", "video/x-ms-asf"},
-                {"lsx", "video/x-ms-asf"}, {"lzh", "application/x-lzh"},
-                {"m13", "application/x-msmediaview"},
-                {"m14", "application/x-msmediaview"}, {"m15", "audio/x-mod"},
-                {"m3u", "audio/x-mpegurl"}, {"m3url", "audio/x-mpegurl"},
-                {"ma1", "audio/ma1"}, {"ma2", "audio/ma2"},
-                {"ma3", "audio/ma3"}, {"ma5", "audio/ma5"},
-                {"man", "application/x-troff-man"},
-                {"map", "magnus-internal/imagemap"},
-                {"mbd", "application/mbedlet"},
-                {"mct", "application/x-mascot"},
-                {"mdb", "application/x-msaccess"}, {"mdz", "audio/x-mod"},
-                {"me", "application/x-troff-me"}, {"mel", "text/x-vmel"},
-                {"mi", "application/x-mif"}, {"mid", "audio/midi"},
-                {"midi", "audio/midi"}, {"mif", "application/x-mif"},
-                {"mil", "image/x-cals"}, {"mio", "audio/x-mio"},
-                {"mmf", "application/x-skt-lbs"}, {"mng", "video/x-mng"},
-                {"mny", "application/x-msmoney"},
-                {"moc", "application/x-mocha"},
-                {"mocha", "application/x-mocha"}, {"mod", "audio/x-mod"},
-                {"mof", "application/x-yumekara"},
-                {"mol", "chemical/x-mdl-molfile"},
-                {"mop", "chemical/x-mopac-input"}, {"mov", "video/quicktime"},
-                {"movie", "video/x-sgi-movie"}, {"mp2", "audio/x-mpeg"},
-                {"mp3", "audio/x-mpeg"}, {"mp4", "video/mp4"},
-                {"mpc", "application/vnd.mpohun.certificate"},
-                {"mpe", "video/mpeg"}, {"mpeg", "video/mpeg"},
-                {"mpg", "video/mpeg"}, {"mpg4", "video/mp4"},
-                {"mpga", "audio/mpeg"},
-                {"mpn", "application/vnd.mophun.application"},
-                {"mpp", "application/vnd.ms-project"},
-                {"mps", "application/x-mapserver"}, {"mrl", "text/x-mrml"},
-                {"mrm", "application/x-mrm"}, {"ms", "application/x-troff-ms"},
-                {"mts", "application/metastream"},
-                {"mtx", "application/metastream"},
-                {"mtz", "application/metastream"},
-                {"mzv", "application/metastream"}, {"nar", "application/zip"},
-                {"nbmp", "image/nbmp"}, {"nc", "application/x-netcdf"},
-                {"ndb", "x-lml/x-ndb"}, {"ndwn", "application/ndwn"},
-                {"nif", "application/x-nif"}, {"nmz", "application/x-scream"},
-                {"nokia-op-logo", "image/vnd.nok-oplogo-color"},
-                {"npx", "application/x-netfpx"}, {"nsnd", "audio/nsnd"},
-                {"nva", "application/x-neva1"}, {"oda", "application/oda"},
-                {"oom", "application/x-AtlasMate-Plugin"},
-                {"pac", "audio/x-pac"}, {"pae", "audio/x-epac"},
-                {"pan", "application/x-pan"},
-                {"pbm", "image/x-portable-bitmap"}, {"pcx", "image/x-pcx"},
-                {"pda", "image/x-pda"}, {"pdb", "chemical/x-pdb"},
-                {"pdf", "application/pdf"}, {"pfr", "application/font-tdpfr"},
-                {"pgm", "image/x-portable-graymap"}, {"pict", "image/x-pict"},
-                {"pm", "application/x-perl"}, {"pmd", "application/x-pmd"},
-                {"png", "image/png"}, {"pnm", "image/x-portable-anymap"},
-                {"pnz", "image/png"}, {"pot", "application/vnd.ms-powerpoint"},
-                {"ppm", "image/x-portable-pixmap"},
-                {"pps", "application/vnd.ms-powerpoint"},
-                {"ppt", "application/vnd.ms-powerpoint"},
-                {"pqf", "application/x-cprplayer"},
-                {"pqi", "application/cprplayer"}, {"prc", "application/x-prc"},
-                {"proxy", "application/x-ns-proxy-autoconfig"},
-                {"ps", "application/postscript"},
-                {"ptlk", "application/listenup"},
-                {"pub", "application/x-mspublisher"},
-                {"pvx", "video/x-pv-pvx"}, {"qcp", "audio/vnd.qcelp"},
-                {"qt", "video/quicktime"}, {"qti", "image/x-quicktime"},
-                {"qtif", "image/x-quicktime"},
-                {"r3t", "text/vnd.rn-realtext3d"},
-                {"ra", "audio/x-pn-realaudio"},
-                {"ram", "audio/x-pn-realaudio"},
-                {"rar", "application/x-rar-compressed"},
-                {"ras", "image/x-cmu-raster"}, {"rdf", "application/rdf+xml"},
-                {"rf", "image/vnd.rn-realflash"}, {"rgb", "image/x-rgb"},
-                {"rlf", "application/x-richlink"},
-                {"rm", "audio/x-pn-realaudio"}, {"rmf", "audio/x-rmf"},
-                {"rmm", "audio/x-pn-realaudio"},
-                {"rmvb", "audio/x-pn-realaudio"},
-                {"rnx", "application/vnd.rn-realplayer"},
-                {"roff", "application/x-troff"},
-                {"rp", "image/vnd.rn-realpix"},
-                {"rpm", "audio/x-pn-realaudio-plugin"},
-                {"rt", "text/vnd.rn-realtext"}, {"rte", "x-lml/x-gps"},
-                {"rtf", "application/rtf"}, {"rtg", "application/metastream"},
-                {"rtx", "text/richtext"}, {"rv", "video/vnd.rn-realvideo"},
-                {"rwc", "application/x-rogerwilco"}, {"s3m", "audio/x-mod"},
-                {"s3z", "audio/x-mod"}, {"sca", "application/x-supercard"},
-                {"scd", "application/x-msschedule"},
-                {"sdf", "application/e-score"},
-                {"sea", "application/x-stuffit"}, {"sgm", "text/x-sgml"},
-                {"sgml", "text/x-sgml"}, {"sh", "application/x-sh"},
-                {"shar", "application/x-shar"},
-                {"shtml", "magnus-internal/parsed-html"},
-                {"shw", "application/presentations"}, {"si6", "image/si6"},
-                {"si7", "image/vnd.stiwap.sis"},
-                {"si9", "image/vnd.lgtwap.sis"},
-                {"sis", "application/vnd.symbian.install"},
-                {"sit", "application/x-stuffit"},
-                {"skd", "application/x-Koan"}, {"skm", "application/x-Koan"},
-                {"skp", "application/x-Koan"}, {"skt", "application/x-Koan"},
-                {"slc", "application/x-salsa"}, {"smd", "audio/x-smd"},
-                {"smi", "application/smil"}, {"smil", "application/smil"},
-                {"smp", "application/studiom"}, {"smz", "audio/x-smd"},
-                {"snd", "audio/basic"}, {"spc", "text/x-speech"},
-                {"spl", "application/futuresplash"},
-                {"spr", "application/x-sprite"},
-                {"sprite", "application/x-sprite"},
-                {"spt", "application/x-spt"},
-                {"src", "application/x-wais-source"},
-                {"stk", "application/hyperstudio"}, {"stm", "audio/x-mod"},
-                {"sv4cpio", "application/x-sv4cpio"},
-                {"sv4crc", "application/x-sv4crc"}, {"svf", "image/vnd"},
-                {"svg", "image/svg-xml"}, {"svh", "image/svh"},
-                {"svr", "x-world/x-svr"},
-                {"swf", "application/x-shockwave-flash"},
-                {"swfl", "application/x-shockwave-flash"},
-                {"t", "application/x-troff"},
-                {"tad", "application/octet-stream"}, {"talk", "text/x-speech"},
-                {"tar", "application/x-tar"}, {"taz", "application/x-tar"},
-                {"tbp", "application/x-timbuktu"},
-                {"tbt", "application/x-timbuktu"},
-                {"tcl", "application/x-tcl"}, {"tex", "application/x-tex"},
-                {"texi", "application/x-texinfo"},
-                {"texinfo", "application/x-texinfo"},
-                {"tgz", "application/x-tar"},
-                {"thm", "application/vnd.eri.thm"}, {"tif", "image/tiff"},
-                {"tiff", "image/tiff"}, {"tki", "application/x-tkined"},
-                {"tkined", "application/x-tkined"}, {"toc", "application/toc"},
-                {"toy", "image/toy"}, {"tr", "application/x-troff"},
-                {"trk", "x-lml/x-gps"}, {"trm", "application/x-msterminal"},
-                {"tsi", "audio/tsplayer"}, {"tsp", "application/dsptype"},
-                {"tsv", "text/tab-separated-values"},
-                {"tsv", "text/tab-separated-values"},
-                {"ttf", "application/octet-stream"},
-                {"ttz", "application/t-time"}, {"txt", "text/plain"},
-                {"ult", "audio/x-mod"}, {"ustar", "application/x-ustar"},
-                {"uu", "application/x-uuencode"},
-                {"uue", "application/x-uuencode"},
-                {"vcd", "application/x-cdlink"}, {"vcf", "text/x-vcard"},
-                {"vdo", "video/vdo"}, {"vib", "audio/vib"},
-                {"viv", "video/vivo"}, {"vivo", "video/vivo"},
-                {"vmd", "application/vocaltec-media-desc"},
-                {"vmf", "application/vocaltec-media-file"},
-                {"vmi", "application/x-dreamcast-vms-info"},
-                {"vms", "application/x-dreamcast-vms"},
-                {"vox", "audio/voxware"}, {"vqe", "audio/x-twinvq-plugin"},
-                {"vqf", "audio/x-twinvq"}, {"vql", "audio/x-twinvq"},
-                {"vre", "x-world/x-vream"}, {"vrml", "x-world/x-vrml"},
-                {"vrt", "x-world/x-vrt"}, {"vrw", "x-world/x-vream"},
-                {"vts", "workbook/formulaone"}, {"wav", "audio/x-wav"},
-                {"wax", "audio/x-ms-wax"}, {"wbmp", "image/vnd.wap.wbmp"},
-                {"web", "application/vnd.xara"}, {"wi", "image/wavelet"},
-                {"wis", "application/x-InstallShield"},
-                {"wm", "video/x-ms-wm"}, {"wma", "audio/x-ms-wma"},
-                {"wmd", "application/x-ms-wmd"},
-                {"wmf", "application/x-msmetafile"},
-                {"wml", "text/vnd.wap.wml"},
-                {"wmlc", "application/vnd.wap.wmlc"},
-                {"wmls", "text/vnd.wap.wmlscript"},
-                {"wmlsc", "application/vnd.wap.wmlscriptc"},
-                {"wmlscript", "text/vnd.wap.wmlscript"},
-                {"wmv", "audio/x-ms-wmv"}, {"wmx", "video/x-ms-wmx"},
-                {"wmz", "application/x-ms-wmz"}, {"wpng", "image/x-up-wpng"},
-                {"wpt", "x-lml/x-gps"}, {"wri", "application/x-mswrite"},
-                {"wrl", "x-world/x-vrml"}, {"wrz", "x-world/x-vrml"},
-                {"ws", "text/vnd.wap.wmlscript"},
-                {"wsc", "application/vnd.wap.wmlscriptc"},
-                {"wv", "video/wavelet"}, {"wvx", "video/x-ms-wvx"},
-                {"wxl", "application/x-wxl"}, {"x-gzip", "application/x-gzip"},
-                {"xar", "application/vnd.xara"}, {"xbm", "image/x-xbitmap"},
-                {"xdm", "application/x-xdma"}, {"xdma", "application/x-xdma"},
-                {"xdw", "application/vnd.fujixerox.docuworks"},
-                {"xht", "application/xhtml+xml"},
-                {"xhtm", "application/xhtml+xml"},
-                {"xhtml", "application/xhtml+xml"},
-                {"xla", "application/vnd.ms-excel"},
-                {"xlc", "application/vnd.ms-excel"},
-                {"xll", "application/x-excel"},
-                {"xlm", "application/vnd.ms-excel"},
-                {"xls", "application/vnd.ms-excel"},
-                {"xlt", "application/vnd.ms-excel"},
-                {"xlw", "application/vnd.ms-excel"}, {"xm", "audio/x-mod"},
-                {"xml", "text/xml"}, {"xmz", "audio/x-mod"},
-                {"xpi", "application/x-xpinstall"}, {"xpm", "image/x-xpixmap"},
-                {"xsit", "text/xml"}, {"xsl", "text/xml"},
-                {"xul", "text/xul"}, {"xwd", "image/x-xwindowdump"},
-                {"xyz", "chemical/x-pdb"}, {"yz1", "application/x-yz1"},
-                {"z", "application/x-compress"},
-                {"zac", "application/x-zaurus-zac"},
-                {"zip", "application/zip"},};
-        //------------------------------第三方调用打开文件
-
-        //------------------------图片处理
-        public static Drawable bitmapToDrawable (Bitmap bmp){
-            return new BitmapDrawable(bmp);
+        /* 获取文件的后缀名 */
+        String end = fName.substring(dotIndex + 1, fName.length())
+                .toLowerCase();
+        if (end == "")
+            return type;
+        // 在MIME和文件类型的匹配表中找到对应的MIME类型。
+        for (int i = 0; i < MIME_Table.length; i++) {
+            if (end.equals(MIME_Table[i][0]))
+                type = MIME_Table[i][1];
         }
+        return type;
+    }
 
-        public static Bitmap drawableToBitmap (Drawable drawable){
-            if (drawable instanceof BitmapDrawable) {
-                return ((BitmapDrawable) drawable).getBitmap();
-            }
-            int w = drawable.getIntrinsicWidth();
-            int h = drawable.getIntrinsicHeight();
-            System.out.println("Drawable转Bitmap");
-            Bitmap.Config config =
-                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                            : Bitmap.Config.RGB_565;
-            Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-            //注意，下面三行代码要用到，否则在View或者SurfaceView里的canvas.drawBitmap会看不到图
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, w, h);
-            drawable.draw(canvas);
-            return bitmap;
+    /**
+     * 文件MIME类型(主要用做打开操作时，指定打开的指定文件对应所属的MIME类型)
+     */
+    private static final String[][] MIME_Table = {
+            // {后缀名，MIME类型}
+            {"aab", "application/x-authoware-bin"},
+            {"aam", "application/x-authoware-map"},
+            {"aas", "application/x-authoware-seg"},
+            {"amc", "application/x-mpeg"},
+            {"ani", "application/octet-stream"},
+            {"apk", "application/vnd.android.package-archive"},
+            {"asd", "application/astound"}, {"asn", "application/astound"},
+            {"asp", "application/x-asap"},
+            {"ai", "application/postscript"},
+            {"avb", "application/octet-stream"},
+            {"bcpio", "application/x-bcpio"},
+            {"bin", "application/octet-stream"},
+            {"bld", "application/bld"}, {"bld2", "application/bld2"},
+            {"aif", "audio/x-aiff"}, {"aifc", "audio/x-aiff"},
+            {"aiff", "audio/x-aiff"}, {"als", "audio/X-Alpha5"},
+            {"au", "audio/basic"}, {"awb", "audio/amr-wb"},
+            {"3gp", "video/3gpp"}, {"asf", "video/x-ms-asf"},
+            {"asx", "video/x-ms-asf"}, {"avi", "video/x-msvideo"},
+            {"asc", "text/plain"}, {"bmp", "image/bmp"},
+            {"bpk", "application/octet-stream"},
+            {"bz2", "application/x-bzip2"}, {"c", "text/x-csrc"},
+            {"cpp", "text/x-c++src"}, {"cal", "image/x-cals"},
+            {"ccn", "application/x-cnc"}, {"cco", "application/x-cocoa"},
+            {"cdf", "application/x-netcdf"},
+            {"cgi", "magnus-internal/cgi"}, {"chat", "application/x-chat"},
+            {"class", "application/octet-stream"},
+            {"clp", "application/x-msclip"}, {"cmx", "application/x-cmx"},
+            {"co", "application/x-cult3d-object"},
+            {"cod", "image/cis-cod"}, {"csh", "application/x-csh"},
+            {"csm", "chemical/x-csml"}, {"csml", "chemical/x-csml"},
+            {"css", "text/css"}, {"dcm", "x-lml/x-evm"},
+            {"cpio", "application/x-cpio"},
+            {"cpt", "application/mac-compactpro"},
+            {"crd", "application/x-mscardfile"},
+            {"cur", "application/octet-stream"},
+            {"dcr", "application/x-director"},
+            {"dir", "application/x-director"},
+            {"dll", "application/octet-stream"},
+            {"dmg", "application/octet-stream"},
+            {"dms", "application/octet-stream"},
+            {"doc", "application/msword"}, {"dot", "application/x-dot"},
+            {"dvi", "application/x-dvi"}, {"dwg", "application/x-autocad"},
+            {"dxf", "application/x-autocad"},
+            {"dxr", "application/x-director"},
+            {"ebk", "application/x-expandedbook"},
+            {"etc", "application/x-earthtime"}, {"dcx", "image/x-dcx"},
+            {"dhtml", "text/html"}, {"dwf", "drawing/x-dwf"},
+            {"emb", "chemical/x-embl-dl-nucleotide"},
+            {"embl", "chemical/x-embl-dl-nucleotide"},
+            {"eps", "application/postscript"}, {"eri", "image/x-eri"},
+            {"es", "audio/echospeech"}, {"esl", "audio/echospeech"},
+            {"etx", "text/x-setext"}, {"evm", "x-lml/x-evm"},
+            {"evy", "application/x-envoy"},
+            {"exe", "application/octet-stream"},
+            {"fh4", "image/x-freehand"}, {"fh5", "image/x-freehand"},
+            {"fhc", "image/x-freehand"}, {"fif", "image/fif"},
+            {"fm", "application/x-maker"}, {"fpx", "image/x-fpx"},
+            {"fvi", "video/isivideo"},
+            {"gau", "chemical/x-gaussian-input"},
+            {"gca", "application/x-gca-compressed"},
+            {"gdb", "x-lml/x-gdb"}, {"gif", "image/gif"},
+            {"gps", "application/x-gps"}, {"gtar", "application/x-gtar"},
+            {"gz", "application/x-gzip"}, {"h", "text/x-chdr"},
+            {"hdf", "application/x-hdf"}, {"hdm", "text/x-hdml"},
+            {"hdml", "text/x-hdml"}, {"hlp", "application/winhlp"},
+            {"hqx", "application/mac-binhex40"}, {"htm", "text/html"},
+            {"html", "text/html"}, {"hts", "text/html"},
+            {"ice", "x-conference/x-cooltalk"},
+            {"ico", "application/octet-stream"}, {"ief", "image/ief"},
+            {"ifm", "image/gif"}, {"ifs", "image/ifs"},
+            {"imy", "audio/melody"}, {"ins", "application/x-NET-Install"},
+            {"ips", "application/x-ipscript"},
+            {"ipx", "application/x-ipix"}, {"it", "audio/x-mod"},
+            {"itz", "audio/x-mod"}, {"ivr", "i-world/i-vrml"},
+            {"j2k", "image/j2k"},
+            {"jad", "text/vnd.sun.j2me.app-descriptor"},
+            {"jam", "application/x-jam"}, {"java", "application/x-java"},
+            {"jar", "application/java-archive"},
+            {"jnlp", "application/x-java-jnlp-file"},
+            {"jpe", "image/jpeg"}, {"jpeg", "image/jpeg"},
+            {"jpg", "image/jpeg"}, {"jpz", "image/jpeg"},
+            {"js", "application/x-javascript"}, {"jwc", "application/jwc"},
+            {"kjx", "application/x-kjx"}, {"lak", "x-lml/x-lak"},
+            {"latex", "application/x-latex"},
+            {"lcc", "application/fastman"},
+            {"lcl", "application/x-digitalloca"},
+            {"lcr", "application/x-digitalloca"},
+            {"lgh", "application/lgh"},
+            {"lha", "application/octet-stream"}, {"lml", "x-lml/x-lml"},
+            {"lmlpack", "x-lml/x-lmlpack"}, {"lsf", "video/x-ms-asf"},
+            {"lsx", "video/x-ms-asf"}, {"lzh", "application/x-lzh"},
+            {"m13", "application/x-msmediaview"},
+            {"m14", "application/x-msmediaview"}, {"m15", "audio/x-mod"},
+            {"m3u", "audio/x-mpegurl"}, {"m3url", "audio/x-mpegurl"},
+            {"ma1", "audio/ma1"}, {"ma2", "audio/ma2"},
+            {"ma3", "audio/ma3"}, {"ma5", "audio/ma5"},
+            {"man", "application/x-troff-man"},
+            {"map", "magnus-internal/imagemap"},
+            {"mbd", "application/mbedlet"},
+            {"mct", "application/x-mascot"},
+            {"mdb", "application/x-msaccess"}, {"mdz", "audio/x-mod"},
+            {"me", "application/x-troff-me"}, {"mel", "text/x-vmel"},
+            {"mi", "application/x-mif"}, {"mid", "audio/midi"},
+            {"midi", "audio/midi"}, {"mif", "application/x-mif"},
+            {"mil", "image/x-cals"}, {"mio", "audio/x-mio"},
+            {"mmf", "application/x-skt-lbs"}, {"mng", "video/x-mng"},
+            {"mny", "application/x-msmoney"},
+            {"moc", "application/x-mocha"},
+            {"mocha", "application/x-mocha"}, {"mod", "audio/x-mod"},
+            {"mof", "application/x-yumekara"},
+            {"mol", "chemical/x-mdl-molfile"},
+            {"mop", "chemical/x-mopac-input"}, {"mov", "video/quicktime"},
+            {"movie", "video/x-sgi-movie"}, {"mp2", "audio/x-mpeg"},
+            {"mp3", "audio/x-mpeg"}, {"mp4", "video/mp4"},
+            {"mpc", "application/vnd.mpohun.certificate"},
+            {"mpe", "video/mpeg"}, {"mpeg", "video/mpeg"},
+            {"mpg", "video/mpeg"}, {"mpg4", "video/mp4"},
+            {"mpga", "audio/mpeg"},
+            {"mpn", "application/vnd.mophun.application"},
+            {"mpp", "application/vnd.ms-project"},
+            {"mps", "application/x-mapserver"}, {"mrl", "text/x-mrml"},
+            {"mrm", "application/x-mrm"}, {"ms", "application/x-troff-ms"},
+            {"mts", "application/metastream"},
+            {"mtx", "application/metastream"},
+            {"mtz", "application/metastream"},
+            {"mzv", "application/metastream"}, {"nar", "application/zip"},
+            {"nbmp", "image/nbmp"}, {"nc", "application/x-netcdf"},
+            {"ndb", "x-lml/x-ndb"}, {"ndwn", "application/ndwn"},
+            {"nif", "application/x-nif"}, {"nmz", "application/x-scream"},
+            {"nokia-op-logo", "image/vnd.nok-oplogo-color"},
+            {"npx", "application/x-netfpx"}, {"nsnd", "audio/nsnd"},
+            {"nva", "application/x-neva1"}, {"oda", "application/oda"},
+            {"oom", "application/x-AtlasMate-Plugin"},
+            {"pac", "audio/x-pac"}, {"pae", "audio/x-epac"},
+            {"pan", "application/x-pan"},
+            {"pbm", "image/x-portable-bitmap"}, {"pcx", "image/x-pcx"},
+            {"pda", "image/x-pda"}, {"pdb", "chemical/x-pdb"},
+            {"pdf", "application/pdf"}, {"pfr", "application/font-tdpfr"},
+            {"pgm", "image/x-portable-graymap"}, {"pict", "image/x-pict"},
+            {"pm", "application/x-perl"}, {"pmd", "application/x-pmd"},
+            {"png", "image/png"}, {"pnm", "image/x-portable-anymap"},
+            {"pnz", "image/png"}, {"pot", "application/vnd.ms-powerpoint"},
+            {"ppm", "image/x-portable-pixmap"},
+            {"pps", "application/vnd.ms-powerpoint"},
+            {"ppt", "application/vnd.ms-powerpoint"},
+            {"pqf", "application/x-cprplayer"},
+            {"pqi", "application/cprplayer"}, {"prc", "application/x-prc"},
+            {"proxy", "application/x-ns-proxy-autoconfig"},
+            {"ps", "application/postscript"},
+            {"ptlk", "application/listenup"},
+            {"pub", "application/x-mspublisher"},
+            {"pvx", "video/x-pv-pvx"}, {"qcp", "audio/vnd.qcelp"},
+            {"qt", "video/quicktime"}, {"qti", "image/x-quicktime"},
+            {"qtif", "image/x-quicktime"},
+            {"r3t", "text/vnd.rn-realtext3d"},
+            {"ra", "audio/x-pn-realaudio"},
+            {"ram", "audio/x-pn-realaudio"},
+            {"rar", "application/x-rar-compressed"},
+            {"ras", "image/x-cmu-raster"}, {"rdf", "application/rdf+xml"},
+            {"rf", "image/vnd.rn-realflash"}, {"rgb", "image/x-rgb"},
+            {"rlf", "application/x-richlink"},
+            {"rm", "audio/x-pn-realaudio"}, {"rmf", "audio/x-rmf"},
+            {"rmm", "audio/x-pn-realaudio"},
+            {"rmvb", "audio/x-pn-realaudio"},
+            {"rnx", "application/vnd.rn-realplayer"},
+            {"roff", "application/x-troff"},
+            {"rp", "image/vnd.rn-realpix"},
+            {"rpm", "audio/x-pn-realaudio-plugin"},
+            {"rt", "text/vnd.rn-realtext"}, {"rte", "x-lml/x-gps"},
+            {"rtf", "application/rtf"}, {"rtg", "application/metastream"},
+            {"rtx", "text/richtext"}, {"rv", "video/vnd.rn-realvideo"},
+            {"rwc", "application/x-rogerwilco"}, {"s3m", "audio/x-mod"},
+            {"s3z", "audio/x-mod"}, {"sca", "application/x-supercard"},
+            {"scd", "application/x-msschedule"},
+            {"sdf", "application/e-score"},
+            {"sea", "application/x-stuffit"}, {"sgm", "text/x-sgml"},
+            {"sgml", "text/x-sgml"}, {"sh", "application/x-sh"},
+            {"shar", "application/x-shar"},
+            {"shtml", "magnus-internal/parsed-html"},
+            {"shw", "application/presentations"}, {"si6", "image/si6"},
+            {"si7", "image/vnd.stiwap.sis"},
+            {"si9", "image/vnd.lgtwap.sis"},
+            {"sis", "application/vnd.symbian.install"},
+            {"sit", "application/x-stuffit"},
+            {"skd", "application/x-Koan"}, {"skm", "application/x-Koan"},
+            {"skp", "application/x-Koan"}, {"skt", "application/x-Koan"},
+            {"slc", "application/x-salsa"}, {"smd", "audio/x-smd"},
+            {"smi", "application/smil"}, {"smil", "application/smil"},
+            {"smp", "application/studiom"}, {"smz", "audio/x-smd"},
+            {"snd", "audio/basic"}, {"spc", "text/x-speech"},
+            {"spl", "application/futuresplash"},
+            {"spr", "application/x-sprite"},
+            {"sprite", "application/x-sprite"},
+            {"spt", "application/x-spt"},
+            {"src", "application/x-wais-source"},
+            {"stk", "application/hyperstudio"}, {"stm", "audio/x-mod"},
+            {"sv4cpio", "application/x-sv4cpio"},
+            {"sv4crc", "application/x-sv4crc"}, {"svf", "image/vnd"},
+            {"svg", "image/svg-xml"}, {"svh", "image/svh"},
+            {"svr", "x-world/x-svr"},
+            {"swf", "application/x-shockwave-flash"},
+            {"swfl", "application/x-shockwave-flash"},
+            {"t", "application/x-troff"},
+            {"tad", "application/octet-stream"}, {"talk", "text/x-speech"},
+            {"tar", "application/x-tar"}, {"taz", "application/x-tar"},
+            {"tbp", "application/x-timbuktu"},
+            {"tbt", "application/x-timbuktu"},
+            {"tcl", "application/x-tcl"}, {"tex", "application/x-tex"},
+            {"texi", "application/x-texinfo"},
+            {"texinfo", "application/x-texinfo"},
+            {"tgz", "application/x-tar"},
+            {"thm", "application/vnd.eri.thm"}, {"tif", "image/tiff"},
+            {"tiff", "image/tiff"}, {"tki", "application/x-tkined"},
+            {"tkined", "application/x-tkined"}, {"toc", "application/toc"},
+            {"toy", "image/toy"}, {"tr", "application/x-troff"},
+            {"trk", "x-lml/x-gps"}, {"trm", "application/x-msterminal"},
+            {"tsi", "audio/tsplayer"}, {"tsp", "application/dsptype"},
+            {"tsv", "text/tab-separated-values"},
+            {"tsv", "text/tab-separated-values"},
+            {"ttf", "application/octet-stream"},
+            {"ttz", "application/t-time"}, {"txt", "text/plain"},
+            {"ult", "audio/x-mod"}, {"ustar", "application/x-ustar"},
+            {"uu", "application/x-uuencode"},
+            {"uue", "application/x-uuencode"},
+            {"vcd", "application/x-cdlink"}, {"vcf", "text/x-vcard"},
+            {"vdo", "video/vdo"}, {"vib", "audio/vib"},
+            {"viv", "video/vivo"}, {"vivo", "video/vivo"},
+            {"vmd", "application/vocaltec-media-desc"},
+            {"vmf", "application/vocaltec-media-file"},
+            {"vmi", "application/x-dreamcast-vms-info"},
+            {"vms", "application/x-dreamcast-vms"},
+            {"vox", "audio/voxware"}, {"vqe", "audio/x-twinvq-plugin"},
+            {"vqf", "audio/x-twinvq"}, {"vql", "audio/x-twinvq"},
+            {"vre", "x-world/x-vream"}, {"vrml", "x-world/x-vrml"},
+            {"vrt", "x-world/x-vrt"}, {"vrw", "x-world/x-vream"},
+            {"vts", "workbook/formulaone"}, {"wav", "audio/x-wav"},
+            {"wax", "audio/x-ms-wax"}, {"wbmp", "image/vnd.wap.wbmp"},
+            {"web", "application/vnd.xara"}, {"wi", "image/wavelet"},
+            {"wis", "application/x-InstallShield"},
+            {"wm", "video/x-ms-wm"}, {"wma", "audio/x-ms-wma"},
+            {"wmd", "application/x-ms-wmd"},
+            {"wmf", "application/x-msmetafile"},
+            {"wml", "text/vnd.wap.wml"},
+            {"wmlc", "application/vnd.wap.wmlc"},
+            {"wmls", "text/vnd.wap.wmlscript"},
+            {"wmlsc", "application/vnd.wap.wmlscriptc"},
+            {"wmlscript", "text/vnd.wap.wmlscript"},
+            {"wmv", "audio/x-ms-wmv"}, {"wmx", "video/x-ms-wmx"},
+            {"wmz", "application/x-ms-wmz"}, {"wpng", "image/x-up-wpng"},
+            {"wpt", "x-lml/x-gps"}, {"wri", "application/x-mswrite"},
+            {"wrl", "x-world/x-vrml"}, {"wrz", "x-world/x-vrml"},
+            {"ws", "text/vnd.wap.wmlscript"},
+            {"wsc", "application/vnd.wap.wmlscriptc"},
+            {"wv", "video/wavelet"}, {"wvx", "video/x-ms-wvx"},
+            {"wxl", "application/x-wxl"}, {"x-gzip", "application/x-gzip"},
+            {"xar", "application/vnd.xara"}, {"xbm", "image/x-xbitmap"},
+            {"xdm", "application/x-xdma"}, {"xdma", "application/x-xdma"},
+            {"xdw", "application/vnd.fujixerox.docuworks"},
+            {"xht", "application/xhtml+xml"},
+            {"xhtm", "application/xhtml+xml"},
+            {"xhtml", "application/xhtml+xml"},
+            {"xla", "application/vnd.ms-excel"},
+            {"xlc", "application/vnd.ms-excel"},
+            {"xll", "application/x-excel"},
+            {"xlm", "application/vnd.ms-excel"},
+            {"xls", "application/vnd.ms-excel"},
+            {"xlt", "application/vnd.ms-excel"},
+            {"xlw", "application/vnd.ms-excel"}, {"xm", "audio/x-mod"},
+            {"xml", "text/xml"}, {"xmz", "audio/x-mod"},
+            {"xpi", "application/x-xpinstall"}, {"xpm", "image/x-xpixmap"},
+            {"xsit", "text/xml"}, {"xsl", "text/xml"},
+            {"xul", "text/xul"}, {"xwd", "image/x-xwindowdump"},
+            {"xyz", "chemical/x-pdb"}, {"yz1", "application/x-yz1"},
+            {"z", "application/x-compress"},
+            {"zac", "application/x-zaurus-zac"},
+            {"zip", "application/zip"},};
+    //------------------------------第三方调用打开文件
+
+    //------------------------图片处理
+    public static Drawable bitmapToDrawable(Bitmap bmp) {
+        return new BitmapDrawable(bmp);
+    }
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
         }
-        //------------------------图片处理
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+        System.out.println("Drawable转Bitmap");
+        Bitmap.Config config =
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565;
+        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+        //注意，下面三行代码要用到，否则在View或者SurfaceView里的canvas.drawBitmap会看不到图
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, w, h);
+        drawable.draw(canvas);
+        return bitmap;
+    }
+    //------------------------图片处理
 
-        //------------------------little tools
+    //------------------------little tools
 
-        /**
-         * 获取状态栏高度
-         */
-        public static int getStatusBarHeight (Context context){
-            int resourcesId = context.getResources().getIdentifier("status_bar_height",
-                    "dimen", "android");
-            return context.getResources().getDimensionPixelSize(resourcesId);
+    /**
+     * 获取状态栏高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        int resourcesId = context.getResources().getIdentifier("status_bar_height",
+                "dimen", "android");
+        return context.getResources().getDimensionPixelSize(resourcesId);
+    }
+
+    /**
+     * 获取ActionBar高度
+     */
+    public static int getActionBarHeight(Context context) {
+        TypedValue tv = new TypedValue();
+        int actionBarHeight = 0;
+        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,
+                    context.getResources().getDisplayMetrics());
         }
+        return actionBarHeight;
+    }
 
-        /**
-         * 获取ActionBar高度
-         */
-        public static int getActionBarHeight (Context context){
-            TypedValue tv = new TypedValue();
-            int actionBarHeight = 0;
-            if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,
-                        context.getResources().getDisplayMetrics());
-            }
-            return actionBarHeight;
+    /**
+     * 获取导航栏高度：就是类似华为底部的虚拟键
+     */
+    public static int getNavigationHeight(Context context) {
+        //首先判断是否显示了导航栏：
+        int rid = context.getResources().getIdentifier("config_showNavigationBar",
+                "bool", "android");
+        //如果rid非零
+        int resourceId = context.getResources().getIdentifier("navigation_bar_height",
+                "dimen", "android");
+        return context.getResources().getDimensionPixelSize(resourceId);
+    }
+
+
+    //------------------------little tools
+
+
+    //------------------------Android
+
+    /**
+     * 获取当前本地apk的版本
+     *
+     * @param mContext
+     * @return
+     */
+    public static int getVersionCode(Context mContext) {
+        int versionCode = 0;
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionCode
+            versionCode = mContext.getPackageManager().
+                    getPackageInfo(mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
+        return versionCode;
+    }
 
-        /**
-         * 获取导航栏高度：就是类似华为底部的虚拟键
-         */
-        public static int getNavigationHeight (Context context){
-            //首先判断是否显示了导航栏：
-            int rid = context.getResources().getIdentifier("config_showNavigationBar",
-                    "bool", "android");
-            //如果rid非零
-            int resourceId = context.getResources().getIdentifier("navigation_bar_height",
-                    "dimen", "android");
-            return context.getResources().getDimensionPixelSize(resourceId);
+    /**
+     * 获取版本号名称
+     *
+     * @param context 上下文
+     * @return
+     */
+    public static String getVerionName(Context context) {
+        String verName = "";
+        try {
+            verName = context.getPackageManager().
+                    getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
+        return verName;
+    }
 
+    //安卓5.0以上只能得到自己的信息
+    public static boolean judgeAppOnForgound(String packageName, Context context) {
 
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = activityManager.getRunningAppProcesses();
 
-        //------------------------little tools
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcessInfos) {
 
+            int curProcessPid = runningAppProcessInfo.pid;
 
-        //------------------------Android
+            Log.e("zbv", "processName=" + runningAppProcessInfo.processName
+                    + ";curProcessPid=" + curProcessPid);
 
-        /**
-         * 获取当前本地apk的版本
-         *
-         * @param mContext
-         * @return
-         */
-        public static int getVersionCode (Context mContext){
-            int versionCode = 0;
-            try {
-                //获取软件版本号，对应AndroidManifest.xml下android:versionCode
-                versionCode = mContext.getPackageManager().
-                        getPackageInfo(mContext.getPackageName(), 0).versionCode;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return versionCode;
-        }
+            if (runningAppProcessInfo.processName.equals(packageName)) {
 
-        /**
-         * 获取版本号名称
-         *
-         * @param context 上下文
-         * @return
-         */
-        public static String getVerionName (Context context){
-            String verName = "";
-            try {
-                verName = context.getPackageManager().
-                        getPackageInfo(context.getPackageName(), 0).versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return verName;
-        }
+                if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                        || runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE
+                        || runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_TOP_SLEEPING) {
 
-        //安卓5.0以上只能得到自己的信息
-        public static boolean judgeAppOnForgound (String packageName, Context context){
-
-            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
-            List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = activityManager.getRunningAppProcesses();
-
-            for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcessInfos) {
-
-                int curProcessPid = runningAppProcessInfo.pid;
-
-                Log.e("zbv", "processName=" + runningAppProcessInfo.processName
-                        + ";curProcessPid=" + curProcessPid);
-
-                if (runningAppProcessInfo.processName.equals(packageName)) {
-
-                    if (runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                            || runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE
-                            || runningAppProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_TOP_SLEEPING) {
-
-                        return true;
-
-                    }
+                    return true;
 
                 }
-            }
-            return false;
-        }
 
-        /**
-         * 获取进程号对应的进程名
-         *
-         * @param pid 进程号
-         * @return 进程名
-         */
-        public static String getProcessName ( int pid){
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
-                String processName = reader.readLine();
-                if (!TextUtils.isEmpty(processName)) {
-                    processName = processName.trim();
-                }
-                return processName;
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            } finally {
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
             }
-            return null;
         }
+        return false;
+    }
+
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    public static String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
+    }
 
 
 
@@ -2060,46 +2088,135 @@ public class QZXTools {
     *-----------------px适配各种分辨率方案------------------------
     */
 
-        public static String getDeviceSN () {
-            String serialNumber = Build.SERIAL;
-            return serialNumber;
-        }
+    public static String getDeviceSN() {
+        String serialNumber = Build.SERIAL;
+        return serialNumber;
+    }
 
     /* @author suncat
   2  * @category 判断是否有外网连接（普通方法不能判断外网的网络是否连接，比如连接上局域网）
   3  * @return
   4  */
-        public static final boolean ping () {
+    public static final boolean ping() {
 
-            String result = null;
-            try {
-                String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
-                Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址3次
-                // 读取ping的内容，可以不加
-                InputStream input = p.getInputStream();
-                BufferedReader in = new BufferedReader(new InputStreamReader(input));
-                StringBuffer stringBuffer = new StringBuffer();
-                String content = "";
-                while ((content = in.readLine()) != null) {
-                    stringBuffer.append(content);
-                }
-                Log.d("------ping-----", "result content : " + stringBuffer.toString());
-                // ping的状态
-                int status = p.waitFor();
-                if (status == 0) {
-                    result = "success";
-                    return true;
-                } else {
-                    result = "failed";
-                }
-            } catch (IOException e) {
-                result = "IOException";
-            } catch (InterruptedException e) {
-                result = "InterruptedException";
-            } finally {
-                Log.d("----result---", "result = " + result);
+        String result = null;
+        try {
+            String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
+            Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址3次
+            // 读取ping的内容，可以不加
+            InputStream input = p.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            StringBuffer stringBuffer = new StringBuffer();
+            String content = "";
+            while ((content = in.readLine()) != null) {
+                stringBuffer.append(content);
             }
-            return false;
+            Log.d("------ping-----", "result content : " + stringBuffer.toString());
+            // ping的状态
+            int status = p.waitFor();
+            if (status == 0) {
+                result = "success";
+                return true;
+            } else {
+                result = "failed";
+            }
+        } catch (IOException e) {
+            result = "IOException";
+        } catch (InterruptedException e) {
+            result = "InterruptedException";
+        } finally {
+            Log.d("----result---", "result = " + result);
         }
-
+        return false;
     }
+
+    //设置开关灯的指令的拼接
+
+    /**
+     * 代表的是第几路，目前设置的都是加入是第4路，就是第4路全开
+     * @param position
+     * @return
+     */
+
+    private static  int allLength=12;
+    public static String openStingLight(int position) {
+        String start = "FE 55 11 00 17 01";//固定代码
+        //受控制的开关
+        String control="01";
+
+        //不受控制的开关
+        String noControl="FF";
+        //获取最后一位  这个是与或运算出来的
+
+        //获取回路灯的指令模板
+        String byteLight = getByteLight(position, "open");
+        String[] split = byteLight.split(",");
+        for (int i = 1; i <split.length ; i++) {
+            control=control + " "+split[i];
+        }
+        //不受控制的开关数
+        for (int i = 1; i <allLength-position-1 ; i++) {
+            noControl=noControl+" "+"FF";
+        }
+        return start +" "+ control+" " + noControl;
+    }
+
+
+    /**
+     * 代表的是第几路，目前设置的都是加入是第4路，就是第4路全开
+     * @param position
+     * @return
+     */
+
+    public static String closeStingLight(int position) {
+        String start = "FE 55 11 00 17 01";//固定代码
+        //受控制的开关
+        String control="00";
+
+        //不受控制的开关
+        String noControl="FF";
+        //获取最后一位  这个是与或运算出来的
+
+        //获取回路灯的指令模板
+        String byteLight = getByteLight(position, "close");
+        String[] split = byteLight.split(",");
+        for (int i = 1; i <split.length ; i++) {
+            control=control + " "+split[i];
+        }
+        //不受控制的开关数
+        for (int i = 1; i <allLength-position-1 ; i++) {
+            noControl=noControl +" "+"FF";
+        }
+        return start +" "+ control+" " + noControl;
+    }
+
+    /**
+     * 获取灯的指令模板也就是从1到12
+     * @param position
+     * @param type
+     */
+    private static String getByteLight(int position, String type) {
+        String start="";
+        StringBuffer sb=new StringBuffer();
+        if (position>=12){
+            return start;
+        }
+        position=position+1;
+        if (type.equals("open")){
+            for (int i = 0; i < position; i++) {
+                start = "01";
+                sb.append(start);
+                sb.append(",");
+            }
+        }else {
+            //下面的是关灯
+            for (int i = 0; i < position; i++) {
+                start = "00";
+                sb.append(start);
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+}

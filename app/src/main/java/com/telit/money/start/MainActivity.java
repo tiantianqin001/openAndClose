@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -81,8 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_wen_du;
     private TextView tv_shi_du;
     private TextView tv_er_yang;
-
-
+    private RelativeLayout rl_clear_sp;
 
 
     private class MyHandler extends Handler {
@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
         initData();
         ////这里不要最后一位和第一位
-        String originalData = "55 11 00 17 01 01 FF FF FF FF FF FF FF FF FF FF FF";
+ /*       String originalData = "55 11 00 17 01 01 FF FF FF FF FF FF FF FF FF FF FF";
         //这个是获取最后一位
-        NumUtil.bytesToHexLastString(originalData);
+        NumUtil.bytesToHexLastString(originalData);*/
 
     }
 
@@ -275,6 +275,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home_one_close = (TextView) findViewById(R.id.home_one_close);
         home_line_open = (TextView) findViewById(R.id.home_line_open);
         home_line_close = (TextView) findViewById(R.id.home_line_close);
+        //移除sp
+        rl_clear_sp = (RelativeLayout) findViewById(R.id.rl_clear_sp);
+        rl_clear_sp.setOnClickListener(this);
 
 
         MyContentFragment fragment = MyContentFragment.newInstance();
@@ -301,25 +304,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.home_one_open:
                 //一键开机
-                if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+            /*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
+                }*/
+                for (int i = 0; i < 10; i++) {
+                 String   getIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverIp" + i);
+                  String  getPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverPort" + i);
+                    if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(getPort)){
+                        ToastUtils.show("当前"+i+1+"台设备没有被绑定");
+                        return;
+                    }
+                    QZXTools. moveAdevice(getIp, getPort, "重启");
                 }
-                SimpleClientNetty.getInstance().sendMsgToServer(MsgUtils.HEAD_ONE_OPEN,
-                        "");
+
+
                 break;
             case R.id.home_one_close:
                 //一键关机
-                if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+            /*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
-                }
+                }*/
                 //关机要延迟1秒
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        SimpleClientNetty.getInstance().sendMsgToServer(MsgUtils.HEAD_ONE_CLOSE,
-                                "");
+
+                        for (int i = 0; i < 10; i++) {
+                            String   getIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverIp" + i);
+                            String  getPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverPort" + i);
+                            if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(getPort)){
+                                ToastUtils.show("当前"+i+1+"台设备没有被绑定");
+                                return;
+                            }
+                            QZXTools. moveAdevice(getIp, getPort, "关闭");
+                        }
+
+
                     }
                 }, 1200);
 
@@ -338,6 +360,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 break;
+
+            case R.id.rl_clear_sp:
+                //移除sp
+                count++;
+                long curTime1 = System.currentTimeMillis();
+                if (count == 1) {
+                    touchFirstTime = curTime1;
+                }
+                if (count == 3 && curTime1 - touchFirstTime <= 1000) {
+                    count = 0;
+                    ToastUtils.show("移除服务地址成功");
+                    for (int i = 0; i < 10; i++) {
+                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp" +i,"");
+                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort" +i,"");
+                    }
+
+
+                } else if (curTime1 - touchFirstTime > 1000) {
+                    //重置
+                    count = 0;
+                } else if (count > 3) {
+                    //重置
+                    count = 0;
+                }
+                break;
+
             case R.id.home_timetable:
                 //切换ip
                 count++;
@@ -358,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     count = 0;
                 }
                 break;
+
+
         }
     }
 

@@ -57,9 +57,11 @@ public class NumUtil {
         String[] strings = originalData.split("\\s+");
         for (String string : strings) {
             Log.i(TAG, "onCreate: .................." + string);
-            if (!string.equals("FF")) {
-                stringLists.add(string);
+
+            if (string.equals("FF") || string.equals("FE")) {
+               continue;
             }
+            stringLists.add(string);
 
         }
         //开始把数据转化成二进制

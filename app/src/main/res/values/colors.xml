@@ -36,10 +36,12 @@
     <color name="micro_lecture_primary_bg_blue">#F5F5F5</color>
     <color name="black70">#70000000</color>
     <color name="dark">#5e5656</color>
+    <color name="color_pi_zu">#32C5FE</color>
     <color name="light_blue">#53ACF1</color>
     <color name="light_gray">#F3F4F5</color>
-
+    <color name="gray_bg_color_size">#B3B9C7</color>
     <color name="dialog_bg">#bc000000</color>
+    <color name="color_afff">#fff</color>
 
     //------------------------Resource------------------
     <color name="video_text_color">#FF4343</color>

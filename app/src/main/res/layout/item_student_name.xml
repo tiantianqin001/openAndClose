@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/x25"
+    android:paddingBottom="@dimen/x25"
+    android:paddingLeft="@dimen/x50"
+    android:paddingRight="@dimen/x50"
+    tools:ignore="NewApi"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:id="@+id/tv_device_close"
+        android:layout_width="@dimen/x255"
+        android:layout_height="@dimen/y75"
+        android:gravity="center"
+        android:textColor="@color/color_afff"
+        android:textSize="@dimen/x24"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/y10"
+        android:text="关机"
+        android:background="@drawable/ic_studnt_item_check"
+        android:layout_marginBottom="@dimen/y10"
+        />
+
+    <TextView
+        android:id="@+id/tv_device_rebot"
+        android:layout_width="@dimen/x255"
+        android:layout_height="@dimen/y75"
+        android:gravity="center"
+        android:textColor="@color/color_afff"
+        android:textSize="@dimen/x24"
+        android:text="重启"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/y10"
+        android:layout_marginLeft="@dimen/x40"
+        android:background="@drawable/ic_studnt_item_check"
+        android:layout_marginBottom="@dimen/y10"
+        />
+
+</LinearLayout>
