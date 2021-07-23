@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.telit.money.start.R;
 import com.telit.money.start.bean.LightBean;
+import com.telit.money.start.bean.SaveLight;
 import com.telit.money.start.bean.ZhXiangBean;
+
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder>{
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.item_student_name, null);
+        View view = View.inflate(context, R.layout.item_light_name, null);
         ViewHolder viewHolder=new ViewHolder(view);
         viewHolder.setIsRecyclable(false);
         return viewHolder;
@@ -38,13 +41,16 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_device_close.setText(lightBeans.get(position).getClose());
         holder.tv_device_rebot.setText(lightBeans.get(position).getOpen());
+        holder.tv_device_adress.setText(lightBeans.get(position).getAddress());
+
+
 
         holder.tv_device_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (listener!=null){
-                    listener.onClick(position,"关灯");
+                    listener.onClick(holder.tv_device_close,position,"关灯");
                 }
 
             }
@@ -54,13 +60,29 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 if (listener!=null){
-                    listener.onClick(position,"开灯");
+                    listener.onClick( holder.tv_device_rebot,position,"开灯");
                 }
             }
         });
+
+        holder.tv_device_adress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener!=null){
+                    listener.onClick( holder.tv_device_adress,position,"地址");
+                }
+            }
+        });
+
+
+        List<SaveLight> all = LitePal.findAll(SaveLight.class);
+        for (SaveLight saveLight : all) {
+            int index = saveLight.getIndex();
+            if (position == index){
+                holder.tv_device_adress.setText(saveLight.getWord());
+            }
+        }
     }
-
-
     @Override
     public int getItemCount() {
         return lightBeans.size();
@@ -69,17 +91,19 @@ public class LightAdapter extends RecyclerView.Adapter<LightAdapter.ViewHolder>{
 
         private final TextView tv_device_close;
         private final TextView tv_device_rebot;
+        private final TextView tv_device_adress;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_device_close = itemView.findViewById(R.id.tv_device_close);
             tv_device_rebot = itemView.findViewById(R.id.tv_device_rebot);
+            tv_device_adress = itemView.findViewById(R.id.tv_device_adress);
         }
     }
 
 
     public interface onClickListerner  {
-      void   onClick(int position,String type);
+      void   onClick(TextView view, int position,String type);
     }
 
     public void setOnCliclListener(onClickListerner listener){

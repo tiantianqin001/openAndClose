@@ -3,6 +3,10 @@ package com.telit.money.start.bean;
 public class LightBean {
     private String close;
     private String open;
+
+
+    private String address;
+
     private int num;
 
     public String getClose() {
@@ -28,4 +32,13 @@ public class LightBean {
     public void setNum(int num) {
         this.num = num;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
 }

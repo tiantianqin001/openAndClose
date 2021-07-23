@@ -1,6 +1,5 @@
 package com.telit.money.start;
 
-import android.app.ActivityManager;
 import android.app.Application;
 
 import com.hjq.toast.ToastUtils;
@@ -12,6 +11,8 @@ import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.DBCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.telit.money.start.utils.QZXTools;
+
+import org.litepal.LitePalApplication;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -25,20 +26,15 @@ import okhttp3.OkHttpClient;
  * <p>
  * 如果GreenDao升级会删除之前的所有数据，所以升级一下
  */
-public class MyApplication extends Application {
+public class MyApplication extends LitePalApplication {
 
     private static MyApplication myApplication;
-
-
-
     @Override
     public void onCreate() {
         super.onCreate();
         myApplication = this;
 
         initOkGo();
-
-
         ToastUtils.init(this);
 
 
@@ -91,6 +87,9 @@ public class MyApplication extends Application {
 //                .addCommonParams(params);//全局公共参数
 
     }
+
+
+
 
 
     public static MyApplication getInstance() {
