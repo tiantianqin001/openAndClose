@@ -15,6 +15,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -29,7 +30,9 @@ import com.lzy.okgo.model.Response;
 import com.telit.money.start.activity.ChangeCrdActivity;
 import com.telit.money.start.activity.LoginActivity;
 import com.telit.money.start.bean.HandleTimeBean;
+import com.telit.money.start.bean.SaveLight;
 import com.telit.money.start.constant.Constant;
+import com.telit.money.start.customview.CustomPopWindow;
 import com.telit.money.start.dialoge.TipsDialog;
 import com.telit.money.start.dialoge.UrlUpdateDialog;
 import com.telit.money.start.fragment.MyContentFragment;
@@ -53,6 +56,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -76,13 +80,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView home_one_close;
     private TextView home_line_open;
     private TextView home_line_close;
-    private ScheduledExecutorService messageExecutorService;
+    private ExecutorService messageExecutorService;
 
     private String onLine = "";
     private TextView tv_wen_du;
     private TextView tv_shi_du;
     private TextView tv_er_yang;
     private RelativeLayout rl_clear_sp;
+    private TextView home_change_address;
+    private CustomPopWindow mCustomPopWindow;
 
 
     private class MyHandler extends Handler {
@@ -157,10 +163,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         if (messageExecutorService == null) {
-            messageExecutorService = Executors.newSingleThreadScheduledExecutor();
+            messageExecutorService = Executors.newFixedThreadPool(2);
 
         }
-
         messageExecutorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -176,10 +181,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //保存连接的ip和端口
                     SimpleClientNetty.getInstance().init(socketIp, Integer.valueOf(socketPort));
                 }
-
-
             }
         });
+        //设置所有的默认开关地址
+        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
+                setString("allLightAdress","00");
     }
 
     private void initListener() {
@@ -193,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home_line_open.setOnClickListener(this);
         //一键关灯
         home_line_close.setOnClickListener(this);
+        //切换地址
+        home_change_address.setOnClickListener(this);
 
 
     }
@@ -275,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home_one_close = (TextView) findViewById(R.id.home_one_close);
         home_line_open = (TextView) findViewById(R.id.home_line_open);
         home_line_close = (TextView) findViewById(R.id.home_line_close);
+        home_change_address = (TextView) findViewById(R.id.home_change_address);
         //移除sp
         rl_clear_sp = (RelativeLayout) findViewById(R.id.rl_clear_sp);
         rl_clear_sp.setOnClickListener(this);
@@ -352,13 +361,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ToastUtils.show("当前设备不在线");
                     return;
                 }
+
+                messageExecutorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 12; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            String stingLight = QZXTools.openStingLight(i,true);
+                            QZXTools.logD(stingLight);
+                            //这个是获取最后一位
+                            String lastString = NumUtil.bytesToHexLastString(stingLight);
+                            String retailString= stingLight + " " + lastString;
+                            QZXTools.logD(retailString);
+                        }
+
+
+
+                    }
+                });
+
+
                 break;
             case R.id.home_line_close:
                 //一键关灯
-                if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+           /*     if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
-                }
+                }*/
+
+                messageExecutorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 12; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            String stingLight = QZXTools.closeStingLight(i,true);
+                            QZXTools.logD(stingLight);
+                            //这个是获取最后一位
+                            String lastString = NumUtil.bytesToHexLastString(stingLight);
+                            String retailString= stingLight + " " + lastString;
+                            QZXTools.logD(retailString);
+                        }
+
+
+
+                    }
+                });
+
+
+
+
+
+                break;
+
+            case R.id.home_change_address:
+                //切换地址
+                //切换地址
+                View contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu,null);
+                //处理popWindow 显示内容
+                handleLogic(contentView);
+                //创建并显示popWindow
+                mCustomPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
+                        .setView(contentView)
+                        .create()
+                        .showAsDropDown(home_change_address,0,0);
                 break;
 
             case R.id.rl_clear_sp:
@@ -375,8 +450,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp" +i,"");
                         SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort" +i,"");
                     }
-
-
                 } else if (curTime1 - touchFirstTime > 1000) {
                     //重置
                     count = 0;
@@ -385,7 +458,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     count = 0;
                 }
                 break;
-
             case R.id.home_timetable:
                 //切换ip
                 count++;
@@ -406,8 +478,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     count = 0;
                 }
                 break;
-
-
         }
     }
 
@@ -492,5 +562,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void flushData() {
         dataHandler.postDelayed(runnable, 1000 * 60);
+    }
+
+
+    /**
+     * 处理弹出显示内容、点击事件等逻辑
+     * @param contentView
+     */
+    private void handleLogic(View contentView){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCustomPopWindow!=null){
+                    mCustomPopWindow.dissmiss();
+                }
+                String showContent = "";
+                switch (v.getId()){
+                    case R.id.menu1:
+                        showContent = "第1路地址是00";
+                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
+                                setString("allLightAdress","00");
+                        break;
+                    case R.id.menu2:
+                        showContent = "第2路地址是01";
+                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
+                                setString("allLightAdress","01");
+                        break;
+                    case R.id.menu3:
+                        showContent = "第3路地址是02";
+                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
+                                setString("allLightAdress","02");
+                        break;
+
+                }
+
+            }
+        };
+        contentView.findViewById(R.id.menu1).setOnClickListener(listener);
+        contentView.findViewById(R.id.menu2).setOnClickListener(listener);
+        contentView.findViewById(R.id.menu3).setOnClickListener(listener);
+
     }
 }

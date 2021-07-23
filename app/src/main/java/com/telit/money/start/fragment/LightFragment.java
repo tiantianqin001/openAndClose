@@ -189,14 +189,14 @@ public class LightFragment extends Fragment implements LightAdapter.onClickListe
         //判断 当前是不是在线然后发送消息
         ToastUtils.show(position+"........"+type);
                 if (type.equals("开灯")){
-                    String stingLight = QZXTools.openStingLight(position);
+                    String stingLight = QZXTools.openStingLight(position,false);
                     QZXTools.logD(stingLight);
                     //这个是获取最后一位
                     String lastString = NumUtil.bytesToHexLastString(stingLight);
                     String retailString= stingLight + " " + lastString;
                     QZXTools.logD(retailString);
                 }else if (type.equals("关灯")){
-                    String stingLight = QZXTools.closeStingLight(position);
+                    String stingLight = QZXTools.closeStingLight(position,false);
                     QZXTools.logD(stingLight);
                     //这个是获取最后一位
                     String lastString = NumUtil.bytesToHexLastString(stingLight);
