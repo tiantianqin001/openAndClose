@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
                 setString("allLightAdress","00");
     }
-
     private void initListener() {
         //切换ip
         home_timetable.setOnClickListener(this);

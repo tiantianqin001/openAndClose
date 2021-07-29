@@ -78,6 +78,8 @@ public class UrlUpdateDialog extends DialogFragment {
                 //把地址和端口保存到本地
                 SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketIp",socketIp);
                 SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketPort",socketPort);
+                ToastUtils.show("ip="+socketIp+"....port="+socketPort);
+                dismiss();
             }
         });
 

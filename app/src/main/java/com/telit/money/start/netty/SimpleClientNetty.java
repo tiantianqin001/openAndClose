@@ -152,7 +152,7 @@ public class SimpleClientNetty  {
 
         //异步 同步需要加sync()
         String socketIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("socketIp");
-        int port = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getInt("socketPort");
+        String port = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("socketPort","8080");
         if (channel != null && channel.isActive()) {
             if (executorService != null) {
                 executorService.shutdownNow();
@@ -160,7 +160,7 @@ public class SimpleClientNetty  {
             return;
         }
 
-        init(socketIp,port);
+        init(socketIp,Integer.valueOf(port));
     }
 
     /**
