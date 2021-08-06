@@ -23,8 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -37,21 +35,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.telit.money.start.MyApplication;
-import com.telit.money.start.bean.SaveLight;
 
-import org.litepal.LitePal;
+
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -73,10 +65,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -84,7 +72,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -2141,101 +2128,8 @@ public class QZXTools {
      * @return
      */
 
-    private static  int allLength=12;
-    public static String openStingLight(int position,boolean allLightAdress) {
-        String start = "FE 55 11 00 17";//固定代码
-        String systemAdress = null;
-        //获取地址
-        if (allLightAdress){
-            //这个是设置全部的地址
-            systemAdress =  SharedPreferenceUtil.getInstance(MyApplication.getInstance())
-                    .getString("allLightAdress","00");
-        }else {
-            //这个是设置一条路线的地址
-             systemAdress = getSystemAdress(position);
-
-             if (TextUtils.isEmpty(systemAdress)){
-                 systemAdress = "00";
-             }
-
-        }
-        start= start + " " + systemAdress;
-        //受控制的开关
-        String control="01";
-        //不受控制的开关
-        String noControl="FF";
-        //获取最后一位  这个是与或运算出来的
-
-        //获取回路灯的指令模板
-        String byteLight = getByteLight(position, "open");
-        String[] split = byteLight.split(",");
-        for (int i = 1; i <split.length ; i++) {
-            control=control + " "+split[i];
-        }
-        //不受控制的开关数
-        for (int i = 1; i <allLength-position-1 ; i++) {
-            noControl=noControl+" "+"FF";
-        }
-        return start +" "+ control+" " + noControl;
-    }
-
-    private static String getSystemAdress(int position) {
-        List<SaveLight> all = LitePal.findAll(SaveLight.class);
-        for (SaveLight saveLight : all) {
-            int index = saveLight.getIndex();
-            if (index == position){
-                return saveLight.getAdress();
-            }
-        }
-        return "00";
-    }
 
 
-    /**
-     * 代表的是第几路，目前设置的都是加入是第4路，就是第4路全开
-     * @param position
-     * @return
-     */
-
-    public static String closeStingLight(int position,boolean allLightAdress) {
-        String start = "FE 55 11 00 17";//固定代码
-
-        String systemAdress = null;
-        //获取地址
-        if (allLightAdress){
-            //这个是设置全部的地址
-            systemAdress =  SharedPreferenceUtil.getInstance(MyApplication.getInstance())
-                    .getString("allLightAdress","00");
-        }else {
-            //这个是设置一条路线的地址
-            systemAdress = getSystemAdress(position);
-
-            if (TextUtils.isEmpty(systemAdress)){
-                systemAdress = "00";
-            }
-
-        }
-        start= start + " " + systemAdress;
-
-        //受控制的开关
-        String control="00";
-
-        //不受控制的开关
-        String noControl="FF";
-        //获取最后一位  这个是与或运算出来的
-
-        //获取回路灯的指令模板
-        String byteLight = getByteLight(position, "close");
-        String[] split = byteLight.split(",");
-        for (int i = 1; i <split.length ; i++) {
-            control=control + " "+split[i];
-        }
-        //不受控制的开关数
-        for (int i = 1; i <allLength-position-1 ; i++) {
-            noControl=noControl +" "+"FF";
-        }
-        return start +" "+ control+" " + noControl;
-    }
 
     /**
      * 获取灯的指令模板也就是从1到12

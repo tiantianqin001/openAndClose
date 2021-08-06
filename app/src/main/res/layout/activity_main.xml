@@ -56,7 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_below="@+id/ll_wen_du"
+                android:layout_toRightOf="@+id/ll_wen_du"
+                android:layout_marginLeft="@dimen/x30"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,7 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_below="@+id/ll_shi_du"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_toRightOf="@+id/ll_shi_du"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,85 +148,7 @@
                 android:src="@mipmap/wifi" />
         </LinearLayout>
 
-        <!--时间日期线-->
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/home_one_open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="一键\n关机"
-                android:textColor="@android:color/white"
-                android:layout_marginLeft="@dimen/x20"
-                android:layout_marginRight="@dimen/x20"
-                android:textSize="@dimen/x42"
-                android:background="@drawable/shape_circle_normal"
-                />
-
-            <TextView
-                android:id="@+id/home_one_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="一键\n开机"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/x42"
-                android:layout_marginLeft="@dimen/x20"
-                android:layout_marginRight="@dimen/x30"
-                android:background="@drawable/shape_circle_normal"
-                android:layout_toRightOf="@+id/home_one_open"
-                />
-
-            <TextView
-                android:id="@+id/home_line_open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="一键\n开灯"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/x42"
-                android:layout_marginLeft="@dimen/x20"
-                android:layout_marginRight="@dimen/x30"
-                android:background="@drawable/shape_circle_normal"
-                android:layout_toRightOf="@+id/home_one_close"
-                />
-
-            <TextView
-                android:id="@+id/home_line_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="一键\n关灯"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/x42"
-                android:layout_marginLeft="@dimen/x20"
-                android:layout_marginRight="@dimen/x30"
-                android:background="@drawable/shape_circle_normal"
-                android:layout_toRightOf="@+id/home_line_open"
-
-                />
-
-            <TextView
-                android:id="@+id/home_change_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="切换\n地址"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/x42"
-                android:layout_marginLeft="@dimen/x20"
-                android:layout_marginRight="@dimen/x30"
-                android:background="@drawable/shape_circle_normal"
-                android:layout_toRightOf="@+id/home_line_close"
-
-                />
-
-        </RelativeLayout>
     </RelativeLayout>
 
     <!--主体内容展示栏-->

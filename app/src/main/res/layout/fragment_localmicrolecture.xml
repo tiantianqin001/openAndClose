@@ -1,17 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list_light"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/x15"
-        />
+        android:layout_marginLeft="@dimen/x36"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
+        <!--序厅-->
+        <LinearLayout
+            android:id="@+id/ll_preface"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_one"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_preface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="序厅区"
+                android:textColor="@color/color_afff"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--视觉区-->
+        <LinearLayout
+            android:id="@+id/ll_visual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_two"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_visual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="视觉区"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--语音区-->
+        <LinearLayout
+            android:id="@+id/ll_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_three"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="语音区"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--生态区-->
+        <LinearLayout
+            android:id="@+id/ll_ecology"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_fore"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_ecology"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="生态区"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--尾厅-->
+        <LinearLayout
+            android:id="@+id/ll_tail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_five"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_tail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="尾厅区"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--休闲区-->
+        <LinearLayout
+            android:id="@+id/ll_casual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_check_six"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_casual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="休闲区"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+        <!--外立面-->
+        <LinearLayout
+            android:id="@+id/ll_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x44"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_show_seven"
+                android:layout_width="@dimen/x6"
+                android:layout_height="match_parent"
+                android:background="@drawable/exhibition_check"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tv_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x26"
+                android:text="外立面"
+                android:textColor="@color/dialog_bg"
+                android:textSize="@dimen/x36"
+
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/word_white" />
+
+
+    <FrameLayout
+        android:id="@+id/fl_content_light"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        />
 
 
 </LinearLayout>

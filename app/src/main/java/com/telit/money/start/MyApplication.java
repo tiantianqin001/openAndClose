@@ -2,6 +2,8 @@ package com.telit.money.start;
 
 import android.app.Application;
 
+import com.greendao.dao.DaoMaster;
+import com.greendao.dao.DaoSession;
 import com.hjq.toast.ToastUtils;
 
 import com.lzy.okgo.OkGo;
@@ -10,9 +12,11 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.DBCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
+import com.telit.money.start.help.DbOpenHelper;
 import com.telit.money.start.utils.QZXTools;
 
-import org.litepal.LitePalApplication;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -26,19 +30,19 @@ import okhttp3.OkHttpClient;
  * <p>
  * 如果GreenDao升级会删除之前的所有数据，所以升级一下
  */
-public class MyApplication extends LitePalApplication {
+public class MyApplication  extends Application{
 
     private static MyApplication myApplication;
+
+    private static final String DATABASE_NAME = "greendao.db";
     @Override
     public void onCreate() {
         super.onCreate();
         myApplication = this;
 
         initOkGo();
-        ToastUtils.init(this);
 
-
-
+        initGreenDAO();
         //关闭日志
         //QZXTools.openLog=false;
         //开启日志
@@ -87,6 +91,28 @@ public class MyApplication extends LitePalApplication {
 //                .addCommonParams(params);//全局公共参数
 
     }
+
+    /**
+     * 初始化greendao
+     * <p>
+     * 解释一下：
+     * 底层还是用到sqlitehelper获得greendao的helper,然后通过helper获取database,通过database创建DaoMaster
+     * DaoMaster获取到DaoSession,通过DaoSession获取到想要的dao操作对象，例如UserDao
+     */
+    private void initGreenDAO() {
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DATABASE_NAME);
+        DbOpenHelper helper = new DbOpenHelper(this, DATABASE_NAME);
+        Database database = database = helper.getWritableDb();
+        DaoMaster daoMaster = new DaoMaster(database);
+        daoSession = daoMaster.newSession();
+    }
+
+    private DaoSession daoSession;
+
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
 
 
 

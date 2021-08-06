@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //设置导航栏的颜色
-        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
+        //ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
         isShow=true;
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;

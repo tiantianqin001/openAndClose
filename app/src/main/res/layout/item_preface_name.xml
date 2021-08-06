@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/x10"
+
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_preface_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+
+        >
+        <TextView
+            android:id="@+id/tv_light_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/word_white"
+            android:text="筒灯"
+            android:textSize="@dimen/x32"
+            />
+
+        <com.telit.money.start.customview.SwitchView
+            android:id="@+id/sv_open_and_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isOpened="false"
+            app:offColor="#FFE3E3E3"
+            android:layout_marginLeft="@dimen/x20"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_all_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="共几路"
+        android:layout_marginLeft="@dimen/x16"
+        android:textSize="@dimen/x32"
+        android:textColor="@color/word_white"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/x36"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/word_white"
+        android:layout_below="@+id/ll_preface_item"
+        android:layout_marginTop="@dimen/x10"
+        />
+
+
+
+
+</RelativeLayout>

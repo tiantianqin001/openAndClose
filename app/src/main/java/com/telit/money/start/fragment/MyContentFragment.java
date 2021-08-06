@@ -36,7 +36,7 @@ public class MyContentFragment extends Fragment implements OnTabSelectListener, 
     private List<Fragment> fragments = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
 
-    private LightFragment localMicroLectureFragment;
+    private ExhibitionFragment localMicroLectureFragment;
 
 
     @Override
@@ -65,11 +65,11 @@ public class MyContentFragment extends Fragment implements OnTabSelectListener, 
     @Override
     protected void initArgs(Bundle bundle) {
         super.initArgs(bundle);
-        titles.add("展台");
-        titles.add("灯光");
+        titles.add("全部");
+        titles.add("展项");
 
-        fragments.add(ExhibitionItemFragment.newInstance());
-        localMicroLectureFragment = LightFragment.newInstance();
+        fragments.add(AllLightAndCloseFragment.newInstance());
+        localMicroLectureFragment = ExhibitionFragment.newInstance();
         fragments.add(localMicroLectureFragment);
     }
 

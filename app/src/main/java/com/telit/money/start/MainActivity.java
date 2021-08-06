@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.res.XmlResourceParser;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,10 +15,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,41 +25,26 @@ import com.hjq.toast.ToastUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-import com.telit.money.start.activity.ChangeCrdActivity;
-import com.telit.money.start.activity.LoginActivity;
 import com.telit.money.start.bean.HandleTimeBean;
-import com.telit.money.start.bean.SaveLight;
+import com.telit.money.start.bean.XmlBean;
 import com.telit.money.start.constant.Constant;
 import com.telit.money.start.customview.CustomPopWindow;
 import com.telit.money.start.dialoge.TipsDialog;
-import com.telit.money.start.dialoge.UrlUpdateDialog;
 import com.telit.money.start.fragment.MyContentFragment;
 import com.telit.money.start.net.Common;
-import com.telit.money.start.netty.MsgUtils;
 import com.telit.money.start.netty.SimpleClientListener;
 import com.telit.money.start.netty.SimpleClientNetty;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 import com.telit.money.start.utils.SharedPreferenceUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SimpleClientListener {
     private static final String TAG = "MainActivity";
@@ -75,11 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             QZXTools.logE("TAG+\"...我是离线....的情况先重连", null);
         }
     };
-    private ImageView home_timetable;
-    private TextView home_one_open;
-    private TextView home_one_close;
-    private TextView home_line_open;
-    private TextView home_line_close;
     private ExecutorService messageExecutorService;
 
     private String onLine = "";
@@ -143,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,10 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         initListener();
         initData();
-        ////这里不要最后一位和第一位
- /*       String originalData = "55 11 00 17 01 01 FF FF FF FF FF FF FF FF FF FF FF";
-        //这个是获取最后一位
-        NumUtil.bytesToHexLastString(originalData);*/
+
 
     }
 
@@ -188,18 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setString("allLightAdress","00");
     }
     private void initListener() {
-        //切换ip
-        home_timetable.setOnClickListener(this);
-        //一键开机
-        home_one_open.setOnClickListener(this);
-        //一键关机
-        home_one_close.setOnClickListener(this);
-        //一键开灯
-        home_line_open.setOnClickListener(this);
-        //一键关灯
-        home_line_close.setOnClickListener(this);
-        //切换地址
-        home_change_address.setOnClickListener(this);
+
 
 
     }
@@ -275,14 +240,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_er_yang = (TextView) findViewById(R.id.tv_er_yang);
         //获取湿度
         //获取二氧化碳
-
-
-        home_timetable = (ImageView) findViewById(R.id.home_timetable);
-        home_one_open = (TextView) findViewById(R.id.home_one_open);
-        home_one_close = (TextView) findViewById(R.id.home_one_close);
-        home_line_open = (TextView) findViewById(R.id.home_line_open);
-        home_line_close = (TextView) findViewById(R.id.home_line_close);
-        home_change_address = (TextView) findViewById(R.id.home_change_address);
         //移除sp
         rl_clear_sp = (RelativeLayout) findViewById(R.id.rl_clear_sp);
         rl_clear_sp.setOnClickListener(this);
@@ -309,13 +266,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+    /*    switch (v.getId()) {
             case R.id.home_one_open:
                 //一键开机
-            /*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+            *//*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
-                }*/
+                }*//*
                 for (int i = 0; i < 10; i++) {
                  String   getIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverIp" + i);
                   String  getPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverPort" + i);
@@ -330,10 +287,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.home_one_close:
                 //一键关机
-            /*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+            *//*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
-                }*/
+                }*//*
                 //关机要延迟1秒
                 mHandler.postDelayed(new Runnable() {
                     @Override
@@ -388,10 +345,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.home_line_close:
                 //一键关灯
-           /*     if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
+           *//*     if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
                     ToastUtils.show("当前设备不在线");
                     return;
-                }*/
+                }*//*
 
                 messageExecutorService.execute(new Runnable() {
                     @Override
@@ -477,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     count = 0;
                 }
                 break;
-        }
+        }*/
     }
 
     @Override

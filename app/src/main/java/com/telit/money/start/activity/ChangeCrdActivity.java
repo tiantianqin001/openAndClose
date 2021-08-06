@@ -32,7 +32,7 @@ public class ChangeCrdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_time_table_activtity);
 
         //设置导航栏的颜色
-        ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
+     //   ImmersionBar.with(this).navigationBarColor(R.color.colorPrimary).init();
 
         back_img = findViewById(R.id.timetable_back);
 
