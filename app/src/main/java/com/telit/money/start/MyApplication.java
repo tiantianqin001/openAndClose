@@ -41,6 +41,7 @@ public class MyApplication  extends Application{
         myApplication = this;
 
         initOkGo();
+        ToastUtils.init(this);
 
         initGreenDAO();
         //关闭日志

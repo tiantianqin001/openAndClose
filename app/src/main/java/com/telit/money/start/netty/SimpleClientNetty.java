@@ -179,7 +179,6 @@ public class SimpleClientNetty  {
                         workGroup1.shutdownGracefully();
                         workGroup1 = null;
                     }
-
                     QZXTools.logE("shutdownGracefully", null);
                 } catch (Exception e) {
 
@@ -321,5 +320,36 @@ public class SimpleClientNetty  {
         }
     }
     private boolean isNet = false;
+
+
+    public void sendMsgToServer(String message) {
+        if (simpleClientHandler != null && !TextUtils.isEmpty(message)) {
+            //如果处于断线状态将消息添加至队列,否则如果是断线重连成功则把队列数据一次性发送
+            QZXTools.logE(";SimpleClientNetty sendMsgToServer 线程Name:" + Thread.currentThread().getName()
+                    + ";And message=" + message
+                    + ";And isConnected()=" + isConnected(), null);
+            if (!isConnected()) {
+                //------------------剔除心跳消息和回执消息
+                    concurrentLinkedQueue.offer(message);
+            } else {
+                //发送的消息记录 ============================================================》
+                if (isReconnected) {
+                    //setReconnected(false);
+                    //先发送队列的消息
+                    for (String q : concurrentLinkedQueue) {
+                        QZXTools.logE("重发queue:" + q, null);
+                        simpleClientHandler.sendMsg(q);
+                    }
+                }
+                //然后把当前消息加入队列，TCP协议保证先发先收到的机制？
+                // 剔除心跳消息,和客户端回执消息
+                    concurrentLinkedQueue.offer(message);
+                //再次确认是否处于连接状态,发送当前消息
+                if (isConnected()) {
+                    simpleClientHandler.sendMsg(message);
+                }
+            }
+        }
+    }
 
 }

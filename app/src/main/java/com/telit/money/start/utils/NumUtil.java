@@ -193,6 +193,9 @@ public class NumUtil {
                         if ("position".equals(name)) {
                             xmlBean.setPosition(Integer.parseInt(parser.nextText()));
                         }
+                        if ("port".equals(name)){
+                            xmlBean.setPort(Integer.parseInt(parser.nextText()));
+                        }
                     }
                     break;
                 case XmlPullParser.END_TAG://结束元素事件

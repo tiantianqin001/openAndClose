@@ -162,7 +162,6 @@ public class SwitchView extends View {
         hasShadow = shadow;
         invalidate();
     }
-
     public boolean isOpened() {
         return isOpened;
     }
@@ -240,6 +239,7 @@ public class SwitchView extends View {
         isCanVisibleDrawing = w > getPaddingLeft() + getPaddingRight() && h > getPaddingTop() + getPaddingBottom();
 
         if (isCanVisibleDrawing) {
+            //这个是真实的宽度和高度
             int actuallyDrawingAreaWidth = w - getPaddingLeft() - getPaddingRight();
             int actuallyDrawingAreaHeight = h - getPaddingTop() - getPaddingBottom();
 
@@ -247,6 +247,7 @@ public class SwitchView extends View {
             int actuallyDrawingAreaRight;
             int actuallyDrawingAreaTop;
             int actuallyDrawingAreaBottom;
+            //getPadding 现在设置的宽和高都是0  这个宽和高都是一样的
             if (actuallyDrawingAreaWidth * ratioAspect < actuallyDrawingAreaHeight) {
                 actuallyDrawingAreaLeft = getPaddingLeft();
                 actuallyDrawingAreaRight = w - getPaddingRight();
@@ -254,20 +255,28 @@ public class SwitchView extends View {
                 actuallyDrawingAreaTop = getPaddingTop() + heightExtraSize / 2;
                 actuallyDrawingAreaBottom = getHeight() - getPaddingBottom() - heightExtraSize / 2;
             } else {
+                //宽的额外大小是0
                 int widthExtraSize = (int) (actuallyDrawingAreaWidth - actuallyDrawingAreaHeight / ratioAspect);
                 actuallyDrawingAreaLeft = getPaddingLeft() + widthExtraSize / 2;
+                //这个是84 就是宽
                 actuallyDrawingAreaRight = getWidth() - getPaddingRight() - widthExtraSize / 2;
                 actuallyDrawingAreaTop = getPaddingTop();
+                //这个就是要画的view 的高
                 actuallyDrawingAreaBottom = getHeight() - getPaddingBottom();
             }
-
+            //就是view 高的0.07
             shadowReservedHeight = (int) ((actuallyDrawingAreaBottom - actuallyDrawingAreaTop) * 0.07f);
+            //这个left  是 0
             float sLeft = actuallyDrawingAreaLeft;
+            //这个就是view 高的0.07  也就是3
             float sTop = actuallyDrawingAreaTop + shadowReservedHeight;
+            //这个就是view 的宽
             sRight = actuallyDrawingAreaRight;
+            //这个是绘制矩形底部的位置
             float sBottom = actuallyDrawingAreaBottom - shadowReservedHeight;
-
+            //这个是view  的真正高度
             float sHeight = sBottom - sTop;
+            //圆心
             sCenterX = (sRight + sLeft) / 2;
             sCenterY = (sBottom + sTop) / 2;
 
@@ -290,11 +299,16 @@ public class SwitchView extends View {
             sRectF.bottom = sBottom;
             sRectF.left = sLeft;
             sRectF.right = sLeft + sHeight;
+//sweepAngle指的是旋转的度数，也就是以startAngle开始，旋转多少度，
+// 如果sweepAngle是正数，那么就是按顺时针方向旋转，如果是负数就是按逆时针方向旋转。
             sPath.arcTo(sRectF, 90, 180);
             sRectF.left = sRight - sHeight;
             sRectF.right = sRight;
             sPath.arcTo(sRectF, 270, 180);
+            //如果连接Path起点和终点能形成一个闭合图形，则会将起点和终点连接起来形成一个闭合图形
             sPath.close();
+
+            //下面这个是放射渐变  只要是颜色的渐变
 
             bRectF.left = bLeft;
             bRectF.right = bRight;
@@ -390,8 +404,9 @@ public class SwitchView extends View {
         // Draw background animation
         final float scale = sScale * (isOn ? dsAnim : 1 - dsAnim);
         final float scaleOffset = (sRight - sCenterX - bRadius) * (isOn ? 1 - dsAnim : dsAnim);
+        //这里主要是保存一下画笔的坐标还是从起点  0,0 开始
         canvas.save();
-        //把画布缩放
+        //把画布缩放 scale  scale  画布=画布*scale  画布的起点坐标是 sCenterX + scaleOffset  sCenterY 开始画
         canvas.scale(scale, scale, sCenterX + scaleOffset, sCenterY);
         paint.setColor(colorBackground);
         canvas.drawPath(sPath, paint);
@@ -401,7 +416,8 @@ public class SwitchView extends View {
         //画布平移
         canvas.translate(calcBTranslate(dbAnim), shadowReservedHeight);
         final boolean isState2 = (state == STATE_SWITCH_ON2 || state == STATE_SWITCH_OFF2);
-        calcBPath(isState2 ? 1 - dbAnim : dbAnim);
+        //这个就是画圆弧
+       calcBPath(isState2 ? 1 - dbAnim : dbAnim);
         // Use center bar path to draw shadow
         if (hasShadow) {
             paint.setStyle(Paint.Style.FILL);

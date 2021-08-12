@@ -94,7 +94,7 @@ public class PrefaceAdapter extends RecyclerView.Adapter<PrefaceAdapter.ViewHold
                      * @param adress 地址 要不是01   或 02
                      */
                     listener.onClick(Integer.valueOf(datas.get(position).getRoad()),
-                            type,isOpen,datas.get(position).getAdress());
+                            type,isOpen,datas.get(position).getAdress(),position);
                 }
             }
         });
@@ -124,8 +124,9 @@ public class PrefaceAdapter extends RecyclerView.Adapter<PrefaceAdapter.ViewHold
          * @param type 休闲区  ，语音区，生态区  等
          * @param isOpen 灯的开关
          * @param adress 地址 要不是01   或 02
+         * @param position 下表
          */
-        void onClick(int road,String type,boolean isOpen,String adress);
+        void onClick(int road,String type,boolean isOpen,String adress,int position);
     }
     public void setonClickListener(onClickListener listener){
 

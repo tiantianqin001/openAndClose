@@ -1,6 +1,7 @@
 package com.telit.money.start.fragment;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import com.telit.money.start.R;
 import com.telit.money.start.adapter.PrefaceAdapter;
 import com.telit.money.start.bean.AdviceBean;
 import com.telit.money.start.bean.XmlBean;
+import com.telit.money.start.netty.SimpleClientNetty;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 
@@ -29,13 +31,14 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
     private RecyclerView rv_staile_content;
     private List<AdviceBean> adviceBeans = new ArrayList<>();
 
+    private Handler handler=new Handler();
+
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         rv_staile_content = root.findViewById(R.id.rv_staile_content);
     }
-
     @Override
     protected void addressInfo(List<XmlBean> xmlBeans) {
         super.addressInfo(xmlBeans);
@@ -47,7 +50,6 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
             }
         }
     }
-
     @Override
     protected void initData() {
         super.initData();
@@ -66,21 +68,46 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
         prefaceAdapter.setonClickListener(this);
         rv_staile_content.setAdapter(prefaceAdapter);
     }
-
-
     @Override
     protected int getContentLayoutId() {
         return R.layout.staile_count;
     }
-
     @Override
-    public void onClick(int position, String type, boolean isOpen,String adress) {
+    public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("序厅区")) {
+            //第4路要设置设备的关只关设备开机是通电自己就开机
+            if (position == 3 && !isOpen){
+                XmlBean xmlBean = addressList.get(position);
+                String getIp = xmlBean.getUrl();
+                int getPort = xmlBean.getPort();
+
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+            }
+
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
+            boolean connected = SimpleClientNetty.getInstance().isConnected();
+            if (connected){
+                //发送消息
+                //退出班级,服务端会主动关闭连接
+                //如果当前是关灯，要先关电脑等30秒在关电
+                if (!isOpen){
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
+                            SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                        }
+                    },1000*30);
+                }else {
+
+                    SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                }
+            }else {
+                ToastUtils.show("当前设备不在线");
+            }
         }
     }
 }

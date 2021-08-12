@@ -1,14 +1,18 @@
 package com.telit.money.start.fragment;
 
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hjq.toast.ToastUtils;
 import com.telit.money.start.R;
 import com.telit.money.start.adapter.PrefaceAdapter;
 import com.telit.money.start.bean.AdviceBean;
 import com.telit.money.start.bean.XmlBean;
+import com.telit.money.start.netty.SimpleClientNetty;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 
@@ -19,7 +23,7 @@ public class OutFragment extends Fragment implements PrefaceAdapter.onClickListe
 
     private RecyclerView rv_staile_content;
 
-
+    private Handler handler=new Handler();
     private List<AdviceBean> adviceBeans = new ArrayList<>();
     @Override
     protected void addressInfo(List<XmlBean> xmlBeans) {
@@ -59,10 +63,48 @@ public class OutFragment extends Fragment implements PrefaceAdapter.onClickListe
     }
 
     @Override
-    public void onClick(int position, String type, boolean isOpen,String adress) {
+    public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("外立面")){
+            //第4路要设置设备的关只关设备开机是通电自己就开机
+      /*      if (position ==position && !isOpen){
+                XmlBean xmlBean = addressList.get(position);
+                String getIp = xmlBean.getUrl();
+                int getPort = xmlBean.getPort();
+                if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                    ToastUtils.show("ip和端口不能为空");
+                    return;
+                }
+
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+            }*/
+
+            //控住设备的开和关
+            //先判断是不是在线
             String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
+            boolean connected = SimpleClientNetty.getInstance().isConnected();
+            if (connected){
+                //发送消息
+                //退出班级,服务端会主动关闭连接
+                //如果当前是关灯，要先关电脑等30秒在关电
+                if (!isOpen){
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                        }
+                    },1000*30);
+                }else {
+
+                    SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                }
+            }else {
+                ToastUtils.show("当前设备不在线");
+            }
         }
+
     }
+
+
 }

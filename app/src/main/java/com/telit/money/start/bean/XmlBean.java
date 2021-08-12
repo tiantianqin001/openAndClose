@@ -7,6 +7,16 @@ public class XmlBean {
     private String addre;
     private String url;
     private int id;
+    private int port;
+
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
 
     public int getPosition() {
         return position;
