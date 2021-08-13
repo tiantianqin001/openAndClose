@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.telit.money.start.R;
+import com.telit.money.start.utils.QZXTools;
 
 /**
  * *****************************************************************
@@ -33,6 +34,8 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
     private TextView tv_casual;
     private TextView tv_out;
     private FrameLayout fl_content_light;
+
+    private int lastClickPosition = 0;
 
     /**
      * 创建新实例
@@ -93,8 +96,9 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
         fl_content_light = root.findViewById(R.id.fl_content_light);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_content_light,new PrefaceFragment()).commit();
+                .replace(R.id.fl_content_light, new PrefaceFragment()).commit();
     }
+
 
     @Override
     public void onClick(View v) {
@@ -103,54 +107,94 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
                 // 序厅区
                 showCheckView(0);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new PrefaceFragment()).commit();
+                        .replace(R.id.fl_content_light, new PrefaceFragment()).commit();
                 break;
             case R.id.ll_visual:
                 // 视觉区
                 showCheckView(1);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new VisualFragment()).commit();
+                        .replace(R.id.fl_content_light, new VisualFragment()).commit();
                 break;
             case R.id.ll_voice:
                 // 语音区
                 showCheckView(2);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new VoiceFragment()).commit();
+                        .replace(R.id.fl_content_light, new VoiceFragment()).commit();
                 break;
             case R.id.ll_ecology:
                 // 生态区
                 showCheckView(3);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new EcologyFragment()).commit();
+                        .replace(R.id.fl_content_light, new EcologyFragment()).commit();
                 break;
             case R.id.ll_tail:
                 // 尾厅区
                 showCheckView(4);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new TailFragment()).commit();
+                        .replace(R.id.fl_content_light, new TailFragment()).commit();
                 break;
             case R.id.ll_casual:
                 // 休闲区
                 showCheckView(5);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new CasualFragment()).commit();
+                        .replace(R.id.fl_content_light, new CasualFragment()).commit();
                 break;
             case R.id.ll_out:
                 // 外立面
                 showCheckView(6);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fl_content_light,new OutFragment()).commit();
+                        .replace(R.id.fl_content_light, new OutFragment()).commit();
                 break;
         }
 
     }
 
 
+    public void sendMessage() {
+        QZXTools.logD("wobei diaoyong ke ...." + lastClickPosition);
+        switch (lastClickPosition) {
+            case 0:
+                showCheckView(0);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new PrefaceFragment()).commit();
+                break;
+            case 1:
+                showCheckView(1);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new VisualFragment()).commit();
+                break;
+            case 2:
+                showCheckView(2);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new VoiceFragment()).commit();
+                break;
+            case 3:
+                showCheckView(3);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new EcologyFragment()).commit();
+                break;
+            case 4:
+                showCheckView(4);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new TailFragment()).commit();
+                break;
+            case 5:
+                showCheckView(5);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new CasualFragment()).commit();
+                break;
+            case 6:
+                showCheckView(6);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fl_content_light, new OutFragment()).commit();
+                break;
+        }
+    }
+
+
     @Override
     protected void initView() {
         super.initView();
-
-
     }
 
     @Override
@@ -174,6 +218,7 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
     }
 
     private void showCheckView(int pos) {
+        lastClickPosition = pos;
         switch (pos) {
             case 0:
                 tv_show_check_one.setVisibility(View.VISIBLE);
@@ -298,6 +343,9 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
 
         }
     }
+
+
+
 
 
 }

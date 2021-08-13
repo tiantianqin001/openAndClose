@@ -115,6 +115,8 @@ public class MyContentFragment extends Fragment implements OnTabSelectListener, 
     @Override
     public void onPageSelected(int position) {
         stl_microLectureMy.setCurrentTab(position);
+        Fragment fragment = adapter.getItem(position);
+        fragment.sendMessage();
     }
 
     @Override

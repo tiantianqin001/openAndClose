@@ -27,13 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickListener {
-
     private RecyclerView rv_staile_content;
     private List<AdviceBean> adviceBeans = new ArrayList<>();
-
     private Handler handler=new Handler();
-
-
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);

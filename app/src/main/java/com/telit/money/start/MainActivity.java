@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SimpleClientListener {
+public class MainActivity extends AppCompatActivity implements SimpleClientListener {
     private static final String TAG = "MainActivity";
     private MyHandler mHandler;
     private Runnable reComment = new Runnable() {
@@ -211,16 +211,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             tv_er_yang.setText(realTimeData1.get(0).getDataValue() + "ppm");
                                         }
                                     }
-
-
                                 }
                             }
 
                         } catch (Exception e) {
                             e.getMessage();
                         }
-
-
                     }
 
                     @Override
@@ -240,9 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_er_yang = (TextView) findViewById(R.id.tv_er_yang);
         //获取湿度
         //获取二氧化碳
-        //移除sp
-        rl_clear_sp = (RelativeLayout) findViewById(R.id.rl_clear_sp);
-        rl_clear_sp.setOnClickListener(this);
+
 
 
         MyContentFragment fragment = MyContentFragment.newInstance();
@@ -264,178 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int count = 0;
     private long touchFirstTime;
 
-    @Override
-    public void onClick(View v) {
-    /*    switch (v.getId()) {
-            case R.id.home_one_open:
-                //一键开机
-            *//*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
-                    ToastUtils.show("当前设备不在线");
-                    return;
-                }*//*
-                for (int i = 0; i < 10; i++) {
-                 String   getIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverIp" + i);
-                  String  getPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverPort" + i);
-                    if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(getPort)){
-                        ToastUtils.show("当前"+i+1+"台设备没有被绑定");
-                        return;
-                    }
-                    QZXTools. moveAdevice(getIp, getPort, "重启");
-                }
 
-
-                break;
-            case R.id.home_one_close:
-                //一键关机
-            *//*    if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
-                    ToastUtils.show("当前设备不在线");
-                    return;
-                }*//*
-                //关机要延迟1秒
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        for (int i = 0; i < 10; i++) {
-                            String   getIp = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverIp" + i);
-                            String  getPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("serverPort" + i);
-                            if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(getPort)){
-                                ToastUtils.show("当前"+i+1+"台设备没有被绑定");
-                                return;
-                            }
-                            QZXTools. moveAdevice(getIp, getPort, "关闭");
-                        }
-
-
-                    }
-                }, 1200);
-
-                break;
-            case R.id.home_line_open:
-                //一键开灯
-                if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
-                    ToastUtils.show("当前设备不在线");
-                    return;
-                }
-
-                messageExecutorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 12; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            String stingLight = QZXTools.openStingLight(i,true);
-                            QZXTools.logD(stingLight);
-                            //这个是获取最后一位
-                            String lastString = NumUtil.bytesToHexLastString(stingLight);
-                            String retailString= stingLight + " " + lastString;
-                            QZXTools.logD(retailString);
-                        }
-
-
-
-                    }
-                });
-
-
-                break;
-            case R.id.home_line_close:
-                //一键关灯
-           *//*     if (TextUtils.isEmpty(onLine) || onLine.equals("离线")) {
-                    ToastUtils.show("当前设备不在线");
-                    return;
-                }*//*
-
-                messageExecutorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 12; i++) {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            String stingLight = QZXTools.closeStingLight(i,true);
-                            QZXTools.logD(stingLight);
-                            //这个是获取最后一位
-                            String lastString = NumUtil.bytesToHexLastString(stingLight);
-                            String retailString= stingLight + " " + lastString;
-                            QZXTools.logD(retailString);
-                        }
-
-
-
-                    }
-                });
-
-
-
-
-
-                break;
-
-            case R.id.home_change_address:
-                //切换地址
-                //切换地址
-                View contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu,null);
-                //处理popWindow 显示内容
-                handleLogic(contentView);
-                //创建并显示popWindow
-                mCustomPopWindow = new CustomPopWindow.PopupWindowBuilder(this)
-                        .setView(contentView)
-                        .create()
-                        .showAsDropDown(home_change_address,0,0);
-                break;
-
-            case R.id.rl_clear_sp:
-                //移除sp
-                count++;
-                long curTime1 = System.currentTimeMillis();
-                if (count == 1) {
-                    touchFirstTime = curTime1;
-                }
-                if (count == 3 && curTime1 - touchFirstTime <= 1000) {
-                    count = 0;
-                    ToastUtils.show("移除服务地址成功");
-                    for (int i = 0; i < 10; i++) {
-                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp" +i,"");
-                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort" +i,"");
-                    }
-                } else if (curTime1 - touchFirstTime > 1000) {
-                    //重置
-                    count = 0;
-                } else if (count > 3) {
-                    //重置
-                    count = 0;
-                }
-                break;
-            case R.id.home_timetable:
-                //切换ip
-                count++;
-                long curTime = System.currentTimeMillis();
-                if (count == 1) {
-                    touchFirstTime = curTime;
-                }
-                if (count == 3 && curTime - touchFirstTime <= 1000) {
-                    count = 0;
-                    //进入修改服务和通讯IP界面
-                    UrlUpdateDialog urlUpdateDialog = new UrlUpdateDialog();
-                    urlUpdateDialog.show(getSupportFragmentManager(), UrlUpdateDialog.class.getSimpleName());
-                } else if (curTime - touchFirstTime > 1000) {
-                    //重置
-                    count = 0;
-                } else if (count > 3) {
-                    //重置
-                    count = 0;
-                }
-                break;
-        }*/
-    }
 
     @Override
     public void onLine() {
@@ -515,48 +338,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dataHandler.postDelayed(runnable, 1000 * 60);
         }
     };
-
-    private void flushData() {
-        dataHandler.postDelayed(runnable, 1000 * 60);
-    }
-
-
-    /**
-     * 处理弹出显示内容、点击事件等逻辑
-     * @param contentView
-     */
-    private void handleLogic(View contentView){
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mCustomPopWindow!=null){
-                    mCustomPopWindow.dissmiss();
-                }
-                String showContent = "";
-                switch (v.getId()){
-                    case R.id.menu1:
-                        showContent = "第1路地址是00";
-                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
-                                setString("allLightAdress","00");
-                        break;
-                    case R.id.menu2:
-                        showContent = "第2路地址是01";
-                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
-                                setString("allLightAdress","01");
-                        break;
-                    case R.id.menu3:
-                        showContent = "第3路地址是02";
-                        SharedPreferenceUtil.getInstance(MyApplication.getInstance()).
-                                setString("allLightAdress","02");
-                        break;
-
-                }
-
-            }
-        };
-        contentView.findViewById(R.id.menu1).setOnClickListener(listener);
-        contentView.findViewById(R.id.menu2).setOnClickListener(listener);
-        contentView.findViewById(R.id.menu3).setOnClickListener(listener);
-
-    }
 }

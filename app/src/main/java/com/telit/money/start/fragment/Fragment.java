@@ -132,4 +132,5 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
 
     }
 
+    protected  void sendMessage(){};
 }
