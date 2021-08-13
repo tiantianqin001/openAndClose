@@ -54,14 +54,10 @@
         android:layout_height="match_parent"
         android:layout_weight="7"
         >
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_all_open_and_close"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </ScrollView>
+            android:layout_height="match_parent"/>
 
 
     </LinearLayout>

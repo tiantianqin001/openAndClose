@@ -81,9 +81,10 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
             }
 
             //控住设备的开和关
-            //先判断是不是在线
+
             String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
+            //先判断是不是在线
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){
                 //发送消息
