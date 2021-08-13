@@ -23,7 +23,7 @@ public class NumUtil {
    static List<XmlBean>   xmlBeans = new ArrayList<>();
 
 
-    //16进制转2进制
+    //16进制转byte
     public static byte[] hexString2Bytes(String hexStr) {
         if (hexStr.length() < 1)
             return null;

@@ -18,8 +18,6 @@ import com.telit.money.start.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 /**
  * *****************************************************************
  * author: Administrator
@@ -33,7 +31,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
     private TextView home_one_close;
     private TextView home_one_open;
-
     /**
      * 创建新实例
      *

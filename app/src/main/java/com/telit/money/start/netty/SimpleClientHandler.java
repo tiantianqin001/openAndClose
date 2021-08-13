@@ -1,10 +1,15 @@
 package com.telit.money.start.netty;
 
 
+import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
+
+import org.greenrobot.greendao.annotation.Convert;
 
 import java.util.concurrent.TimeUnit;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -127,7 +132,9 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<String> {
     public void sendMsg(String msgInfo) {
         if (channelHandlerContext != null) {
             QZXTools.logE("channelHandlerContext sendMsg 线程Name:" + Thread.currentThread().getName() + "........" + msgInfo, null);
-            ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(msgInfo);
+            ByteBuf byteValue = Unpooled.buffer();// netty需要用ByteBuf传输
+            byteValue.writeBytes(NumUtil.hexString2Bytes(msgInfo));// 对接需要16进制
+            ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(byteValue);
             channelFuture.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {
@@ -143,6 +150,7 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<String> {
             });
         }
     }
+
 
 
 }
