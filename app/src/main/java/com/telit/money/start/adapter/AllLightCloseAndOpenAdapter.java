@@ -72,7 +72,6 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @NonNull
