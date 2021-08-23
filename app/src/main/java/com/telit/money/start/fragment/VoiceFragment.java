@@ -45,8 +45,8 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("voice_one","轨道灯1路(地址1，第9路)",  "9","01",false);
-        AdviceBean adviceBean1 = new AdviceBean( "voice_two","所有插座1路(说好普通话+智能转写+AI互动魔墙(地址1，第10路))", "10","01",false);
+        AdviceBean adviceBean = new AdviceBean("语音区","voice_one","轨道灯1路(地址1，第9路)",  "9","01",false);
+        AdviceBean adviceBean1 = new AdviceBean( "语音区","voice_two","所有插座1路(说好普通话+智能转写+AI互动魔墙(地址1，第10路))", "10","01",false);
 
 
         adviceBeans.add(adviceBean);
@@ -82,7 +82,7 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){

@@ -29,11 +29,11 @@ public class ChangeIpDialog extends DialogFragment {
 
     private EditText url_change_socket_ip;
     private EditText url_change_socket_port;
-    private int position;
+
     private onCallCallback listener;
 
-    public ChangeIpDialog(int position) {
-        this.position = position;
+    public ChangeIpDialog() {
+
     }
 
     @Nullable
@@ -65,8 +65,8 @@ public class ChangeIpDialog extends DialogFragment {
                     return;
                 }
                 //把地址和端口保存到本地
-                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp" + position, socketIp);
-                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort" + position, socketPort);
+                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp", socketIp);
+                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort", socketPort);
 
                 ToastUtils.show(socketIp+":"+socketPort);
                 dismiss();

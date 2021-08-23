@@ -14,7 +14,7 @@ public class Constant {
     public static final int OffLine = 1;
     public static final int ReceiveMessage = 2;
 
-  public static final String SOCKED_IP="192.168.0.8";
+  public static final String SOCKED_IP="192.168.1.25";
    // public static final String SOCKED_IP="192.168.11.8";
     public static final int SOCKED_PORT=8080;
 

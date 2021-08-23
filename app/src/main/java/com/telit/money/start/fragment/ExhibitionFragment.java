@@ -339,8 +339,6 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
                 tv_casual.setTextColor(getResources().getColor(R.color.dialog_bg));
                 tv_out.setTextColor(getResources().getColor(R.color.color_afff));
                 break;
-
-
         }
     }
 

@@ -45,8 +45,8 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("casual_one","轨道灯1路(地址2，第6路)" , "6","02",false);
-        AdviceBean adviceBean1 = new AdviceBean( "casual_two","灯带1路(地址2，第7路)", "7","02");
+        AdviceBean adviceBean = new AdviceBean("休闲区","casual_one","轨道灯1路(地址2，第6路)" , "6","02",false);
+        AdviceBean adviceBean1 = new AdviceBean( "休闲区","casual_two","灯带1路(地址2，第7路)", "7","02",false);
         adviceBeans.add(adviceBean);
         adviceBeans.add(adviceBean1);
 
@@ -80,7 +80,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){

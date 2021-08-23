@@ -45,9 +45,9 @@ public class EcologyFragment extends Fragment implements PrefaceAdapter.onClickL
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("ecology_one","灯带1路(地址1，第11路)",  "11","01",false);
-        AdviceBean adviceBean1 = new AdviceBean( "ecology_two","轨道灯1路(地址1，第12路)", "12","01",false);
-        AdviceBean adviceBean2 = new AdviceBean( "ecology_three","所有插座1路(世界聊得来+变声电话亭+AI生活、AI教育、AI城市+地插(地址2,第1路))", "1","02",false);
+        AdviceBean adviceBean = new AdviceBean("生态区","ecology_one","灯带1路(地址1，第11路)",  "11","01",false);
+        AdviceBean adviceBean1 = new AdviceBean( "生态区","ecology_two","轨道灯1路(地址1，第12路)", "12","01",false);
+        AdviceBean adviceBean2 = new AdviceBean( "生态区","ecology_three","所有插座1路(世界聊得来+变声电话亭+AI生活、AI教育、AI城市+地插(地址2,第1路))", "1","02",false);
 
 
         adviceBeans.add(adviceBean);
@@ -83,7 +83,7 @@ public class EcologyFragment extends Fragment implements PrefaceAdapter.onClickL
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){

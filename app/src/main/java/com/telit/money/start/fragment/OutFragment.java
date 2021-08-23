@@ -47,7 +47,7 @@ public class OutFragment extends Fragment implements PrefaceAdapter.onClickListe
     protected void initData() {
         super.initData();
 
-        AdviceBean adviceBean = new AdviceBean("out_one","轨道灯+灯带1路(地址2，第8路)" , "8","02",false);
+        AdviceBean adviceBean = new AdviceBean("外立面","out_one","轨道灯+灯带1路(地址2，第8路)" , "8","02",false);
         adviceBeans.add(adviceBean);
 
         rv_staile_content.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,7 +80,7 @@ public class OutFragment extends Fragment implements PrefaceAdapter.onClickListe
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){

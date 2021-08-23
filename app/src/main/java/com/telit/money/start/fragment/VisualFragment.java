@@ -45,9 +45,9 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("visual_one","灯带1路(地址1，第6路)",  "6","01",false);
-        AdviceBean adviceBean1 = new AdviceBean( "visual_two","所有插座1路(追光音乐+动感火柴人+CV专项+智能导览机器人插座(地址1，第7路))", "7","01",false);
-        AdviceBean adviceBean2 = new AdviceBean("visual_three","顶部软膜灯1路(地址1,第8路)",  "8","01",false);
+        AdviceBean adviceBean = new AdviceBean("视觉区","visual_one","灯带1路(地址1，第6路)",  "6","01",false);
+        AdviceBean adviceBean1 = new AdviceBean( "视觉区","visual_two","所有插座1路(追光音乐+动感火柴人+CV专项+智能导览机器人插座(地址1，第7路))", "7","01",false);
+        AdviceBean adviceBean2 = new AdviceBean("视觉区","visual_three","顶部软膜灯1路(地址1,第8路)",  "8","01",false);
 
         adviceBeans.add(adviceBean);
         adviceBeans.add(adviceBean1);
@@ -83,8 +83,12 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
-            QZXTools.logD(sendInfoAreess);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
+            if (isOpen){
+                QZXTools.logD("qin989.。。..."+type+"。.第"+road+"路开......"+sendInfoAreess);
+            }else {
+                QZXTools.logD("qin989.。。.."+type+"。.第"+road+"路关......"+sendInfoAreess);
+            }
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){
                 //发送消息

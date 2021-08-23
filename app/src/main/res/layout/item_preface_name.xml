@@ -25,14 +25,7 @@
             android:textSize="@dimen/x32"
             />
 
-        <com.telit.money.start.customview.SwitchView
-            android:id="@+id/sv_open_and_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:isOpened="false"
-            app:offColor="#FFE3E3E3"
-            android:layout_marginLeft="@dimen/x20"
-            />
+
 
     </LinearLayout>
     <TextView
@@ -45,6 +38,17 @@
         android:textColor="@color/word_white"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/x36"
+        android:visibility="gone"
+        />
+
+    <com.telit.money.start.customview.SwitchView
+        android:id="@+id/sv_open_and_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:isOpened="false"
+        app:offColor="#FFE3E3E3"
+        android:layout_alignParentRight="true"
+
         />
 
     <TextView

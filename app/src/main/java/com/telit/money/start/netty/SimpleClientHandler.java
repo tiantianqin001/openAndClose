@@ -61,7 +61,7 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<String> {
             QZXTools.logE( "userEventTriggered: "+idleStateEvent.state(),null);
             if (idleStateEvent.state() == IdleState.WRITER_IDLE) {
                 //写超时,即设定的写时间内没有进行write操作会自动调用到这个方法中，主动write发送心跳方法给服务端
-                SimpleClientNetty.getInstance().sendMsgToServer(MsgUtils.HEAD_HEART, MsgUtils.heartMsg());
+               // SimpleClientNetty.getInstance().sendMsgToServer(MsgUtils.HEAD_HEART, MsgUtils.heartMsg());
             } else if (idleStateEvent.state() == IdleState.READER_IDLE) {
                 //读超时，即设定的读时间内没有read操作的话，表名服务端停止了，主动断开连接
                 QZXTools.logE("超过90秒没有接收到服务端的信息，主动关闭", null);

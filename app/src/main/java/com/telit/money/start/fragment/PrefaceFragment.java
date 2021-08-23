@@ -49,11 +49,11 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("preface_one","筒灯1路(地址1,第1路)", "1","01",false);
-        AdviceBean adviceBean1 = new AdviceBean("preface_two","展项+吊顶灯带1路(地址1,第2路)", "2","01",false);
-        AdviceBean adviceBean2 = new AdviceBean("preface_three","环绕灯带1路(地址1，第3路)", "3","01",false);
-        AdviceBean adviceBean3 = new AdviceBean("preface_fore","所有插座1路(AI迎宾墙+墙体插座(地址1，第4路))", "4","01",false);
-        AdviceBean adviceBean4 = new AdviceBean("preface_five","轨道灯1路(地址1，第5路)", "5","01",false);
+        AdviceBean adviceBean = new AdviceBean("序厅区","preface_one","筒灯1路(地址1,第1路)", "1","01",false);
+        AdviceBean adviceBean1 = new AdviceBean("序厅区","preface_two","展项+吊顶灯带1路(地址1,第2路)", "2","01",false);
+        AdviceBean adviceBean2 = new AdviceBean("序厅区","preface_three","环绕灯带1路(地址1，第3路)", "3","01",false);
+        AdviceBean adviceBean3 = new AdviceBean("序厅区","preface_fore","所有插座1路(AI迎宾墙+墙体插座(地址1，第4路))", "4","01",false);
+        AdviceBean adviceBean4 = new AdviceBean("序厅区","preface_five","轨道灯1路(地址1，第5路)", "5","01",false);
         adviceBeans.add(adviceBean);
         adviceBeans.add(adviceBean1);
         adviceBeans.add(adviceBean2);
@@ -79,25 +79,30 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
 
                 QZXTools. moveAdevice(getIp, getPort, "关机");
             }
-
             //控住设备的开和关
 
             String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
+
+            if (isOpen){
+                QZXTools.logD("qin989.。。..."+type+"。.第"+road+"路开......"+sendInfoAreess);
+            }else {
+                QZXTools.logD("qin989.。。.."+type+"。.第"+road+"路关......"+sendInfoAreess);
+            }
             QZXTools.logD(sendInfoAreess);
+
             //先判断是不是在线
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){
                 //发送消息
                 //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等30秒在关电
+                //如果当前是关灯，要先关电脑等30秒在关电 1000*30
                 if (!isOpen){
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000*30);
+                    },1);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

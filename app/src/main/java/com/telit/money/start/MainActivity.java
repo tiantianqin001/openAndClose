@@ -16,6 +16,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.telit.money.start.bean.HandleTimeBean;
 import com.telit.money.start.bean.XmlBean;
 import com.telit.money.start.constant.Constant;
 import com.telit.money.start.customview.CustomPopWindow;
+import com.telit.money.start.dialoge.ChangeIpDialog;
 import com.telit.money.start.dialoge.TipsDialog;
 import com.telit.money.start.fragment.MyContentFragment;
 import com.telit.money.start.net.Common;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
     private RelativeLayout rl_clear_sp;
     private TextView home_change_address;
     private CustomPopWindow mCustomPopWindow;
+    private ImageView home_timetable;
 
 
     private class MyHandler extends Handler {
@@ -153,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                 String socketPort = SharedPreferenceUtil.getInstance(MyApplication.getInstance()).getString("socketPort");
                 if (TextUtils.isEmpty(socketIp) || TextUtils.isEmpty(socketPort)) {
                     SimpleClientNetty.getInstance().init(Constant.SOCKED_IP, Constant.SOCKED_PORT);
+                    SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketIp",Constant.SOCKED_IP);
+                    SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketPort",String.valueOf(Constant.SOCKED_PORT));
                 } else {
                     //保存连接的ip和端口
                     SimpleClientNetty.getInstance().init(socketIp, Integer.valueOf(socketPort));
@@ -164,7 +169,13 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                 setString("allLightAdress","00");
     }
     private void initListener() {
-
+        home_timetable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeIpDialog changeIpDialog = new ChangeIpDialog();
+                changeIpDialog.show(getSupportFragmentManager(),MainActivity.class.getSimpleName());
+            }
+        });
 
 
     }
@@ -234,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
         tv_wen_du = (TextView) findViewById(R.id.tv_wen_du);
         tv_shi_du = (TextView) findViewById(R.id.tv_shi_fu);
         tv_er_yang = (TextView) findViewById(R.id.tv_er_yang);
+        home_timetable = (ImageView) findViewById(R.id.home_timetable);
         //获取湿度
         //获取二氧化碳
 

@@ -24,11 +24,12 @@ public class AdviceBeanDao extends AbstractDao<AdviceBean, String> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property TypeId = new Property(0, String.class, "typeId", true, "TYPE_ID");
-        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Road = new Property(2, String.class, "road", false, "ROAD");
-        public final static Property Adress = new Property(3, String.class, "adress", false, "ADRESS");
-        public final static Property IsOpen = new Property(4, boolean.class, "isOpen", false, "IS_OPEN");
+        public final static Property Area = new Property(0, String.class, "area", false, "AREA");
+        public final static Property TypeId = new Property(1, String.class, "typeId", true, "TYPE_ID");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Road = new Property(3, String.class, "road", false, "ROAD");
+        public final static Property Adress = new Property(4, String.class, "adress", false, "ADRESS");
+        public final static Property IsOpen = new Property(5, boolean.class, "isOpen", false, "IS_OPEN");
     }
 
 
@@ -44,11 +45,12 @@ public class AdviceBeanDao extends AbstractDao<AdviceBean, String> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ADVICE_BEAN\" (" + //
-                "\"TYPE_ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: typeId
-                "\"NAME\" TEXT," + // 1: name
-                "\"ROAD\" TEXT," + // 2: road
-                "\"ADRESS\" TEXT," + // 3: adress
-                "\"IS_OPEN\" INTEGER NOT NULL );"); // 4: isOpen
+                "\"AREA\" TEXT," + // 0: area
+                "\"TYPE_ID\" TEXT PRIMARY KEY NOT NULL ," + // 1: typeId
+                "\"NAME\" TEXT," + // 2: name
+                "\"ROAD\" TEXT," + // 3: road
+                "\"ADRESS\" TEXT," + // 4: adress
+                "\"IS_OPEN\" INTEGER NOT NULL );"); // 5: isOpen
     }
 
     /** Drops the underlying database table. */
@@ -61,78 +63,90 @@ public class AdviceBeanDao extends AbstractDao<AdviceBean, String> {
     protected final void bindValues(DatabaseStatement stmt, AdviceBean entity) {
         stmt.clearBindings();
  
+        String area = entity.getArea();
+        if (area != null) {
+            stmt.bindString(1, area);
+        }
+ 
         String typeId = entity.getTypeId();
         if (typeId != null) {
-            stmt.bindString(1, typeId);
+            stmt.bindString(2, typeId);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(3, name);
         }
  
         String road = entity.getRoad();
         if (road != null) {
-            stmt.bindString(3, road);
+            stmt.bindString(4, road);
         }
  
         String adress = entity.getAdress();
         if (adress != null) {
-            stmt.bindString(4, adress);
+            stmt.bindString(5, adress);
         }
-        stmt.bindLong(5, entity.getIsOpen() ? 1L: 0L);
+        stmt.bindLong(6, entity.getIsOpen() ? 1L: 0L);
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, AdviceBean entity) {
         stmt.clearBindings();
  
+        String area = entity.getArea();
+        if (area != null) {
+            stmt.bindString(1, area);
+        }
+ 
         String typeId = entity.getTypeId();
         if (typeId != null) {
-            stmt.bindString(1, typeId);
+            stmt.bindString(2, typeId);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(2, name);
+            stmt.bindString(3, name);
         }
  
         String road = entity.getRoad();
         if (road != null) {
-            stmt.bindString(3, road);
+            stmt.bindString(4, road);
         }
  
         String adress = entity.getAdress();
         if (adress != null) {
-            stmt.bindString(4, adress);
+            stmt.bindString(5, adress);
         }
-        stmt.bindLong(5, entity.getIsOpen() ? 1L: 0L);
+        stmt.bindLong(6, entity.getIsOpen() ? 1L: 0L);
     }
 
     @Override
     public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+        return cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1);
     }    
 
     @Override
     public AdviceBean readEntity(Cursor cursor, int offset) {
         AdviceBean entity = new AdviceBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // typeId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // road
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // adress
-            cursor.getShort(offset + 4) != 0 // isOpen
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // area
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // typeId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // road
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // adress
+            cursor.getShort(offset + 5) != 0 // isOpen
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, AdviceBean entity, int offset) {
-        entity.setTypeId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setRoad(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setAdress(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setIsOpen(cursor.getShort(offset + 4) != 0);
+        entity.setArea(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setTypeId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setRoad(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setAdress(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setIsOpen(cursor.getShort(offset + 5) != 0);
      }
     
     @Override

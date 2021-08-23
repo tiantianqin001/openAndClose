@@ -160,7 +160,7 @@ public class SimpleClientNetty  {
             return;
         }
 
-        init(socketIp,Integer.valueOf(port));
+        init(socketIp,Integer.parseInt(port));
     }
 
     /**
@@ -325,6 +325,7 @@ public class SimpleClientNetty  {
     public void sendMsgToServer(String message) {
         if (simpleClientHandler != null && !TextUtils.isEmpty(message)) {
             //如果处于断线状态将消息添加至队列,否则如果是断线重连成功则把队列数据一次性发送
+
             QZXTools.logE(";SimpleClientNetty sendMsgToServer 线程Name:" + Thread.currentThread().getName()
                     + ";And message=" + message
                     + ";And isConnected()=" + isConnected(), null);
@@ -343,7 +344,7 @@ public class SimpleClientNetty  {
                 }
                 //然后把当前消息加入队列，TCP协议保证先发先收到的机制？
                 // 剔除心跳消息,和客户端回执消息
-                    concurrentLinkedQueue.offer(message);
+                   // concurrentLinkedQueue.offer(message);
                 //再次确认是否处于连接状态,发送当前消息
                 if (isConnected()) {
                     simpleClientHandler.sendMsg(message);

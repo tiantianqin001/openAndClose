@@ -3,6 +3,7 @@ package com.telit.money.start.bean;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Keep;
 
 @Entity
 public class AdviceBean  {
@@ -12,6 +13,8 @@ public class AdviceBean  {
     private String road;
 
     private String adress;
+
+    private String area;
 
     public boolean isOpen() {
         return isOpen;
@@ -80,9 +83,10 @@ public class AdviceBean  {
         this.adress = adress;
     }
 
-    @Generated(hash = 2114976909)
-    public AdviceBean(String typeId, String name, String road, String adress,
+    @Keep
+    public AdviceBean(String area,String typeId, String name, String road, String adress,
             boolean isOpen) {
+        this.area = area;
         this.typeId = typeId;
         this.name = name;
         this.road = road;
@@ -97,11 +101,20 @@ public class AdviceBean  {
     @Override
     public String toString() {
         return "AdviceBean{" +
+                "area='" + area + '\'' +
                 "typeId='" + typeId + '\'' +
                 ", name='" + name + '\'' +
                 ", road='" + road + '\'' +
                 ", adress='" + adress + '\'' +
                 ", isOpen=" + isOpen +
                 '}';
+    }
+
+    public String getArea() {
+        return this.area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

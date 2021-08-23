@@ -45,10 +45,10 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("tail_one","轨道灯1路(地址2，第2路)",  "2","02",false);
-        AdviceBean adviceBean1 = new AdviceBean( "tail_two","灯带1路(地址2，第3路)", "3","02",false);
-        AdviceBean adviceBean2 = new AdviceBean( "tail_three","所有插座1路(留言墙+地插(地址2，第4路))", "4","02",false);
-        AdviceBean adviceBean3 = new AdviceBean( "tail_fore","弱点箱1路(地址2，第5路)", "5","02",false);
+        AdviceBean adviceBean = new AdviceBean("尾厅区","tail_one","轨道灯1路(地址2，第2路)",  "2","02",false);
+        AdviceBean adviceBean1 = new AdviceBean( "尾厅区","tail_two","灯带1路(地址2，第3路)", "3","02",false);
+        AdviceBean adviceBean2 = new AdviceBean( "尾厅区","tail_three","所有插座1路(留言墙+地插(地址2，第4路))", "4","02",false);
+        AdviceBean adviceBean3 = new AdviceBean( "尾厅区","tail_fore","弱点箱1路(地址2，第5路)", "5","02",false);
 
 
         adviceBeans.add(adviceBean);
@@ -86,7 +86,7 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
 
             //控住设备的开和关
             //先判断是不是在线
-            String sendInfoAreess = NumUtil.getSendInfoAreess(position, adress, isOpen);
+            String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
             QZXTools.logD(sendInfoAreess);
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){
