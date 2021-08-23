@@ -79,7 +79,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
                         }
                         QZXTools. moveAdevice(getIp, getPort, "关机");
                     }
-                }, 1000 * 60);
+                }, 1000 * 30);
             }
 
             //控住设备的开和关
@@ -90,7 +90,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
             if (connected){
                 //发送消息
                 //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等30秒在关电
+                //如果当前是关灯，要先关电脑等90秒在关电
                 if (!isOpen){
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -98,7 +98,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000*30);
+                    },1000 * 90);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

@@ -40,8 +40,6 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
         super.initWidget(root);
         rv_staile_content = root.findViewById(R.id.rv_staile_content);
     }
-
-
     @Override
     protected void initData() {
         super.initData();
@@ -57,8 +55,6 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
         prefaceAdapter.setonClickListener(this);
         rv_staile_content.setAdapter(prefaceAdapter);
     }
-
-
     @Override
     protected int getContentLayoutId() {
         return R.layout.staile_count;
@@ -84,7 +80,7 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
                         QZXTools. moveAdevice(getIp, getPort, "关机");
                     }
-                }, 1000 * 60);
+                }, 1000 * 30);
             }
 
             //控住设备的开和关
@@ -99,7 +95,7 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
             if (connected){
                 //发送消息
                 //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等30秒在关电
+                //如果当前是关灯，要先关电脑等90秒在关电
                 if (!isOpen){
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -107,7 +103,7 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000*30);
+                    },1000 * 90);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

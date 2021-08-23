@@ -97,7 +97,7 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
             if (connected){
                 //发送消息
                 //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等30秒在关电
+                //如果当前是关灯，要先关电脑等90秒在关电
                 if (!isOpen){
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -105,7 +105,7 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
 
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000*30);
+                    },1000 * 90);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

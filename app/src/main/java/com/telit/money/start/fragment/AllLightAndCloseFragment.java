@@ -2,6 +2,9 @@ package com.telit.money.start.fragment;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -85,7 +88,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
-
         //解析数据
         try {
             InputStream inputStream = getContext().getAssets().open("address.xml");
@@ -128,12 +130,9 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         home_one_open.setOnClickListener(this);
 
     }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     @Override
@@ -263,7 +262,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
 
 
-        addall.add(outs);
+        initAinm();
         rv_all_open_and_close.setLayoutManager(new LinearLayoutManager(getContext()));
         AllLightCloseAndOpenAdapter adapter = new AllLightCloseAndOpenAdapter(getActivity(),adviceBeans,true);
 
@@ -370,7 +369,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         QZXTools.logE(adviceBeans.toString(),null);
 
-
+        initAinm();
         rv_all_open_and_close.setLayoutManager(new LinearLayoutManager(getContext()));
         AllLightCloseAndOpenAdapter adapter = new AllLightCloseAndOpenAdapter(getActivity(),adviceBeans,false);
         rv_all_open_and_close.setAdapter(adapter);
@@ -442,4 +441,21 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         super.onDestroyView();
 
     }
+
+
+    private void initAinm() {
+        //通过加载XML动画设置文件来创建一个Animation对象；
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.in_fade_right);
+        //得到一个LayoutAnimationController对象；
+        LayoutAnimationController lac = new LayoutAnimationController(animation);
+        //设置控件显示的顺序；
+        lac.setOrder(LayoutAnimationController.ORDER_NORMAL);
+        //设置控件显示间隔时间；
+        lac.setDelay(5f);
+        //为ListView设置LayoutAnimationController属性；
+        rv_all_open_and_close.setLayoutAnimation(lac);
+    }
+
+
+
 }

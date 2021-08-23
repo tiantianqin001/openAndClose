@@ -38,52 +38,14 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
     private  ExecutorService executorService;
     private  TextView tv_all_close_and_open;
     private Handler mHandler = new Handler();
-            protected List<XmlBean> prefaceList = new ArrayList<>();
-            protected List<XmlBean> visualList = new ArrayList<>();
-            protected List<XmlBean> voiceList = new ArrayList<>();
-            protected List<XmlBean> ecologyList = new ArrayList<>();
-            protected List<XmlBean> tailList = new ArrayList<>();
-            protected List<XmlBean> casualList = new ArrayList<>();
-            protected List<XmlBean> outList = new ArrayList<>();
+
 
             public AllLightCloseAndOpenAdapter(Context context, List<AdviceBean> addall, boolean isOpen) {
                 this.context = context;
                 this.addall = addall;
                 this.isOpen = isOpen;
                 executorService= Executors.newSingleThreadExecutor();
-                //解析数据
-                try {
-                    InputStream inputStream = context.getAssets().open("address.xml");
-                    List<XmlBean> xmlBeans = NumUtil.getUrls(inputStream);
-                    QZXTools.logE(xmlBeans.toString(), null);
-                    prefaceList.clear();
-                    visualList.clear();
-                    voiceList.clear();
-                    ecologyList.clear();
-                    tailList.clear();
-                    casualList.clear();
-                    outList.clear();
-                    for (XmlBean xmlBean : xmlBeans) {
-                        String area = xmlBean.getArea();
-                        if (area.equals("序厅区")) {
-                            prefaceList.add(xmlBean);
-                        } else if (area.equals("视觉区")) {
-                            visualList.add(xmlBean);
-                        } else if (area.equals("语音区")) {
-                            voiceList.add(xmlBean);
-                        } else if (area.equals("生态区")) {
-                            ecologyList.add(xmlBean);
-                        } else if (area.equals("尾厅区")) {
-                            tailList.add(xmlBean);
-                        } else if (area.equals("休闲区")) {
-                            casualList.add(xmlBean);
-                        } else if (area.equals("外立面")) {
-                            outList.add(xmlBean);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
 
             }
 
@@ -119,7 +81,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                         }
                     });
                 } else {
-                    //关闭电要等一分钟在关闭
+                    //关闭电要等一分钟 先关闭了电脑再关闭电
                     QZXTools.logD("qin989.。。.." + adviceBean);
                     String area = adviceBean.getArea();
                     String obj = "" + area + "...第" + road + "路关......" + sendInfoAreess;
@@ -139,7 +101,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                                 }
                             });
                         }
-                    },1000 * 60);
+                    },1000 * 90);
 
                 }
 

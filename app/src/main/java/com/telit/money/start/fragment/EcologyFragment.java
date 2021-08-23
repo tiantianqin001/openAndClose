@@ -84,7 +84,7 @@ public class EcologyFragment extends Fragment implements PrefaceAdapter.onClickL
 
                         QZXTools. moveAdevice(getIp, getPort, "关机");
                     }
-                }, 1000 * 60);
+                }, 1000 * 30);
             }
 
 
@@ -96,7 +96,7 @@ public class EcologyFragment extends Fragment implements PrefaceAdapter.onClickL
             if (connected){
                 //发送消息
                 //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等30秒在关电
+                //如果当前是关灯，要先关电脑等90秒在关电
                 if (!isOpen){
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -104,7 +104,7 @@ public class EcologyFragment extends Fragment implements PrefaceAdapter.onClickL
 
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000*30);
+                    },1000 * 90);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

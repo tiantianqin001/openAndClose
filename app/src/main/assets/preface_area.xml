@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<list>
+    <!--序厅区-->
+    <info id="1">
+        <area>序厅区</area>
+        <typeId>preface_one</typeId>
+        <name>筒灯1路(地址1,第1路)</name>
+        <fewWays>1</fewWays>
+        <addre>01</addre>
+    </info>
+
+</list>
