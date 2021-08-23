@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
     private TextView home_change_address;
     private CustomPopWindow mCustomPopWindow;
     private ImageView home_timetable;
+    private ImageView home_wifi;
 
 
     private class MyHandler extends Handler {
@@ -117,8 +118,17 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                     String stringData = (String) msg.obj;
                     //如果没有收到内容
                     if (TextUtils.isEmpty(stringData)) return;
+                    break;
 
-
+                case Constant.NotCommint:
+                    //不能正常连接
+                  boolean  connect= (boolean) msg.obj;
+                  if (connect){
+                      ToastUtils.show("服务没有开启");
+                  }else {
+                      //当前网络不可用
+                      ToastUtils.show("当前设备没联网");
+                  }
                     break;
             }
         }
@@ -176,8 +186,12 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                 changeIpDialog.show(getSupportFragmentManager(),MainActivity.class.getSimpleName());
             }
         });
-
-
+        home_wifi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QZXTools.enterWifiSetting(MainActivity.this);
+            }
+        });
     }
 
     private void initData() {
@@ -233,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        QZXTools.logD(response.body().toString());
+                      //  QZXTools.logD(response.body().toString());
                     }
                 });
 
@@ -246,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
         tv_shi_du = (TextView) findViewById(R.id.tv_shi_fu);
         tv_er_yang = (TextView) findViewById(R.id.tv_er_yang);
         home_timetable = (ImageView) findViewById(R.id.home_timetable);
+        home_wifi = (ImageView) findViewById(R.id.home_wifi);
         //获取湿度
         //获取二氧化碳
 
@@ -308,7 +323,11 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
 
     @Override
     public void isNoUser(boolean isNet) {
-        //todo
+      //连接服务失败  isNet= true  网络连接正常
+        Message message = mHandler.obtainMessage();
+        message.what = Constant.NotCommint;
+        message.obj = isNet;
+        mHandler.sendMessage(message);
     }
 
     @Override

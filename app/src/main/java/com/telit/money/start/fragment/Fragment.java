@@ -2,6 +2,7 @@ package com.telit.money.start.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
     protected List<XmlBean> addressList = new ArrayList<>();
     // 标示是否第一次初始化数据
     protected boolean mIsFirstInitData = true;
+    protected Handler mHandler = new Handler();
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -133,4 +135,11 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
     }
 
     protected  void sendMessage(){};
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler=null;
+    }
 }

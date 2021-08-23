@@ -68,17 +68,22 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
     public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("语音区")){
             //第4路要设置设备的关只关设备开机是通电自己就开机
-       /*     if (position ==position && !isOpen){
-                XmlBean xmlBean = addressList.get(position);
-                String getIp = xmlBean.getUrl();
-                int getPort = xmlBean.getPort();
-                if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
-                    ToastUtils.show("ip和端口不能为空");
-                    return;
-                }
+            if (!isOpen){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        XmlBean xmlBean = addressList.get(position);
+                        String getIp = xmlBean.getUrl();
+                        int getPort = xmlBean.getPort();
+                        if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                            ToastUtils.show("ip和端口不能为空");
+                            return;
+                        }
 
-                QZXTools. moveAdevice(getIp, getPort, "关机");
-            }*/
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 60);
+            }
 
             //控住设备的开和关
             //先判断是不是在线
@@ -107,6 +112,8 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
         }
 
     }
+
+
 
 
 }

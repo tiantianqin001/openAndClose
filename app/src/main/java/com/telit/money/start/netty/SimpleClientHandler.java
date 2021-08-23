@@ -66,10 +66,8 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<String> {
                 //读超时，即设定的读时间内没有read操作的话，表名服务端停止了，主动断开连接
                 QZXTools.logE("超过90秒没有接收到服务端的信息，主动关闭", null);
                 // ctx.channel().close();
-                 ctx.channel().close();
-                if (simpleClientListener != null) {
-                    simpleClientListener.isNoUser(true);
-                }
+                 //ctx.channel().close();
+
             }
         } else {
             super.userEventTriggered(ctx, evt);

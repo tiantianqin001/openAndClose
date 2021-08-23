@@ -2,6 +2,7 @@ package com.telit.money.start.fragment;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -72,17 +73,23 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
     public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("序厅区")) {
             //第4路要设置设备的关只关设备开机是通电自己就开机
-            if (position == 3 && !isOpen){
-                XmlBean xmlBean = addressList.get(position);
-                String getIp = xmlBean.getUrl();
-                int getPort = xmlBean.getPort();
-
-                QZXTools. moveAdevice(getIp, getPort, "关机");
+            if (!isOpen){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        XmlBean xmlBean = addressList.get(position);
+                        String getIp = xmlBean.getUrl();
+                        int getPort = xmlBean.getPort();
+                        if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                            ToastUtils.show("ip和端口不能为空");
+                            return;
+                        }
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 60);
             }
             //控住设备的开和关
-
             String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
-
             if (isOpen){
                 QZXTools.logD("qin989.。。..."+type+"。.第"+road+"路开......"+sendInfoAreess);
             }else {

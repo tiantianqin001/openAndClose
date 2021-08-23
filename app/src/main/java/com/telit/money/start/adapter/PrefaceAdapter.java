@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PrefaceAdapter extends RecyclerView.Adapter<PrefaceAdapter.ViewHolder>{
-
-
     private Context context;
     private List<AdviceBean> datas;
     private String type;
@@ -38,7 +36,6 @@ public class PrefaceAdapter extends RecyclerView.Adapter<PrefaceAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //recycleview item不能显示全部 todo  这个是为啥
         View view = LayoutInflater.from(context).inflate( R.layout.item_preface_name,parent,false );
       //  View view = View.inflate(context, R.layout.item_preface_name, parent);
         ViewHolder viewHolder=new ViewHolder(view);
@@ -48,8 +45,6 @@ public class PrefaceAdapter extends RecyclerView.Adapter<PrefaceAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-
         holder.tv_all_line.setText("一共"+datas.size()+"路");
         holder.tv_light_name.setText(datas.get(position).getName());
         //如果当前开关保存到本地要回显

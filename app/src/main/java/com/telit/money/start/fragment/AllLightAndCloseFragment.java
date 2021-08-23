@@ -238,7 +238,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         //外立面
 
         AdviceBean out_one = new AdviceBean("外立面","out_one","轨道灯+灯带1路(地址2，第8路)" , "8","02",true);
-
         outs.clear();
         outs.add(out_one);
         MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(out_one);
@@ -269,6 +268,8 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         AllLightCloseAndOpenAdapter adapter = new AllLightCloseAndOpenAdapter(getActivity(),adviceBeans,true);
 
         rv_all_open_and_close.setAdapter(adapter);
+
+
 
     }
 
@@ -374,9 +375,71 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         AllLightCloseAndOpenAdapter adapter = new AllLightCloseAndOpenAdapter(getActivity(),adviceBeans,false);
         rv_all_open_and_close.setAdapter(adapter);
 
+        //设置所有的设备关机可以马上关，但是关灯也就是关电要等1分钟
+
+        closeAdveces();
+    }
+    //关闭所有的电脑
+    private void closeAdveces() {
+        //序厅区
+        for (int i = 0; i < prefaceList.size(); i++) {
+            XmlBean xmlBean = prefaceList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //视觉区
+        for (int i = 0; i < visualList.size(); i++) {
+            XmlBean xmlBean = visualList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //语音区
+        for (int i = 0; i < voiceList.size(); i++) {
+            XmlBean xmlBean = voiceList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //生态区
+        for (int i = 0; i < ecologyList.size(); i++) {
+            XmlBean xmlBean = ecologyList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //尾厅区
+        for (int i = 0; i < tailList.size(); i++) {
+            XmlBean xmlBean = tailList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //休闲区
+        for (int i = 0; i < casualList.size(); i++) {
+            XmlBean xmlBean = casualList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+        //外立面
+        for (int i = 0; i < outList.size(); i++) {
+            XmlBean xmlBean = outList.get(i);
+            String getIp = xmlBean.getUrl();
+            int getPort = xmlBean.getPort();
+            QZXTools. moveAdevice(getIp, getPort, "关机");
+        }
+
     }
 
     public void sendMessage(){
         QZXTools.logD("wobei diaoyong ke ");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
     }
 }

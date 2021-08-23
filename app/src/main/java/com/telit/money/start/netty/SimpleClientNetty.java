@@ -95,7 +95,7 @@ public class SimpleClientNetty  {
                     .channel(NioSocketChannel.class)
                     .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000*100)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000*10)
                     // 设置禁用nagle算法
                     .option(ChannelOption.TCP_NODELAY, true)
                     // 设置该选项以后，如果在两小时内没有数据的通信时，TCP会自动发送一个活动探测数据报文
@@ -105,7 +105,7 @@ public class SimpleClientNetty  {
                         protected void initChannel(Channel channel) throws Exception {
                             ChannelPipeline channelPipeline = channel.pipeline();
                             //一秒接收不到写操作则发送心跳
-                            channelPipeline.addLast("heart", new IdleStateHandler(90,
+                            channelPipeline.addLast("heart", new IdleStateHandler(90*120,
                                     10, 0, TimeUnit.SECONDS));
 
                             // netty提供了多种解码器用于处理半包问题

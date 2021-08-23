@@ -69,16 +69,22 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
         if (type.equals("视觉区")){
          //第4路要设置设备的关只关设备开机是通电自己就开机
-            if (position == 1 && !isOpen){
-                XmlBean xmlBean = addressList.get(position);
-                String getIp = xmlBean.getUrl();
-                int getPort = xmlBean.getPort();
-                if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
-                    ToastUtils.show("ip和端口不能为空");
-                    return;
-                }
 
-                QZXTools. moveAdevice(getIp, getPort, "关机");
+            if (!isOpen){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        XmlBean xmlBean = addressList.get(position);
+                        String getIp = xmlBean.getUrl();
+                        int getPort = xmlBean.getPort();
+                        if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                            ToastUtils.show("ip和端口不能为空");
+                            return;
+                        }
+
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 60);
             }
 
             //控住设备的开和关

@@ -37,8 +37,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
 
     private  ExecutorService executorService;
     private  TextView tv_all_close_and_open;
-
-
+    private Handler mHandler = new Handler();
             protected List<XmlBean> prefaceList = new ArrayList<>();
             protected List<XmlBean> visualList = new ArrayList<>();
             protected List<XmlBean> voiceList = new ArrayList<>();
@@ -120,21 +119,28 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                         }
                     });
                 } else {
+                    //关闭电要等一分钟在关闭
                     QZXTools.logD("qin989.。。.." + adviceBean);
                     String area = adviceBean.getArea();
                     String obj = "" + area + "...第" + road + "路关......" + sendInfoAreess;
                     tv_all_close_and_open.setText(obj);
-                    executorService.execute(new Runnable() {
+                    mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                Thread.sleep(5000);
-                                SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            executorService.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(1000 * 3);
+                                        SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                         }
-                    });
+                    },1000 * 60);
+
                 }
 
             }
