@@ -57,8 +57,6 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
         prefaceAdapter.setonClickListener(this);
         rv_staile_content.setAdapter(prefaceAdapter);
     }
-
-
     @Override
     protected int getContentLayoutId() {
         return R.layout.staile_count;

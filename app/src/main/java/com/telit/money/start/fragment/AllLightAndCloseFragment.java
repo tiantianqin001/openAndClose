@@ -44,8 +44,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     private TextView home_one_open;
     private RecyclerView rv_all_open_and_close;
 
-
-
     protected List<XmlBean> prefaceList = new ArrayList<>();
     protected List<XmlBean> visualList = new ArrayList<>();
     protected List<XmlBean> voiceList = new ArrayList<>();
@@ -53,8 +51,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     protected List<XmlBean> tailList = new ArrayList<>();
     protected List<XmlBean> casualList = new ArrayList<>();
     protected List<XmlBean> outList = new ArrayList<>();
-
-
     /**
      * 创建新实例
      *
@@ -64,13 +60,10 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         AllLightAndCloseFragment fragment = new AllLightAndCloseFragment();
         return fragment;
     }
-
     @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_cloudmicrolecture;
     }
-
-
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
