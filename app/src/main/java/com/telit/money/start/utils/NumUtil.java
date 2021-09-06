@@ -191,11 +191,11 @@ public class NumUtil {
                         if ("url".equals(name)) {
                             xmlBean.setUrl(parser.nextText());
                         }
-                        if ("position".equals(name)) {
-                            xmlBean.setPosition(Integer.parseInt(parser.nextText()));
-                        }
                         if ("port".equals(name)){
                             xmlBean.setPort(Integer.parseInt(parser.nextText()));
+                        }
+                        if ("includecomputer".equals(name)){
+                            xmlBean.setIncludecomputer(Integer.parseInt(parser.nextText()));
                         }
                     }
                     break;

@@ -8,7 +8,16 @@ public class XmlBean {
     private String url;
     private int id;
     private int port;
+    private int includecomputer;
 
+
+    public int getIncludecomputer() {
+        return includecomputer;
+    }
+
+    public void setIncludecomputer(int includecomputer) {
+        this.includecomputer = includecomputer;
+    }
 
     public int getPort() {
         return port;
@@ -86,6 +95,8 @@ public class XmlBean {
                 ", addre='" + addre + '\'' +
                 ", url='" + url + '\'' +
                 ", id=" + id +
+                ", port=" + port +
+                ", includecomputer=" + includecomputer +
                 ", position=" + position +
                 '}';
     }

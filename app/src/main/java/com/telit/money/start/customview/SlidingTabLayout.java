@@ -231,7 +231,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         }
 
         this.mViewPager = vp;
-        this.mViewPager.setAdapter(new SlidingTabLayout.InnerPagerAdapter(fa.getSupportFragmentManager(), fragments, titles));
+        this.mViewPager.setAdapter(new InnerPagerAdapter(fa.getSupportFragmentManager(), fragments, titles));
 
         this.mViewPager.removeOnPageChangeListener(this);
         this.mViewPager.addOnPageChangeListener(this);

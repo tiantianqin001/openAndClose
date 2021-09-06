@@ -4,6 +4,6 @@
     <size
         android:width="@dimen/x160"
         android:height="@dimen/x160" />
-    <solid android:color="@color/btn_blue" />
+    <solid android:color="@color/wrong_color" />
     <corners android:radius="@dimen/x80" />
 </shape>

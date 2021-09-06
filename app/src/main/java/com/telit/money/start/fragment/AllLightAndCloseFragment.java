@@ -1,5 +1,6 @@
 package com.telit.money.start.fragment;
 
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
@@ -51,6 +52,8 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     protected List<XmlBean> tailList = new ArrayList<>();
     protected List<XmlBean> casualList = new ArrayList<>();
     protected List<XmlBean> outList = new ArrayList<>();
+
+
     /**
      * 创建新实例
      *
@@ -264,6 +267,14 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
 
     }
+    private Handler handler=new Handler();
+
+  Runnable runnable=  new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
 
     //全部关机
     private void getAllClose() {
@@ -369,6 +380,8 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         //设置所有的设备关机可以马上关，但是关灯也就是关电要等1分钟
 
+
+
         closeAdveces();
     }
     //关闭所有的电脑
@@ -378,49 +391,128 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
             XmlBean xmlBean = prefaceList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                 handler.postDelayed(new Runnable() {
+                     @Override
+                     public void run() {
+                         QZXTools. moveAdevice(getIp, getPort, "关机");
+                     }
+                 }, 1000 * 30);
+            }
+
         }
         //视觉区
         for (int i = 0; i < visualList.size(); i++) {
             XmlBean xmlBean = visualList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
         //语音区
         for (int i = 0; i < voiceList.size(); i++) {
             XmlBean xmlBean = voiceList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
         //生态区
         for (int i = 0; i < ecologyList.size(); i++) {
             XmlBean xmlBean = ecologyList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
         //尾厅区
         for (int i = 0; i < tailList.size(); i++) {
             XmlBean xmlBean = tailList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
         //休闲区
         for (int i = 0; i < casualList.size(); i++) {
             XmlBean xmlBean = casualList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
         //外立面
         for (int i = 0; i < outList.size(); i++) {
             XmlBean xmlBean = outList.get(i);
             String getIp = xmlBean.getUrl();
             int getPort = xmlBean.getPort();
-            QZXTools. moveAdevice(getIp, getPort, "关机");
+            int includecomputer = xmlBean.getIncludecomputer();
+            if (includecomputer == 0){
+                QZXTools. moveAdevice(getIp, getPort, "关机");
+
+            }else {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                    }
+                }, 1000 * 30);
+            }
         }
 
     }
@@ -432,6 +524,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        handler.removeCallbacks(runnable);
 
     }
 
@@ -448,6 +541,9 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         //为ListView设置LayoutAnimationController属性；
         rv_all_open_and_close.setLayoutAnimation(lac);
     }
+
+
+
 
 
 

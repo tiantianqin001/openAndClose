@@ -67,7 +67,8 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                 String address = adviceBean.getAdress();
                 String sendInfoAreess = NumUtil.getSendInfoAreess(road, address, isOpen);
                 if (isOpen) {
-                    String obj = "" + adviceBean.getArea() + "...第" + road + "路开......" + sendInfoAreess;
+                    String name = adviceBean.getName();
+                    String obj = "" + adviceBean.getArea() + "....."+name+"...第"+ + road + "路开......" + sendInfoAreess;
                     tv_all_close_and_open.setText(obj);
                     executorService.execute(new Runnable() {
                         @Override
@@ -84,7 +85,8 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                     //关闭电要等一分钟 先关闭了电脑再关闭电
                     QZXTools.logD("qin989.。。.." + adviceBean);
                     String area = adviceBean.getArea();
-                    String obj = "" + area + "...第" + road + "路关......" + sendInfoAreess;
+                    String name = adviceBean.getName();
+                    String obj = "" + area + "...."+name+"...第" + road + "路关......" + sendInfoAreess;
                     tv_all_close_and_open.setText(obj);
                     mHandler.postDelayed(new Runnable() {
                         @Override
@@ -101,7 +103,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                                 }
                             });
                         }
-                    },1000 * 90);
+                    },1000 * 60);
 
                 }
 

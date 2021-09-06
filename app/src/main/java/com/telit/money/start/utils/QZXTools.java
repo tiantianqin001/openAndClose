@@ -181,7 +181,7 @@ public class QZXTools {
 
             QZXTools.logD(url);
             OkGo.<String>post(url)
-                    .params("delayTime", 30)
+                    .params("delayTime", 10)
                     .execute(new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {

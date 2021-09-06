@@ -65,8 +65,8 @@ public class ChangeIpDialog extends DialogFragment {
                     return;
                 }
                 //把地址和端口保存到本地
-                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverIp", socketIp);
-                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("serverPort", socketPort);
+                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketIp", socketIp);
+                SharedPreferenceUtil.getInstance(MyApplication.getInstance()).setString("socketPort", socketPort);
 
                 ToastUtils.show(socketIp+":"+socketPort);
                 dismiss();

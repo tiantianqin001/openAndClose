@@ -29,6 +29,9 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
     // 标示是否第一次初始化数据
     protected boolean mIsFirstInitData = true;
     protected Handler mHandler = new Handler();
+
+    //保存是不是已设置了配置
+    protected List<XmlBean>  xmlBeans = new ArrayList<>();
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

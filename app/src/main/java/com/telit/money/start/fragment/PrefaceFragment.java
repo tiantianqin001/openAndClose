@@ -73,20 +73,48 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
     public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("序厅区")) {
             //第4路要设置设备的关只关设备开机是通电自己就开机
+            xmlBeans.clear();
             if (!isOpen){
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        XmlBean xmlBean = addressList.get(position);
-                        String getIp = xmlBean.getUrl();
-                        int getPort = xmlBean.getPort();
-                        if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
-                            ToastUtils.show("ip和端口不能为空");
-                            return;
-                        }
-                        QZXTools. moveAdevice(getIp, getPort, "关机");
+                //当前这个开关可能有多个电脑
+                for (XmlBean xmlBean : addressList) {
+                    if (xmlBean.getId()-1 == position){
+                        xmlBeans.add(xmlBean);
                     }
-                }, 1000 * 30);
+                }
+                //判断当前的开关的所有的电脑的开和关
+                if (xmlBeans!= null && xmlBeans.size()>0){
+                    for (XmlBean xmlBean : xmlBeans) {
+
+                        int includecomputer = xmlBean.getIncludecomputer();
+                        if (includecomputer == 0){
+                            String getIp = xmlBean.getUrl();
+                            int getPort = xmlBean.getPort();
+                            if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                                ToastUtils.show("ip和端口不能为空");
+                                return;
+                            }
+                            QZXTools. moveAdevice(getIp, getPort, "关机");
+                        }else {
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    XmlBean xmlBean = addressList.get(position);
+                                    String getIp = xmlBean.getUrl();
+                                    int getPort = xmlBean.getPort();
+                                    if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
+                                        ToastUtils.show("ip和端口不能为空");
+                                        return;
+                                    }
+
+                                    QZXTools. moveAdevice(getIp, getPort, "关机");
+                                }
+                            }, 1000 * 30);
+                        }
+                    }
+                }
+
+
+
             }
             //控住设备的开和关
             String sendInfoAreess = NumUtil.getSendInfoAreess(road, adress, isOpen);
@@ -109,7 +137,7 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
                         public void run() {
                             SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                         }
-                    },1000 * 90);
+                    },1000 * 60);
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

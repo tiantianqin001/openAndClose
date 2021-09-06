@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.gyf.immersionbar.ImmersionBar;
@@ -48,16 +49,20 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements SimpleClientListener {
+public class MainActivity extends AppCompatActivity implements SimpleClientListener, ChangeIpDialog.onCallCallback {
     private static final String TAG = "MainActivity";
+    private int count = 0;
     private MyHandler mHandler;
     private Runnable reComment = new Runnable() {
         @Override
         public void run() {
             //重连
+
+            if (count>=15)return;
             SimpleClientNetty.getInstance().reConnect();
             mHandler.postDelayed(reComment, 8 * 1000);
             QZXTools.logE("TAG+\"...我是离线....的情况先重连", null);
+            count++;
         }
     };
     private ExecutorService messageExecutorService;
@@ -66,11 +71,14 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
     private TextView tv_wen_du;
     private TextView tv_shi_du;
     private TextView tv_er_yang;
-    private RelativeLayout rl_clear_sp;
-    private TextView home_change_address;
-    private CustomPopWindow mCustomPopWindow;
+
     private ImageView home_timetable;
     private ImageView home_wifi;
+
+    @Override
+    public void call(String ip, String port) {
+        SimpleClientNetty.getInstance().init(ip, Integer.valueOf(port));
+    }
 
 
     private class MyHandler extends Handler {
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
             switch (msg.what) {
                 case Constant.OnLine:
                     ToastUtils.show("在线");
+                    count=0;
                     onLine = "在线";
                     if (mHandler != null) {
                         mHandler.removeCallbacks(reComment);
@@ -124,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
                     //不能正常连接
                   boolean  connect= (boolean) msg.obj;
                   if (connect){
-                      ToastUtils.show("服务没有开启");
+                      ToastUtils.show("服务没有开启或ip地址设置错误");
+                      //这种状态教师端已经关闭了不能连接了
+                     // mHandler.postDelayed(reComment, 5000);
+                      QZXTools.logE("qin009.........1234567899",null);
                   }else {
                       //当前网络不可用
                       ToastUtils.show("当前设备没联网");
@@ -184,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
             public void onClick(View v) {
                 ChangeIpDialog changeIpDialog = new ChangeIpDialog();
                 changeIpDialog.show(getSupportFragmentManager(),MainActivity.class.getSimpleName());
+                changeIpDialog.setOnCallCallback(MainActivity.this);
             }
         });
         home_wifi.setOnClickListener(new View.OnClickListener() {
@@ -279,11 +292,9 @@ public class MainActivity extends AppCompatActivity implements SimpleClientListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        count=0;
 
     }
-
-    private int count = 0;
-    private long touchFirstTime;
 
 
 
