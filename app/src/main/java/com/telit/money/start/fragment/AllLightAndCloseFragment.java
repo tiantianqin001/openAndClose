@@ -81,42 +81,11 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         super.initView();
     }
 
+
+
     @Override
     protected void initData() {
         super.initData();
-        //解析数据
-        try {
-            InputStream inputStream = getContext().getAssets().open("address.xml");
-            List<XmlBean> xmlBeans = NumUtil.getUrls(inputStream);
-            QZXTools.logE(xmlBeans.toString(), null);
-            prefaceList.clear();
-            visualList.clear();
-            voiceList.clear();
-            ecologyList.clear();
-            tailList.clear();
-            casualList.clear();
-            outList.clear();
-            for (XmlBean xmlBean : xmlBeans) {
-                String area = xmlBean.getArea();
-                if (area.equals("序厅区")) {
-                    prefaceList.add(xmlBean);
-                } else if (area.equals("视觉区")) {
-                    visualList.add(xmlBean);
-                } else if (area.equals("语音区")) {
-                    voiceList.add(xmlBean);
-                } else if (area.equals("生态区")) {
-                    ecologyList.add(xmlBean);
-                } else if (area.equals("尾厅区")) {
-                    tailList.add(xmlBean);
-                } else if (area.equals("休闲区")) {
-                    casualList.add(xmlBean);
-                } else if (area.equals("外立面")) {
-                    outList.add(xmlBean);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
     @Override
@@ -145,7 +114,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    private List<List<AdviceBean>> addall = new ArrayList<>();
+    private List<AdviceBean> addall = new ArrayList<>();
     private List<AdviceBean> prefaces = new ArrayList<>();
     private List<AdviceBean> visuals = new ArrayList<>();
     private List<AdviceBean> voices = new ArrayList<>();
@@ -159,98 +128,93 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     private void getOpenAll() {
         addall.clear();
         adviceBeans.clear();
-        //
-        AdviceBean preface_one = new AdviceBean("序厅区","preface_one","筒灯1路(地址1,第1路)", "1","01",true);
-        AdviceBean preface_two = new AdviceBean("序厅区","preface_two","展项+吊顶灯带1路(地址1,第2路)", "2","01",true);
-        AdviceBean preface_three = new AdviceBean("序厅区","preface_three","环绕灯带1路(地址1，第3路)", "3","01",true);
-        AdviceBean preface_fore = new AdviceBean("序厅区","preface_fore","所有插座1路(AI迎宾墙+墙体插座(地址1，第4路))", "4","01",true);
-        AdviceBean preface_five = new AdviceBean("序厅区","preface_five","轨道灯1路(地址1，第5路)", "5","01",true);
 
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_three);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_fore);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_five);
 
         prefaces.clear();
-        prefaces.add(preface_one);
-        prefaces.add(preface_two);
-        prefaces.add(preface_three);
-        prefaces.add(preface_fore);
-        prefaces.add(preface_five);
+        List<AdviceBean> preface_listInfo = NumUtil.getListInfo(getContext(), "preface.json");
+        for (int i = 0; i < preface_listInfo.size(); i++) {
+            AdviceBean adviceBean = preface_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            prefaces.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
+
+
         //视觉区
-        AdviceBean visual_one = new AdviceBean("视觉区","visual_one","灯带1路(地址1，第6路)",  "6","01",true);
-        AdviceBean visual_two = new AdviceBean( "视觉区","visual_two","所有插座1路(追光音乐+动感火柴人+CV专项+智能导览机器人插座(地址1，第7路))", "7","01",true);
-        AdviceBean visual_three = new AdviceBean("视觉区","visual_three","顶部软膜灯1路(地址1,第8路)",  "8","01",true);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_three);
         visuals.clear();
-        visuals.add(visual_one);
-        visuals.add(visual_two);
-        visuals.add(visual_three);
+        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
+        for (int i = 0; i < visual_listInfo.size(); i++) {
+            AdviceBean adviceBean = visual_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            visuals.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
         //语音区
-        AdviceBean voice_one = new AdviceBean("语音区","voice_one","轨道灯1路(地址1，第9路)",  "9","01",true);
-        AdviceBean voice_two = new AdviceBean( "语音区","voice_two","所有插座1路(说好普通话+智能转写+AI互动魔墙(地址1，第10路))", "10","01",true);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(voice_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(voice_two);
         voices.clear();
-        voices.add(voice_one);
-        voices.add(voice_two);
+        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
+        for (int i = 0; i < voice_listInfo.size(); i++) {
+            AdviceBean adviceBean = voice_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            voices.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
         //生态区
-        AdviceBean ecology_one = new AdviceBean("生态区","ecology_one","灯带1路(地址1，第11路)",  "11","01",true);
-        AdviceBean ecology_two = new AdviceBean( "生态区","ecology_two","轨道灯1路(地址1，第12路)", "12","01",true);
-        AdviceBean ecology_three = new AdviceBean( "生态区","ecology_three","所有插座1路(世界聊得来+变声电话亭+AI生活、AI教育、AI城市+地插(地址2,第1路))", "1","02",true);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_three);
         ecologys.clear();
-        ecologys.add(ecology_one);
-        ecologys.add(ecology_two);
-        ecologys.add(ecology_three);
+        List<AdviceBean> ecology_listInfo = NumUtil.getListInfo(getContext(), "ecology.json");
+        for (int i = 0; i < ecology_listInfo.size(); i++) {
+            AdviceBean adviceBean = ecology_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            ecologys.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
         //尾厅区
-        AdviceBean tail_one = new AdviceBean("尾厅区","tail_one","轨道灯1路(地址2，第2路)",  "2","02",true);
-        AdviceBean tail_two = new AdviceBean( "尾厅区","tail_two","灯带1路(地址2，第3路)", "3","02",true);
-        AdviceBean tail_three = new AdviceBean( "尾厅区","tail_three","所有插座1路(留言墙+地插(地址2，第4路))", "4","02",true);
-        AdviceBean tail_fore = new AdviceBean("尾厅区", "tail_fore","弱点箱1路(地址2，第5路)", "5","02",true);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_three);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_fore);
         tails.clear();
-        tails.add(tail_one);
-        tails.add(tail_two);
-        tails.add(tail_three);
-        tails.add(tail_fore);
+        List<AdviceBean> tail_listInfo = NumUtil.getListInfo(getContext(), "tail.json");
+        for (int i = 0; i < tail_listInfo.size(); i++) {
+            AdviceBean adviceBean = tail_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            tails.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
         //休闲区
-        AdviceBean casual_one = new AdviceBean("休闲区","casual_one","轨道灯1路(地址2，第6路)" , "6","02",true);
-        AdviceBean casual_two = new AdviceBean( "休闲区","casual_two","灯带1路(地址2，第7路)", "7","02",true);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(casual_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(casual_two);
         casuals.clear();
-        casuals.add(casual_one);
-        casuals.add(casual_two);
+        List<AdviceBean> casual_listInfo = NumUtil.getListInfo(getContext(), "casual.json");
+        for (int i = 0; i < casual_listInfo.size(); i++) {
+            AdviceBean adviceBean = casual_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            casuals.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
         //外立面
-
-        AdviceBean out_one = new AdviceBean("外立面","out_one","轨道灯+灯带1路(地址2，第8路)" , "8","02",true);
         outs.clear();
-        outs.add(out_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(out_one);
-        //这里是全部开机
-        addall.add(prefaces);
-        addall.add(visuals);
-        addall.add(voices);
-        addall.add(ecologys);
-        addall.add(tails);
 
-        addall.add(casuals);
-        addall.add(outs);
+        List<AdviceBean> out_listInfo = NumUtil.getListInfo(getContext(), "out.json");
+        for (int i = 0; i < out_listInfo.size(); i++) {
+            AdviceBean adviceBean = out_listInfo.get(i);
+            adviceBean.setIsOpen(true);
+            outs.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
+
+        //这里是全部开机
+        addall.addAll(prefaces);
+        addall.addAll(visuals);
+        addall.addAll(voices);
+        addall.addAll(ecologys);
+        addall.addAll(tails);
+
+        addall.addAll(casuals);
+        addall.addAll(outs);
 
         //应该再这个类获取
         for (int i = 0; i < addall.size(); i++) {
-            for (int j = 0; j < addall.get(i).size(); j++) {
-                adviceBeans.add(addall.get(i).get(j));
-            }
+            adviceBeans.add(addall.get(i));
         }
 
         QZXTools.logE(adviceBeans.toString(),null);
@@ -269,106 +233,81 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     }
     private Handler handler=new Handler();
 
-  Runnable runnable=  new Runnable() {
-        @Override
-        public void run() {
 
-        }
-    };
 
     //全部关机
     private void getAllClose() {
         addall.clear();
         adviceBeans.clear();
         //序厅区
-        AdviceBean preface_one = new AdviceBean("序厅区","preface_one","筒灯1路(地址1,第1路)", "1","01",false);
-        AdviceBean preface_two = new AdviceBean("序厅区","preface_two","展项+吊顶灯带1路(地址1,第2路)", "2","01",false);
-        AdviceBean preface_three = new AdviceBean("序厅区","preface_three","环绕灯带1路(地址1，第3路)", "3","01",false);
-        AdviceBean preface_fore = new AdviceBean("序厅区","preface_fore","所有插座1路(AI迎宾墙+墙体插座(地址1，第4路))", "4","01",false);
-        AdviceBean preface_five = new AdviceBean("序厅区","preface_five","轨道灯1路(地址1，第5路)", "5","01",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_three);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_fore);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(preface_five);
-
         prefaces.clear();
-        prefaces.add(preface_one);
-        prefaces.add(preface_two);
-        prefaces.add(preface_three);
-        prefaces.add(preface_fore);
-        prefaces.add(preface_five);
+        List<AdviceBean> preface_listInfo = NumUtil.getListInfo(getContext(), "preface.json");
+        for (int i = 0; i < preface_listInfo.size(); i++) {
+            AdviceBean adviceBean = preface_listInfo.get(i);
+            prefaces.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //视觉区
-        AdviceBean visual_one = new AdviceBean("视觉区","visual_one","灯带1路(地址1，第6路)",  "6","01",false);
-        AdviceBean visual_two = new AdviceBean( "视觉区","visual_two","所有插座1路(追光音乐+动感火柴人+CV专项+智能导览机器人插座(地址1，第7路))", "7","01",false);
-        AdviceBean visual_three = new AdviceBean("视觉区","visual_three","顶部软膜灯1路(地址1,第8路)",  "8","01",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(visual_three);
         visuals.clear();
-        visuals.add(visual_one);
-        visuals.add(visual_two);
-        visuals.add(visual_three);
+        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
+        for (int i = 0; i < visual_listInfo.size(); i++) {
+            AdviceBean adviceBean = visual_listInfo.get(i);
+            visuals.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //语音区
-        AdviceBean voice_one = new AdviceBean("语音区","voice_one","轨道灯1路(地址1，第9路)",  "9","01",false);
-        AdviceBean voice_two = new AdviceBean( "语音区","voice_two","所有插座1路(说好普通话+智能转写+AI互动魔墙(地址1，第10路))", "10","01",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(voice_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(voice_two);
         voices.clear();
-        voices.add(voice_one);
-        voices.add(voice_two);
+        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
+        for (int i = 0; i < voice_listInfo.size(); i++) {
+            AdviceBean adviceBean = voice_listInfo.get(i);
+            voices.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //生态区
-        AdviceBean ecology_one = new AdviceBean("生态区","ecology_one","灯带1路(地址1，第11路)",  "11","01",false);
-        AdviceBean ecology_two = new AdviceBean( "生态区","ecology_two","轨道灯1路(地址1，第12路)", "12","01",false);
-        AdviceBean ecology_three = new AdviceBean( "生态区","ecology_three","所有插座1路(世界聊得来+变声电话亭+AI生活、AI教育、AI城市+地插(地址2,第1路))", "1","02",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(ecology_three);
         ecologys.clear();
-        ecologys.add(ecology_one);
-        ecologys.add(ecology_two);
-        ecologys.add(ecology_three);
+        List<AdviceBean> ecology_listInfo = NumUtil.getListInfo(getContext(), "ecology.json");
+        for (int i = 0; i < ecology_listInfo.size(); i++) {
+            AdviceBean adviceBean = ecology_listInfo.get(i);
+            ecologys.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //尾厅区
-        AdviceBean tail_one = new AdviceBean("尾厅区","tail_one","轨道灯1路(地址2，第2路)",  "2","02",false);
-        AdviceBean tail_two = new AdviceBean( "尾厅区","tail_two","灯带1路(地址2，第3路)", "3","02",false);
-        AdviceBean tail_three = new AdviceBean( "尾厅区","tail_three","所有插座1路(留言墙+地插(地址2，第4路))", "4","02",false);
-        AdviceBean tail_fore = new AdviceBean("尾厅区", "tail_fore","弱点箱1路(地址2，第5路)", "5","02",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_two);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_three);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(tail_fore);
         tails.clear();
-        tails.add(tail_one);
-        tails.add(tail_two);
-        tails.add(tail_three);
-        tails.add(tail_fore);
+        List<AdviceBean> tail_listInfo = NumUtil.getListInfo(getContext(), "tail.json");
+        for (int i = 0; i < tail_listInfo.size(); i++) {
+            AdviceBean adviceBean = tail_listInfo.get(i);
+            tails.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //休闲区
-        AdviceBean casual_one = new AdviceBean("休闲区","casual_one","轨道灯1路(地址2，第6路)" , "6","02",false);
-        AdviceBean casual_two = new AdviceBean( "休闲区","casual_two","灯带1路(地址2，第7路)", "7","02",false);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(casual_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(casual_two);
         casuals.clear();
-        casuals.add(casual_one);
-        casuals.add(casual_two);
+        List<AdviceBean> casual_listInfo = NumUtil.getListInfo(getContext(), "casual.json");
+        for (int i = 0; i < casual_listInfo.size(); i++) {
+            AdviceBean adviceBean = casual_listInfo.get(i);
+            casuals.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //外立面
-        AdviceBean out_one = new AdviceBean("外立面","out_one","轨道灯+灯带1路(地址2，第8路)" , "8","02",false);
         outs.clear();
-        outs.add(out_one);
-        MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(out_one);
+
+        List<AdviceBean> out_listInfo = NumUtil.getListInfo(getContext(), "out.json");
+        for (int i = 0; i < out_listInfo.size(); i++) {
+            AdviceBean adviceBean = out_listInfo.get(i);
+            outs.add(adviceBean);
+            MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
+        }
         //这里是全部开机
-        addall.add(prefaces);
-        addall.add(visuals);
-        addall.add(voices);
-        addall.add(ecologys);
-        addall.add(tails);
-        addall.add(casuals);
-        addall.add(outs);
+        addall.addAll(prefaces);
+        addall.addAll(visuals);
+        addall.addAll(voices);
+        addall.addAll(ecologys);
+        addall.addAll(tails);
+        addall.addAll(casuals);
+        addall.addAll(outs);
 
         //应该再这个类获取
         for (int i = 0; i < addall.size(); i++) {
-            for (int j = 0; j < addall.get(i).size(); j++) {
-                adviceBeans.add(addall.get(i).get(j));
-            }
+            adviceBeans.add(addall.get(i));
         }
 
         QZXTools.logE(adviceBeans.toString(),null);
@@ -524,7 +463,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeCallbacks(runnable);
+
 
     }
 

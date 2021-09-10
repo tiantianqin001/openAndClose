@@ -1,0 +1,32 @@
+{
+  "result": [
+          {
+            "id": "1",
+            "address": {
+              "name": "轨道灯1路(地址1，第9路)",
+              "addres": "02",
+              "area": "语音区",
+              "typeId": "voice_one",
+              "road": "4",
+              "isOpen": false
+            },
+            "computer": [
+              {
+                "url": "http://192.168.1.5:8001"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "address": {
+              "name": "所有插座1路(说好普通话+世界聊得来+变声电话)",
+              "addres": "03",
+              "area": "语音区",
+              "typeId": "voice_one",
+              "road": "8",
+              "isOpen": false
+            },
+            "computer": []
+          }
+  ]
+}

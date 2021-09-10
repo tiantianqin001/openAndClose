@@ -3,6 +3,7 @@ package com.telit.money.start.adapter;
 import android.content.Context;
 import android.os.Handler;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.hjq.toast.ToastUtils;
 import com.telit.money.start.R;
 import com.telit.money.start.bean.AdviceBean;
 import com.telit.money.start.bean.XmlBean;
@@ -38,17 +40,12 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
     private  ExecutorService executorService;
     private  TextView tv_all_close_and_open;
     private Handler mHandler = new Handler();
-
-
             public AllLightCloseAndOpenAdapter(Context context, List<AdviceBean> addall, boolean isOpen) {
                 this.context = context;
                 this.addall = addall;
                 this.isOpen = isOpen;
                 executorService= Executors.newSingleThreadExecutor();
-
-
             }
-
             @NonNull
             @Override
             public CloseAndOpenHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,6 +63,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                 int road = Integer.valueOf(adviceBean.getRoad());
                 String address = adviceBean.getAdress();
                 String sendInfoAreess = NumUtil.getSendInfoAreess(road, address, isOpen);
+
                 if (isOpen) {
                     String name = adviceBean.getName();
                     String obj = "" + adviceBean.getArea() + "....."+name+"...第"+ + road + "路开......" + sendInfoAreess;
@@ -82,28 +80,39 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                         }
                     });
                 } else {
-                    //关闭电要等一分钟 先关闭了电脑再关闭电
-                    QZXTools.logD("qin989.。。.." + adviceBean);
-                    String area = adviceBean.getArea();
                     String name = adviceBean.getName();
-                    String obj = "" + area + "...."+name+"...第" + road + "路关......" + sendInfoAreess;
+                    String obj = "" + adviceBean.getArea() + "....."+name+"...第"+ + road + "路关......" + sendInfoAreess;
                     tv_all_close_and_open.setText(obj);
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            executorService.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        Thread.sleep(1000 * 3);
-                                        SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                    List<AdviceBean.Computer> computerList = adviceBean.getComputerList();
+                    if (computerList!=null && computerList.size()>0){
+                        //这个是关电脑
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for (AdviceBean.Computer computer : computerList) {
+                                    String getIp = computer.getUrl();
+
+                                    if (TextUtils.isEmpty(getIp) ){
+                                        ToastUtils.show("ip和端口不能为空");
+                                        return;
                                     }
+                                    QZXTools. moveAdevice(getIp, 8080,"关机");
                                 }
-                            });
-                        }
-                    },1000 * 60);
+                            }
+                        }, 40);
+
+                        //这个是关灯
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                            }
+                        },1000 * 60);
+                    }else {
+                        SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                    }
+
 
                 }
 

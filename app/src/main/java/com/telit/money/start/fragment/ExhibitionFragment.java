@@ -197,6 +197,8 @@ public class ExhibitionFragment extends Fragment implements View.OnClickListener
         super.initView();
     }
 
+
+
     @Override
     protected void initData() {
         super.initData();

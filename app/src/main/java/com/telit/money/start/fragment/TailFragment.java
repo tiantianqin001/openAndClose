@@ -23,18 +23,9 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
 
     private RecyclerView rv_staile_content;
     private Handler handler=new Handler();
-    private List<AdviceBean> adviceBeans = new ArrayList<>();
-    @Override
-    protected void addressInfo(List<XmlBean> xmlBeans) {
-        super.addressInfo(xmlBeans);
-        addressList.clear();
-        for (XmlBean xmlBean : xmlBeans) {
-            String area = xmlBean.getArea();
-            if (area.equals("尾厅区")){
-                addressList.add(xmlBean);
-            }
-        }
-    }
+    private List<AdviceBean> adviceBeans;
+
+
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
@@ -45,22 +36,15 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
     @Override
     protected void initData() {
         super.initData();
-        AdviceBean adviceBean = new AdviceBean("尾厅区","tail_one","轨道灯1路(地址2，第2路)",  "2","02",false);
-        AdviceBean adviceBean1 = new AdviceBean( "尾厅区","tail_two","灯带1路(地址2，第3路)", "3","02",false);
-        AdviceBean adviceBean2 = new AdviceBean( "尾厅区","tail_three","所有插座1路(留言墙+地插(地址2，第4路))", "4","02",false);
-        AdviceBean adviceBean3 = new AdviceBean( "尾厅区","tail_fore","弱点箱1路(地址2，第5路)", "5","02",false);
-
-
-        adviceBeans.add(adviceBean);
-        adviceBeans.add(adviceBean1);
-        adviceBeans.add(adviceBean2);
-        adviceBeans.add(adviceBean3);
+        adviceBeans = NumUtil.getListInfo(getContext(), "tail.json");
 
         rv_staile_content.setLayoutManager(new LinearLayoutManager(getContext()));
         PrefaceAdapter prefaceAdapter = new PrefaceAdapter(getContext(), adviceBeans, "尾厅区");
         prefaceAdapter.setonClickListener(this);
         rv_staile_content.setAdapter(prefaceAdapter);
     }
+
+
 
 
     @Override
@@ -71,50 +55,7 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
     @Override
     public void onClick(int road, String type, boolean isOpen,String adress,int position) {
         if (type.equals("尾厅区")){
-            //第4路要设置设备的关只关设备开机是通电自己就开机
-            xmlBeans.clear();
-            if (!isOpen){
-                //当前这个开关可能有多个电脑
-                for (XmlBean xmlBean : addressList) {
-                    if (xmlBean.getId()-1 == position){
-                        xmlBeans.add(xmlBean);
-                    }
-                }
-                //判断当前的开关的所有的电脑的开和关
-                if (xmlBeans!= null && xmlBeans.size()>0){
-                    for (XmlBean xmlBean : xmlBeans) {
 
-                        int includecomputer = xmlBean.getIncludecomputer();
-                        if (includecomputer == 0){
-                            String getIp = xmlBean.getUrl();
-                            int getPort = xmlBean.getPort();
-                            if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
-                                ToastUtils.show("ip和端口不能为空");
-                                return;
-                            }
-                            QZXTools. moveAdevice(getIp, getPort, "关机");
-                        }else {
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    XmlBean xmlBean = addressList.get(position);
-                                    String getIp = xmlBean.getUrl();
-                                    int getPort = xmlBean.getPort();
-                                    if (TextUtils.isEmpty(getIp) || TextUtils.isEmpty(String.valueOf(getPort))){
-                                        ToastUtils.show("ip和端口不能为空");
-                                        return;
-                                    }
-
-                                    QZXTools. moveAdevice(getIp, getPort, "关机");
-                                }
-                            }, 1000 * 30);
-                        }
-                    }
-                }
-
-
-
-            }
 
             //控住设备的开和关
             //先判断是不是在线
@@ -123,16 +64,41 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
             boolean connected = SimpleClientNetty.getInstance().isConnected();
             if (connected){
                 //发送消息
-                //退出班级,服务端会主动关闭连接
-                //如果当前是关灯，要先关电脑等90秒在关电
                 if (!isOpen){
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    AdviceBean adviceBean = adviceBeans.get(position);
+                    List<AdviceBean.Computer> computerList = adviceBean.getComputerList();
 
-                            SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
-                        }
-                    },1000 * 60);
+                    if (computerList!=null && computerList.size()>0){
+
+                        //这个是关电脑
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for (AdviceBean.Computer computer : computerList) {
+                                    String getIp = computer.getUrl();
+
+                                    if (TextUtils.isEmpty(getIp) ){
+                                        ToastUtils.show("ip和端口不能为空");
+                                        return;
+                                    }
+                                    QZXTools. moveAdevice(getIp, 8080,"关机");
+                                }
+                            }
+                        }, 40);
+
+                        //这个是关灯
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                            }
+                        },1000 * 60);
+                    }else {
+                        SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                    }
+
+
                 }else {
 
                     SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);

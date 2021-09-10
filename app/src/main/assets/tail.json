@@ -1,0 +1,59 @@
+{
+  "result": [
+          {
+            "id": "1",
+            "address": {
+              "name": "轨道灯1路(地址2，第2路)",
+              "addres": "01",
+              "area": "尾厅区",
+              "typeId": "tail_one",
+              "road": "9",
+              "isOpen": false
+            },
+            "computer": [
+              {
+                "url": "http://192.168.1.5:8001"
+              },
+              {
+                "url": "http://192.168.1.2:8001"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "address": {
+              "name": "灯带1路(地址2，第3路)",
+              "addres": "01",
+              "area": "尾厅区",
+              "typeId": "tail_two",
+              "road": "4",
+              "isOpen": false
+            },
+            "computer": []
+          },
+          {
+            "id": "3",
+            "address": {
+              "name": "所有插座1路(留言墙+地插(地址2，第4路))",
+              "addres": "02",
+              "area": "尾厅区",
+              "typeId": "tail_three",
+              "road": "11",
+              "isOpen": false
+            },
+            "computer": []
+          },
+          {
+            "id": "4",
+            "address": {
+              "name": "弱点箱1路(地址2，第5路)",
+              "addres": "02",
+              "area": "尾厅区",
+              "typeId": "tail_fore",
+              "road": "12",
+              "isOpen": false
+            },
+            "computer": []
+          }
+  ]
+}

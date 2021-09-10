@@ -1,0 +1,16 @@
+{
+  "result": [
+          {
+            "id": "1",
+            "address": {
+              "name": "轨道灯+灯带1路(地址2，第8路)",
+              "addres": "02",
+              "area": "外立面",
+              "typeId": "out_one",
+              "road": "9",
+              "isOpen": false
+            },
+            "computer": []
+          }
+  ]
+}

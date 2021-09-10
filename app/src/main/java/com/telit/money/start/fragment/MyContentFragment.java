@@ -74,6 +74,8 @@ public class MyContentFragment extends Fragment implements OnTabSelectListener, 
     }
 
 
+
+
     @Override
     protected void initView() {
         super.initView();

@@ -1,16 +1,24 @@
 package com.telit.money.start.utils;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 import android.util.Xml;
 
+import com.telit.money.start.bean.AdviceBean;
 import com.telit.money.start.bean.XmlBean;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +29,7 @@ public class NumUtil {
     private static List<byte[]> bytesLists = new ArrayList<>();
     private static XmlBean xmlBean;
    static List<XmlBean>   xmlBeans = new ArrayList<>();
-
+    private static List<AdviceBean> adviceBeans = new ArrayList<>();
 
     //16进制转byte
     public static byte[] hexString2Bytes(String hexStr) {
@@ -213,4 +221,77 @@ public class NumUtil {
         return xmlBeans;
 
     }
+
+
+    public static String getJson(Context context, String fileName){
+        StringBuilder stringBuilder = new StringBuilder();
+        //获得assets资源管理器
+        AssetManager assetManager = context.getAssets();
+        //使用IO流读取json文件内容
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName),"utf-8"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+
+    public static  List<AdviceBean>  getListInfo(Context context,String fileName){
+        try {
+            adviceBeans.clear();
+            String json = NumUtil.getJson(context, fileName);
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.optJSONArray("result");
+            if (jsonArray!=null && jsonArray.length()>0){
+                for (int i = 0; i <jsonArray.length() ; i++) {
+                    AdviceBean adviceBean = new AdviceBean();
+                    JSONObject object = jsonArray.optJSONObject(i);
+                    //获取所有的id
+                    String id = object.optString("id");
+                    //获取address
+                    JSONObject jsonObject_adress = object.optJSONObject("address");
+                    String name = jsonObject_adress.optString("name");
+                    String addres = jsonObject_adress.optString("addres");
+                    String area = jsonObject_adress.optString("area");
+                    String road = jsonObject_adress.optString("road");
+                    String typeId = jsonObject_adress.optString("typeId");
+                    boolean isOpen = jsonObject_adress.optBoolean("isOpen");
+                    adviceBean.setTypeId(typeId);
+                    adviceBean.setOpen(isOpen);
+                    adviceBean.setAdress(addres);
+                    adviceBean.setName(name);
+                    adviceBean.setArea(area);
+                    adviceBean.setRoad(road);
+                    //获取电脑 computer
+                    JSONArray jsonArray_computer = object.optJSONArray("computer");
+
+                    if (jsonArray_computer!=null && jsonArray_computer.length()>0){
+                        List<AdviceBean.Computer> computers = new ArrayList<>();
+                        for (int j = 0; j < jsonArray_computer.length(); j++) {
+                            AdviceBean.Computer computer = new AdviceBean.Computer();
+                            JSONObject jsonObject_computer = jsonArray_computer.optJSONObject(j);
+                            String url = jsonObject_computer.optString("url");
+                            computer.setUrl(url);
+                            computers.add(computer);
+                        }
+                        adviceBean.setComputerList(computers);
+                    }
+
+
+                    adviceBeans.add(adviceBean);
+                }
+                return adviceBeans;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

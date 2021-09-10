@@ -1,9 +1,12 @@
 package com.telit.money.start.bean;
 
+import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Keep;
+
+import java.util.List;
 
 @Entity
 public class AdviceBean  {
@@ -16,6 +19,33 @@ public class AdviceBean  {
 
     private String area;
 
+    private boolean isOpen;
+
+    @Convert(columnType = String.class, converter = AnswerItemListConverter.class)
+    private List<Computer> computerList;
+
+
+    public List<Computer> getComputerList() {
+        return computerList;
+    }
+
+    public void setComputerList(List<Computer> computerList) {
+        this.computerList = computerList;
+    }
+
+    public static class Computer{
+        private String url;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+    }
+
+
     public boolean isOpen() {
         return isOpen;
     }
@@ -24,7 +54,6 @@ public class AdviceBean  {
         isOpen = open;
     }
 
-    private boolean isOpen;
 
     public String getAdress() {
         return adress;
@@ -96,6 +125,18 @@ public class AdviceBean  {
 
     @Generated(hash = 300252844)
     public AdviceBean() {
+    }
+
+    @Generated(hash = 845798269)
+    public AdviceBean(String typeId, String name, String road, String adress, String area,
+            boolean isOpen, List<Computer> computerList) {
+        this.typeId = typeId;
+        this.name = name;
+        this.road = road;
+        this.adress = adress;
+        this.area = area;
+        this.isOpen = isOpen;
+        this.computerList = computerList;
     }
 
     @Override

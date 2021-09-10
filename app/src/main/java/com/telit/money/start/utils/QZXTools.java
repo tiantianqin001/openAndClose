@@ -172,7 +172,7 @@ public class QZXTools {
 
     public static void moveAdevice(String getIp, int getPort, String type) {
         try {
-            String url =  getIp + ":" + getPort;
+            String url =  getIp ;
             if (type.equals("关机")) {
                 url = url + "/shutdown";
             } else {

@@ -1,0 +1,32 @@
+{
+  "result": [
+          {
+            "id": "1",
+            "address": {
+              "name": "轨道灯1路(地址2，第6路)",
+              "addres": "01",
+              "area": "休闲区",
+              "typeId": "casual_one",
+              "road": "8",
+              "isOpen": false
+            },
+            "computer": [
+              {
+                "url": "http://192.168.1.5:8001"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "address": {
+              "name": "灯带1路(地址2，第7路)",
+              "addres": "02",
+              "area": "休闲区",
+              "typeId": "casual_two",
+              "road": "10",
+              "isOpen": false
+            },
+            "computer": []
+          }
+  ]
+}
