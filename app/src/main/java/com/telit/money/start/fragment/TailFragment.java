@@ -11,12 +11,10 @@ import com.hjq.toast.ToastUtils;
 import com.telit.money.start.R;
 import com.telit.money.start.adapter.PrefaceAdapter;
 import com.telit.money.start.bean.AdviceBean;
-import com.telit.money.start.bean.XmlBean;
 import com.telit.money.start.netty.SimpleClientNetty;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TailFragment extends Fragment implements PrefaceAdapter.onClickListener {
@@ -82,7 +80,7 @@ public class TailFragment extends Fragment implements PrefaceAdapter.onClickList
                                         ToastUtils.show("ip和端口不能为空");
                                         return;
                                     }
-                                    QZXTools. moveAdevice(getIp, 8080,"关机");
+                                    QZXTools. moveAdevice(getIp);
                                 }
                             }
                         }, 40);

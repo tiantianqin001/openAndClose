@@ -2,12 +2,10 @@ package com.telit.money.start.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.XmlResourceParser;
 import android.util.Log;
 import android.util.Xml;
 
 import com.telit.money.start.bean.AdviceBean;
-import com.telit.money.start.bean.XmlBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,8 +25,7 @@ public class NumUtil {
     //把所有的二进制字节都到集合中
     private static List<String> stringLists = new ArrayList<>();
     private static List<byte[]> bytesLists = new ArrayList<>();
-    private static XmlBean xmlBean;
-   static List<XmlBean>   xmlBeans = new ArrayList<>();
+
     private static List<AdviceBean> adviceBeans = new ArrayList<>();
 
     //16进制转byte
@@ -160,76 +157,15 @@ public class NumUtil {
         return resule;
     }
 
-
-
-    public static List<XmlBean> getUrls(InputStream inputStream) throws XmlPullParserException, IOException {
-        xmlBeans.clear();
-
-        //得到PULL解析器
-        XmlPullParser parser = Xml.newPullParser();
-        parser.setInput(inputStream,"UTF-8");
-        //产生事件
-        int eventType = parser.getEventType();
-        //如果不是文档结束事件就循环推进
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            switch (eventType) {
-                case XmlPullParser.START_DOCUMENT://开始文档事件
-                    break;
-                case XmlPullParser.START_TAG://开始元素事件
-                    //获取解析器当前指向的元素的名称
-                    String name = parser.getName();
-                    if ("address".equals(name)) {
-                        xmlBean = new XmlBean();
-                        xmlBean.setId(Integer.parseInt(parser.getAttributeValue(0)));
-                    }
-                    if (xmlBean != null) {
-                        if ("name".equals(name)) {
-                            //获取解析器当前指向元素的下一个文本节点的值
-                            xmlBean.setName(parser.nextText());
-                        }
-                        if ("addre".equals(name)) {
-                            xmlBean.setAddre(parser.nextText());
-                        }
-                        if ("area".equals(name)) {
-                            xmlBean.setArea(parser.nextText());
-                        }
-                        if ("fewWays".equals(name)) {
-                            xmlBean.setFewWays(parser.nextText());
-                        }
-                        if ("url".equals(name)) {
-                            xmlBean.setUrl(parser.nextText());
-                        }
-                        if ("port".equals(name)){
-                            xmlBean.setPort(Integer.parseInt(parser.nextText()));
-                        }
-                        if ("includecomputer".equals(name)){
-                            xmlBean.setIncludecomputer(Integer.parseInt(parser.nextText()));
-                        }
-                    }
-                    break;
-                case XmlPullParser.END_TAG://结束元素事件
-                    //判断是都是person的结束事件
-                    if ("address".equals(parser.getName())) {
-                        xmlBeans.add(xmlBean);
-                        xmlBean = null;
-                    }
-                    break;
-            }
-            //进入下一个元素并触发相应的事件
-            eventType = parser.next();
-        }
-        return xmlBeans;
-
-    }
-
-
     public static String getJson(Context context, String fileName){
         StringBuilder stringBuilder = new StringBuilder();
         //获得assets资源管理器
         AssetManager assetManager = context.getAssets();
+        BufferedReader bufferedReader=null;
+        InputStreamReader inputStreamReader =null;
         //使用IO流读取json文件内容
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+             bufferedReader = new BufferedReader(inputStreamReader=new InputStreamReader(
                     assetManager.open(fileName),"utf-8"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -237,6 +173,13 @@ public class NumUtil {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                inputStreamReader.close();
+                bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return stringBuilder.toString();
     }

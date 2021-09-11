@@ -1,34 +1,21 @@
 package com.telit.money.start.fragment;
 
-import android.content.Context;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSON;
 import com.hjq.toast.ToastUtils;
 import com.telit.money.start.R;
 import com.telit.money.start.adapter.PrefaceAdapter;
 import com.telit.money.start.bean.AdviceBean;
-import com.telit.money.start.bean.XmlBean;
 import com.telit.money.start.netty.SimpleClientNetty;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickListener {
     private RecyclerView rv_staile_content;
@@ -91,7 +78,7 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
                                         ToastUtils.show("ip和端口不能为空");
                                         return;
                                     }
-                                    QZXTools. moveAdevice(getIp, 8080,"关机");
+                                    QZXTools. moveAdevice(getIp);
                                 }
                             }
                         }, 40);

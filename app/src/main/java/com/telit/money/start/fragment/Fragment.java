@@ -11,7 +11,6 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.telit.money.start.bean.XmlBean;
 import com.telit.money.start.utils.NumUtil;
 import com.telit.money.start.utils.QZXTools;
 
@@ -24,30 +23,17 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
 
     protected View mRoot;
 
-    //这个是获取电脑的地址方便关机用的
-    protected List<XmlBean> addressList = new ArrayList<>();
     // 标示是否第一次初始化数据
     protected boolean mIsFirstInitData = true;
     protected Handler mHandler = new Handler();
 
-    //保存是不是已设置了配置
-    protected List<XmlBean>  xmlBeans = new ArrayList<>();
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // 初始化参数
         initArgs(getArguments());
 
-
-        //解析数据
-        try {
-            InputStream inputStream =getContext(). getAssets().open("address.xml");
-            List<XmlBean> xmlBeans = NumUtil.getUrls(inputStream);
-            QZXTools.logE(xmlBeans.toString(),null);
-            addressInfo(xmlBeans);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -123,10 +109,6 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
      * 初始化控件
      */
     protected void initWidget(View root) {
-
-    }
-
-    protected void addressInfo(List<XmlBean> xmlBeans){
 
     }
 

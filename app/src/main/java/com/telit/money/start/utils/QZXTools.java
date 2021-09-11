@@ -170,15 +170,9 @@ public class QZXTools {
     }
 
 
-    public static void moveAdevice(String getIp, int getPort, String type) {
+    public static void moveAdevice(String getIp) {
         try {
-            String url =  getIp ;
-            if (type.equals("关机")) {
-                url = url + "/shutdown";
-            } else {
-                url = url + "/shutdown";
-            }
-
+            String url =  getIp +"/shutdown";
             QZXTools.logD(url);
             OkGo.<String>post(url)
                     .params("delayTime", 10)
