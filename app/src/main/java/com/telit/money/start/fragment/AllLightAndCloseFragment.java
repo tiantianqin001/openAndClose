@@ -30,13 +30,10 @@ import java.util.List;
  * ******************************************************************
  */
 public class AllLightAndCloseFragment extends Fragment implements View.OnClickListener {
-
     private TextView home_one_close;
     private TextView home_one_open;
     private RecyclerView rv_all_open_and_close;
     private AllLightCloseAndOpenAdapter adapter;
-
-
     /**
      * 创建新实例
      *
@@ -53,30 +50,23 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-
         home_one_close = (TextView) root.findViewById(R.id.home_one_close);
         home_one_open = (TextView) root.findViewById(R.id.home_one_open);
         rv_all_open_and_close = (RecyclerView) root.findViewById(R.id.rv_all_open_and_close);
     }
-
     @Override
     protected void initView() {
         super.initView();
     }
-
-
-
     @Override
     protected void initData() {
         super.initData();
-
     }
     @Override
     protected void initListener() {
         super.initListener();
         home_one_close.setOnClickListener(this);
         home_one_open.setOnClickListener(this);
-
     }
     @Override
     public void onDestroy() {
@@ -86,7 +76,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         super.onDestroy();
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -115,8 +104,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
     private void getOpenAll() {
         addall.clear();
         adviceBeans.clear();
-
-
         prefaces.clear();
         List<AdviceBean> preface_listInfo = NumUtil.getListInfo(getContext(), "preface.json");
         for (int i = 0; i < preface_listInfo.size(); i++) {
@@ -125,9 +112,6 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
             prefaces.add(adviceBean);
             MyApplication.getInstance().getDaoSession().getAdviceBeanDao().insertOrReplace(adviceBean);
         }
-
-
-
         //视觉区
         visuals.clear();
         List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
@@ -198,32 +182,17 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         addall.addAll(casuals);
         addall.addAll(outs);
-
         //应该再这个类获取
         for (int i = 0; i < addall.size(); i++) {
             adviceBeans.add(addall.get(i));
         }
-
         QZXTools.logE(adviceBeans.toString(),null);
-
-
-
 
         initAinm();
         rv_all_open_and_close.setLayoutManager(new LinearLayoutManager(getContext()));
-
         adapter = new AllLightCloseAndOpenAdapter(getActivity(),adviceBeans,true);
-
-
         rv_all_open_and_close.setAdapter(adapter);
-
-
-
     }
-    private Handler handler=new Handler();
-
-
-
     //全部关机
     private void getAllClose() {
         addall.clear();
