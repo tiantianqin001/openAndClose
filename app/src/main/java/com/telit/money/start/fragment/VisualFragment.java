@@ -32,7 +32,7 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
     @Override
     protected void initData() {
         super.initData();
-        adviceBeans = NumUtil.getListInfo(getContext(), "visual.json");
+        adviceBeans = NumUtil.getListInfo(getContext(), "voice.json");
         rv_staile_content.setLayoutManager(new LinearLayoutManager(getContext()));
         PrefaceAdapter prefaceAdapter = new PrefaceAdapter(getContext(), adviceBeans, "视觉区");
         prefaceAdapter.setonClickListener(this);

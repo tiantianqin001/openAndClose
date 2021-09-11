@@ -34,7 +34,7 @@ public class VoiceFragment extends Fragment implements PrefaceAdapter.onClickLis
     @Override
     protected void initData() {
         super.initData();
-        adviceBeans = NumUtil.getListInfo(getContext(), "voice.json");
+        adviceBeans = NumUtil.getListInfo(getContext(), "visual.json");
 
         rv_staile_content.setLayoutManager(new LinearLayoutManager(getContext()));
         PrefaceAdapter prefaceAdapter = new PrefaceAdapter(getContext(), adviceBeans, "语音区");

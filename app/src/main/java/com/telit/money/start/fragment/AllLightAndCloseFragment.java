@@ -130,7 +130,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         //视觉区
         visuals.clear();
-        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
+        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
         for (int i = 0; i < visual_listInfo.size(); i++) {
             AdviceBean adviceBean = visual_listInfo.get(i);
             adviceBean.setIsOpen(true);
@@ -140,7 +140,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
 
         //语音区
         voices.clear();
-        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
+        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
         for (int i = 0; i < voice_listInfo.size(); i++) {
             AdviceBean adviceBean = voice_listInfo.get(i);
             adviceBean.setIsOpen(true);
@@ -238,7 +238,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         }
         //视觉区
         visuals.clear();
-        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
+        List<AdviceBean> visual_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
         for (int i = 0; i < visual_listInfo.size(); i++) {
             AdviceBean adviceBean = visual_listInfo.get(i);
             visuals.add(adviceBean);
@@ -246,7 +246,7 @@ public class AllLightAndCloseFragment extends Fragment implements View.OnClickLi
         }
         //语音区
         voices.clear();
-        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "voice.json");
+        List<AdviceBean> voice_listInfo = NumUtil.getListInfo(getContext(), "visual.json");
         for (int i = 0; i < voice_listInfo.size(); i++) {
             AdviceBean adviceBean = voice_listInfo.get(i);
             voices.add(adviceBean);
