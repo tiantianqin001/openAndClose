@@ -84,7 +84,7 @@ public class VisualFragment extends Fragment implements PrefaceAdapter.onClickLi
                                     QZXTools. moveAdevice(getIp);
                                 }
                             }
-                        }, 40);
+                        }, 15);
 
                         //这个是关灯
                         handler.postDelayed(new Runnable() {

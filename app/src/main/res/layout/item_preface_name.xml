@@ -11,9 +11,9 @@
     <LinearLayout
         android:id="@+id/ll_preface_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/y100"
         android:orientation="horizontal"
-
+        android:gravity="center_vertical"
 
         >
         <TextView
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/word_white"
             android:text="筒灯"
-            android:textSize="@dimen/x32"
+            android:textSize="@dimen/x38"
             />
 
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="共几路"
         android:layout_marginLeft="@dimen/x16"
-        android:textSize="@dimen/x32"
+        android:textSize="@dimen/x38"
         android:textColor="@color/word_white"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/x36"
@@ -43,8 +43,9 @@
 
     <com.telit.money.start.customview.SwitchView
         android:id="@+id/sv_open_and_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x14"
+        android:layout_width="@dimen/x140"
+        android:layout_height="@dimen/y80"
         app:isOpened="false"
         app:offColor="#FFE3E3E3"
         android:layout_alignParentRight="true"

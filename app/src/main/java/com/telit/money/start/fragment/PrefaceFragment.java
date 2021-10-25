@@ -67,21 +67,15 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
                     if (computerList!=null && computerList.size()>0){
 
                         //这个是关电脑
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+                        for (AdviceBean.Computer computer : computerList) {
+                            String getIp = computer.getUrl();
 
-                                for (AdviceBean.Computer computer : computerList) {
-                                    String getIp = computer.getUrl();
-
-                                    if (TextUtils.isEmpty(getIp) ){
-                                        ToastUtils.show("ip和端口不能为空");
-                                        return;
-                                    }
-                                    QZXTools. moveAdevice(getIp);
-                                }
+                            if (TextUtils.isEmpty(getIp) ){
+                                ToastUtils.show("ip和端口不能为空");
+                                return;
                             }
-                        }, 40);
+                            QZXTools. moveAdevice(getIp);
+                        }
 
                         //这个是关灯
                         handler.postDelayed(new Runnable() {
@@ -89,7 +83,7 @@ public class PrefaceFragment extends Fragment implements PrefaceAdapter.onClickL
                             public void run() {
                                 SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                             }
-                        },1000 * 60);
+                        },1000 * 15);
                     }else {
                         SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
                     }
