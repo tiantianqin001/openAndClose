@@ -22,7 +22,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
 
     private RecyclerView rv_staile_content;
     private Handler handler=new Handler();
-    private List<AdviceBean> adviceBeans = new ArrayList<>();
+    private List<AdviceBean> adviceBeans;
 
     @Override
     protected void initWidget(View root) {
@@ -34,7 +34,7 @@ public class CasualFragment extends Fragment implements PrefaceAdapter.onClickLi
     @Override
     protected void initData() {
         super.initData();
-        List<AdviceBean> adviceBeans = NumUtil.getListInfo(getContext(), "casual.json");
+       adviceBeans = NumUtil.getListInfo(getContext(), "casual.json");
         rv_staile_content.setLayoutManager(new LinearLayoutManager(getContext()));
         PrefaceAdapter prefaceAdapter = new PrefaceAdapter(getContext(), adviceBeans, "休闲区");
         prefaceAdapter.setonClickListener(this);

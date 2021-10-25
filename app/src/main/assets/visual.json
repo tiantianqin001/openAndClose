@@ -3,7 +3,7 @@
           {
             "id": "1",
             "address": {
-              "name": "灯带1路(地址1，第6路)",
+              "name": "追光音乐与动感火柴人灯带灯带（地址1 第2路)",
               "addres": "01",
               "area": "视觉区",
               "typeId": "visual_one",
@@ -11,41 +11,31 @@
               "isOpen": false
             },
             "computer": [
-              {
-                "url": "http://192.168.1.5:8001"
-              },
-              {
-                "url": "http://192.168.1.2:8001"
-              }
+
             ]
           },
           {
             "id": "2",
             "address": {
-              "name": "所有插座1路(追光音乐+动感火柴人+CV专项+智能导览机器人插座(地址1，第7路))",
-              "addres": "03",
+              "name": "追光音乐与CV专项展区顶部软膜灯（地址2 第1路）",
+              "addres": "02",
               "area": "视觉区",
               "typeId": "visual_two",
-              "road": "11",
+              "road": "1",
               "isOpen": false
             },
             "computer": [
-              {
-                "url": "http://192.168.1.21:8001"
-              },
-              {
-                "url": "http://192.168.1.22:8001"
-              }
+
             ]
           },
           {
             "id": "3",
             "address": {
-              "name": "顶部软膜灯1路(地址1,第8路)",
+              "name": "CV专项展区灯带（地址2 第2路）",
               "addres": "02",
               "area": "视觉区",
               "typeId": "visual_three",
-              "road": "1",
+              "road": "2",
               "isOpen": false
             },
             "computer": []
@@ -53,14 +43,22 @@
           {
             "id": "4",
             "address": {
-              "name": "CV专项展区灯带",
-              "addres": "02",
+              "name": "追光音乐+动感火柴人+CV专项+智能导览机器人（地址3 第11路)",
+              "addres": "03",
               "area": "视觉区",
               "typeId": "visual_four",
-              "road": "2",
+              "road": "11",
               "isOpen": false
             },
-            "computer": []
+            "computer": [
+              {
+                "url": "http://192.168.1.15:8001"
+              },
+              {
+                "url": "http://192.168.1.14:8001"
+              }
+
+            ]
           }
   ]
 }

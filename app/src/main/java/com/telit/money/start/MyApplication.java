@@ -5,7 +5,7 @@ import android.app.Application;
 import com.greendao.dao.DaoMaster;
 import com.greendao.dao.DaoSession;
 import com.hjq.toast.ToastUtils;
-
+import com.tencent.bugly.crashreport.CrashReport;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -48,6 +48,9 @@ public class MyApplication  extends Application{
         //QZXTools.openLog=false;
         //开启日志
       QZXTools.openLog=true;
+        CrashReport.initCrashReport(getApplicationContext(), "2063a43b12", true);
+
+        int a= 12/10;
 
 
     }

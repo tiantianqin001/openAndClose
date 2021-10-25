@@ -3,11 +3,11 @@
           {
             "id": "1",
             "address": {
-              "name": "轨道灯+灯带1路(地址2，第8路)",
-              "addres": "02",
+              "name": "轨道灯+灯带1路，， 没找到配置地址05路05",
+              "addres": "05",
               "area": "外立面",
               "typeId": "out_one",
-              "road": "9",
+              "road": "5",
               "isOpen": false
             },
             "computer": []

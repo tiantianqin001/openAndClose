@@ -54,6 +54,7 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.3.0' // add library
     //Gson
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation files('libs/bugly_crash_release.jar')
 
 
 

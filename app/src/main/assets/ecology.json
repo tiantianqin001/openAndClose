@@ -3,7 +3,7 @@
           {
             "id": "1",
             "address": {
-              "name": "灯带1路(地址1，第11路)",
+              "name": "世界聊得来灯带(地址2 第3路)；)",
               "addres": "02",
               "area": "生态区",
               "typeId": "ecology_one",
@@ -11,19 +11,16 @@
               "isOpen": false
             },
             "computer": [
-              {
-                "url": "http://192.168.1.5:8001"
-              }
             ]
           },
           {
             "id": "2",
             "address": {
-              "name": "轨道灯1路(地址1，第12路)",
-              "addres": "02",
+              "name": "世界聊的来与AI+生活8路面灯带(地址1 第1路))",
+              "addres": "01",
               "area": "生态区",
               "typeId": "ecology_two",
-              "road": "5",
+              "road": "1",
               "isOpen": false
             },
             "computer": []
@@ -31,30 +28,33 @@
     {
       "id": "3",
       "address": {
-        "name": "所有插座1路(魔墻+AI生活、AI教育、AI城市+地插(地址2,第1路))",
-        "addres": "03",
+        "name": "世界聊得来轨道灯 (地址2 第5路)；",
+        "addres": "02",
         "area": "生态区",
         "typeId": "ecology_three",
         "road": "5",
         "isOpen": false
       },
       "computer": [
-        {
-          "url": "http://192.168.1.17:8001"
-        }
+
       ]
     },
     {
       "id": "4",
       "address": {
-        "name": "世界聊的来与AI+生活8路面灯带",
-        "addres": "01",
+        "name": "魔墙+AI生活、AI教育、AI城市（地址3 第5路",
+        "addres": "03",
         "area": "生态区",
         "typeId": "ecology_four",
-        "road": "1",
+        "road": "5",
         "isOpen": false
       },
-      "computer": []
+      "computer": [
+
+        {
+          "url": "http://192.168.1.17:8001"
+        }
+      ]
     }
   ]
 }

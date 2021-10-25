@@ -3,7 +3,7 @@
           {
             "id": "1",
             "address": {
-              "name": "轨道灯1路(地址2，第6路)",
+              "name": "灯带(地址1 第8路)",
               "addres": "01",
               "area": "休闲区",
               "typeId": "casual_one",
@@ -15,11 +15,11 @@
           {
             "id": "2",
             "address": {
-              "name": "灯带1路(地址2，第7路)",
-              "addres": "02",
+              "name": "灯带(没找到的配置地址5，第5路)",
+              "addres": "05",
               "area": "休闲区",
               "typeId": "casual_two",
-              "road": "10",
+              "road": "5",
               "isOpen": false
             },
             "computer": []
