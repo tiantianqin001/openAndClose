@@ -18,15 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NumUtil {
     private static final String TAG = "NumUtil";
     //把所有的二进制字节都到集合中
-    private static List<String> stringLists = new ArrayList<>();
-    private static List<byte[]> bytesLists = new ArrayList<>();
+    private static List<String> stringLists = Collections.synchronizedList(new ArrayList<>());
+    private static List<byte[]> bytesLists = Collections.synchronizedList(new ArrayList<>());
 
-    private static List<AdviceBean> adviceBeans = new ArrayList<>();
+    private static List<AdviceBean> adviceBeans = Collections.synchronizedList(new ArrayList<>());
 
     //16进制转byte
     public static byte[] hexString2Bytes(String hexStr) {
@@ -66,7 +67,7 @@ public class NumUtil {
     /**
      * 获取最后一位
       */
-    public static String bytesToHexLastString(String originalData){
+    public static synchronized String bytesToHexLastString(String originalData){
         stringLists.clear();
         bytesLists.clear();
         //这里主要是获取最后一位，第一步把所有的值都转成2进制放到集合中
@@ -110,12 +111,12 @@ public class NumUtil {
 
     /**
      * 获取要发送的地址
-     * @param position
+     * @param road
      * @param adress
      * @param isOpen
      */
 
-    public static String getSendInfoAreess(int position, String adress, boolean isOpen ) {
+    public static String getSendInfoAreess(int road, String adress, boolean isOpen ) {
         String result="";
         //FE 55 11 00 17   这个是固定的
         String  fixedPosition = "FE 55 11 00 17";
@@ -123,7 +124,7 @@ public class NumUtil {
 
 
         //地址后面跟了12位，这里主要是要关或者要开其中一路
-        String openAndClose = getOpenAndClose(isOpen, position);
+        String openAndClose = getOpenAndClose(isOpen, road);
 
         //获取最后一位  是去掉第一位从55 开始的
        String lastString = NumUtil.bytesToHexLastString("55 11 00 17"+" "+adress + openAndClose);
@@ -231,7 +232,7 @@ public class NumUtil {
                 }
                 return adviceBeans;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

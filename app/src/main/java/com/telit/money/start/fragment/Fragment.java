@@ -17,6 +17,8 @@ import com.telit.money.start.utils.QZXTools;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public abstract class Fragment extends androidx.fragment.app.Fragment {
@@ -35,9 +37,6 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
         initArgs(getArguments());
 
     }
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +73,8 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
         initData();
 
         initListener();
+
+
     }
 
     protected  void initListener(){};
@@ -126,5 +127,6 @@ public abstract class Fragment extends androidx.fragment.app.Fragment {
     public void onDestroy() {
         super.onDestroy();
         mHandler=null;
+
     }
 }

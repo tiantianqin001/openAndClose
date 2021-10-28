@@ -1,5 +1,6 @@
 package com.telit.money.start.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 
@@ -28,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCloseAndOpenAdapter.CloseAndOpenHolder> {
-    private Context context;
+    private Activity context;
 
     private List<AdviceBean> addall;
     private boolean isOpen;
@@ -37,11 +38,13 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
     private TextView tv_all_close_and_open;
     private Handler mHandler = new Handler();
 
-    public AllLightCloseAndOpenAdapter(Context context, List<AdviceBean> addall, boolean isOpen) {
+
+    public AllLightCloseAndOpenAdapter(Activity context, List<AdviceBean> addall, boolean isOpen) {
         this.context = context;
         this.addall = addall;
         this.isOpen = isOpen;
         executorService = Executors.newSingleThreadExecutor();
+
     }
 
     @NonNull
@@ -58,6 +61,8 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
         holder.setIsRecyclable(false);
         AdviceBean adviceBean = addall.get(position);
 
+        QZXTools.logD("tianqin.....线程2。。关有电脑的灯111111111111111。。。addall="+addall.size()+".........."+addall);
+
         int road = Integer.valueOf(adviceBean.getRoad());
         String address = adviceBean.getAdress();
         String sendInfoAreess = NumUtil.getSendInfoAreess(road, address, isOpen);
@@ -72,6 +77,7 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
                     try {
                         Thread.sleep(3000);
                         SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+                        QZXTools.logD("tianqin....."+obj);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -81,29 +87,23 @@ public class AllLightCloseAndOpenAdapter extends RecyclerView.Adapter<AllLightCl
             String name = adviceBean.getName();
             String obj = "" + adviceBean.getArea() + "....." + name + "...第" + +road + "路关......" + sendInfoAreess;
             tv_all_close_and_open.setText(obj);
-            List<AdviceBean.Computer> computerList = adviceBean.getComputerList();
-            if (computerList != null && computerList.size() > 0) {
-                //这个是关电脑
-                for (AdviceBean.Computer computer : computerList) {
-                    String getIp = computer.getUrl();
-
-                    if (TextUtils.isEmpty(getIp)) {
-                        ToastUtils.show("ip和端口不能为空");
-                        return;
-                    }
-                    QZXTools.moveAdevice(getIp);
-                }
-
-                //这个是关灯
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+            QZXTools.logD("tianqin.....线程2。。关有电脑的灯22222222222222222。。。"+adviceBean);
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        List<AdviceBean.Computer> computerList = adviceBean.getComputerList();
+                        Thread.sleep(3000);
+                        QZXTools.logD("tianqin.....线程2。。有电脑的灯。。。"+obj);
+                        //发送关机的指令
                         SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
+
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }, 1000 * 15);
-            } else {
-                SimpleClientNetty.getInstance().sendMsgToServer(sendInfoAreess);
-            }
+                }
+            });
 
 
         }

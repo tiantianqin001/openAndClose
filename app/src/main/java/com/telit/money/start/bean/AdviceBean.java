@@ -43,6 +43,14 @@ public class AdviceBean  {
         public void setUrl(String url) {
             this.url = url;
         }
+
+
+        @Override
+        public String toString() {
+            return "Computer{" +
+                    "url='" + url + '\'' +
+                    '}';
+        }
     }
 
 
@@ -142,12 +150,13 @@ public class AdviceBean  {
     @Override
     public String toString() {
         return "AdviceBean{" +
-                "area='" + area + '\'' +
                 "typeId='" + typeId + '\'' +
                 ", name='" + name + '\'' +
                 ", road='" + road + '\'' +
                 ", adress='" + adress + '\'' +
+                ", area='" + area + '\'' +
                 ", isOpen=" + isOpen +
+                ", computerList=" + computerList +
                 '}';
     }
 

@@ -52,12 +52,392 @@
         android:layout_height="match_parent"
         android:layout_weight="7"
         >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_all_open_and_close"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="match_parent">
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line6"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line7"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line8"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line9"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line10"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line11"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line12"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line13"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line14"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line15"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line16"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open17"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line17"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line18"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open19"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line19"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line20"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open21"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line21"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_all_close_and_open22"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/x10"
+                    android:textColor="@color/word_white"
+                    android:textSize="@dimen/x26"
+                    />
+
+                <View
+                    android:id="@+id/view_line22"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/x6"
+                    android:background="@color/word_white"
+                    />
+
+            </LinearLayout>
+
+        </ScrollView>
 
 
     </LinearLayout>
